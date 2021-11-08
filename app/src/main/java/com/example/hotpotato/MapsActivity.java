@@ -1,17 +1,22 @@
 package com.example.hotpotato;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -19,6 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,10 +37,17 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.hotpotato.databinding.ActivityMapsBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements
     GoogleMap.OnMyLocationButtonClickListener,
@@ -54,6 +67,7 @@ public class MapsActivity extends FragmentActivity implements
          * @see #onRequestPermissionsResult(int, String[], int[])
          */
         private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
         /**
          * Flag indicating whether a requested permission has been denied after returning in
@@ -61,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements
          */
         private boolean permissionDenied = false;
         private GoogleMap map;
-        private FusedLocationProviderClient fusedLocationClient;
+        //private FusedLocationProviderClient fusedLocationClient;
         private Location usersLocation;
 
         @Override
@@ -75,10 +89,13 @@ public class MapsActivity extends FragmentActivity implements
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+            if (!Places.isInitialized()) {
+                Places.initialize(getApplicationContext(), "AIzaSyAIuRKBOcw8JNfNSDqmsO0d93k_pnf3MUk", Locale.UK);
+            }
 
-            //init();
+            init();
         }
 
         /**
@@ -139,7 +156,7 @@ public class MapsActivity extends FragmentActivity implements
                     == PackageManager.PERMISSION_GRANTED) {
                 if (map != null) {
                     map.setMyLocationEnabled(true);
-                    fusedLocationClient.getLastLocation()
+                    /*fusedLocationClient.getLastLocation()
                             .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                                 @Override
                                 public void onSuccess(Location location) {
@@ -149,7 +166,7 @@ public class MapsActivity extends FragmentActivity implements
                                         usersLocation = location;
                                     }
                                 }
-                            });
+                            });*/
 
                 }
             } else {
@@ -195,17 +212,45 @@ public class MapsActivity extends FragmentActivity implements
             searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
+
+                    // Set the fields to specify which types of place data to
+                    // return after the user has made a selection.
+                    List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
+                    // Start the autocomplete intent.
+                    Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                            .build(MapsActivity.this);
+                    startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+
                     if (i == EditorInfo.IME_ACTION_SEARCH ||
                             i == EditorInfo.IME_ACTION_DONE ||
                             keyEvent.getAction()==KeyEvent.ACTION_DOWN ||
                             keyEvent.getAction()==KeyEvent.KEYCODE_ENTER)
                     {
-                        geolocation();
+                        Toast.makeText(MapsActivity.this,"Searching",Toast.LENGTH_SHORT).show();
                     }
                     return false;
                 }
             });
         }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
         private void geolocation()
         {
