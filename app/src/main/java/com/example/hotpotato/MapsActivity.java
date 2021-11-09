@@ -1,16 +1,22 @@
 package com.example.hotpotato;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -18,6 +24,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,17 +36,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.hotpotato.databinding.ActivityMapsBinding;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements
     GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener,
     OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback{
 
-        private GoogleMap mMap;
         private ActivityMapsBinding binding;
         /*private Marker markerMenlyn;
         private Marker markerBrooklyn;
@@ -51,6 +67,7 @@ public class MapsActivity extends FragmentActivity implements
          * @see #onRequestPermissionsResult(int, String[], int[])
          */
         private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
         /**
          * Flag indicating whether a requested permission has been denied after returning in
@@ -58,6 +75,8 @@ public class MapsActivity extends FragmentActivity implements
          */
         private boolean permissionDenied = false;
         private GoogleMap map;
+        //private FusedLocationProviderClient fusedLocationClient;
+        private Location usersLocation;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +89,22 @@ public class MapsActivity extends FragmentActivity implements
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
+            //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-            init();
+            if (!Places.isInitialized()) {
+                Places.initialize(getApplicationContext(), "AIzaSyAIuRKBOcw8JNfNSDqmsO0d93k_pnf3MUk", Locale.UK);
+            }
+
+            // Set the fields to specify which types of place data to
+            // return after the user has made a selection.
+            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
+            // Start the autocomplete intent.
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                    .build(MapsActivity.this);
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+
+            //init();
         }
 
         /**
@@ -83,6 +116,7 @@ public class MapsActivity extends FragmentActivity implements
          * it inside the SupportMapFragment. This method will only be triggered once the user has
          * installed Google Play services and returned to the app.
          */
+        @SuppressLint("MissingPermission")
         @Override
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
@@ -90,45 +124,22 @@ public class MapsActivity extends FragmentActivity implements
             map.setOnMyLocationClickListener(this);
             enableMyLocation();
 
-            LatLng pretoria = new LatLng(-25.7,28.2);
-            LatLng menlyn = new LatLng(-25.7819,28.2768);
-            LatLng brooklyn = new LatLng(-25.7646,28.2393);
-            LatLng arcadia = new LatLng(-25.7453,28.2030);
+            /*LatLng menlyn = new LatLng(-25.7819,28.2768);*/
+            //LatLng userPosition = new LatLng(usersLocation.getLatitude(),usersLocation.getLongitude());
 
            /* markerMenlyn = map.addMarker(new MarkerOptions()
                     .position(menlyn)
                     .title("Menlyn Mang"));
-            markerMenlyn.setTag(0);
-
-            markerBrooklyn = map.addMarker(new MarkerOptions()
-                    .position(brooklyn)
-                    .title("Brooklyn Mang"));
-            markerBrooklyn.setTag(0);
-
-            markerArcadia = map.addMarker(new MarkerOptions()
-                    .position(arcadia)
-                    .title("Arcadia Mang"));
-            markerArcadia.setTag(0);*/
-
-            //LatLng mountainView = new LatLng(37.4, -122.1);
-
-            // Move the camera instantly to Sydney with a zoom of 15.
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(pretoria, 15));
-
-        // Zoom in, animating the camera.
-            map.animateCamera(CameraUpdateFactory.zoomIn());
-
-        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
-            map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+            markerMenlyn.setTag(0);*/
 
         // Construct a CameraPosition focusing on Mountain View and animate the camera to that position.
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(menlyn)      // Sets the center of the map to Mountain View
+            /*CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(userPosition)      // Sets the center of the map to Mountain View
                     .zoom(13)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
                     .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
-            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
 
         }
 
@@ -148,11 +159,24 @@ public class MapsActivity extends FragmentActivity implements
         /**
          * Enables the My Location layer if the fine location permission has been granted.
          */
+        @SuppressLint("MissingPermission")
         private void enableMyLocation() {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 if (map != null) {
                     map.setMyLocationEnabled(true);
+                    /*fusedLocationClient.getLastLocation()
+                            .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    // Got last known location. In some rare situations this can be null.
+                                    if (location != null) {
+                                        // Logic to handle location object
+                                        usersLocation = location;
+                                    }
+                                }
+                            });*/
+
                 }
             } else {
                 // Permission to access the location is missing. Show rationale and request permission
@@ -169,9 +193,12 @@ public class MapsActivity extends FragmentActivity implements
             }
 
             if(PermissionUtils.isPermissionGranted(permissions,grantResults,Manifest.permission.ACCESS_FINE_LOCATION)){
+                // Enable the my location layer if the permission has been granted.
                 enableMyLocation();
             }
             else{
+                // Permission was denied. Display an error message
+                // Display the missing permission error dialog when the fragments resume.
                 permissionDenied = true;
             }
         }
@@ -194,17 +221,45 @@ public class MapsActivity extends FragmentActivity implements
             searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
+
+                    // Set the fields to specify which types of place data to
+                    // return after the user has made a selection.
+                    List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
+                    // Start the autocomplete intent.
+                    Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                            .build(MapsActivity.this);
+                    startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+
                     if (i == EditorInfo.IME_ACTION_SEARCH ||
                             i == EditorInfo.IME_ACTION_DONE ||
                             keyEvent.getAction()==KeyEvent.ACTION_DOWN ||
                             keyEvent.getAction()==KeyEvent.KEYCODE_ENTER)
                     {
-                        geolocation();
+                        Toast.makeText(MapsActivity.this,"Searching",Toast.LENGTH_SHORT).show();
                     }
                     return false;
                 }
             });
         }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
         private void geolocation()
         {
@@ -248,7 +303,6 @@ public class MapsActivity extends FragmentActivity implements
         }
 
     @Override
-    public void onMyLocationClick(@NonNull Location location) {
-
+    public void onMyLocationClick(@NonNull Location location) { Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
     }
 }
