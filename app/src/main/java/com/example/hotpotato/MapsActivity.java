@@ -15,15 +15,21 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.Image;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -36,9 +42,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.hotpotato.databinding.ActivityMapsBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
@@ -55,28 +70,15 @@ public class MapsActivity extends FragmentActivity implements
     OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback{
 
         private ActivityMapsBinding binding;
-        /*private Marker markerMenlyn;
-        private Marker markerBrooklyn;
-        private Marker markerArcadia;*/
-
+        private ImageButton search;
         private EditText searchText;
-
-        /**
-         * Request code for location permission request.
-         *
-         * @see #onRequestPermissionsResult(int, String[], int[])
-         */
         private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
-
-        /**
-         * Flag indicating whether a requested permission has been denied after returning in
-         * {@link #onRequestPermissionsResult(int, String[], int[])}.
-         */
+        private static int AUTOCOMPLETE_REQUEST_CODE = 1;
         private boolean permissionDenied = false;
         private GoogleMap map;
-        //private FusedLocationProviderClient fusedLocationClient;
+        private FusedLocationProviderClient fusedLocationClient;
         private Location usersLocation;
+        private PlacesClient placesClient;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -84,17 +86,76 @@ public class MapsActivity extends FragmentActivity implements
 
             binding = ActivityMapsBinding.inflate(getLayoutInflater());
             setContentView(binding.getRoot());
-            searchText = findViewById(R.id.SearchText);
+            search = findViewById(R.id.btnSearch);
+            //searchText = findViewById(R.id.SearchText);
             // Obtain the SupportMapFragment and get notified when the map is ready to be used.
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
+            mapFragment.getMapAsync(MapsActivity.this);
             //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
             if (!Places.isInitialized()) {
-                Places.initialize(getApplicationContext(), "AIzaSyAIuRKBOcw8JNfNSDqmsO0d93k_pnf3MUk", Locale.UK);
+                Places.initialize(getApplicationContext(), "@string/google_maps_API_key", Locale.UK);
             }
+            placesClient = Places.createClient(this);
 
+            search.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AutoComplete();
+                }
+            });
+
+            //init();
+        }
+
+        @SuppressLint("MissingPermission")
+        @Override
+        public void onMapReady(GoogleMap googleMap)
+        {
+            map = googleMap;
+            map.setOnMyLocationButtonClickListener(this);
+            map.setOnMyLocationClickListener(this);
+
+            if(!permissionDenied){
+                GetDeviceLocation();
+                enableMyLocation();
+            }
+        }
+
+        public void GetDeviceLocation()
+        {
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(MapsActivity.this);
+            try
+            {
+                if(!permissionDenied)
+                {
+                    Task location =  fusedLocationClient.getLastLocation();
+                    location.addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if(task.isSuccessful()){
+                                Log.d(TAG,"found location");
+                                usersLocation = (Location) task.getResult();
+                                LatLng userLatLng = new LatLng(usersLocation.getLatitude(), usersLocation.getLongitude());
+                                MoveCamera(userLatLng,15f);
+                            }
+                            else{
+                                Log.d(TAG,"location is null");
+                                Toast.makeText(MapsActivity.this,"Couldn't find user location",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+
+            }catch (SecurityException e)
+            {
+                Log.e(TAG, "GetDeviceLocation: Security Exception" + e.getLocalizedMessage());
+            }
+        }
+
+        public void AutoComplete()
+        {
             // Set the fields to specify which types of place data to
             // return after the user has made a selection.
             List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
@@ -104,43 +165,38 @@ public class MapsActivity extends FragmentActivity implements
                     .build(MapsActivity.this);
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
 
-            //init();
-        }
+            // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
+            // and once again when the user makes a selection (for example when calling fetchPlace()).
+            /*AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera. In this case,
-         * we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to install
-         * it inside the SupportMapFragment. This method will only be triggered once the user has
-         * installed Google Play services and returned to the app.
-         */
-        @SuppressLint("MissingPermission")
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            map = googleMap;
-            map.setOnMyLocationButtonClickListener(this);
-            map.setOnMyLocationClickListener(this);
-            enableMyLocation();
+            // Create a RectangularBounds object.
+            RectangularBounds bounds = RectangularBounds.newInstance(
+                    new LatLng(-33.880490, 151.184363),
+                    new LatLng(-33.858754, 151.229596));
+            // Use the builder to create a FindAutocompletePredictionsRequest.
 
-            /*LatLng menlyn = new LatLng(-25.7819,28.2768);*/
-            //LatLng userPosition = new LatLng(usersLocation.getLatitude(),usersLocation.getLongitude());
+            FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+                    // Call either setLocationBias() OR setLocationRestriction().
+                    .setLocationBias(bounds)
+                    //.setLocationRestriction(bounds)
+                    .setOrigin(new LatLng(-33.8749937,151.2041382))
+                    .setCountries("AU", "NZ")
+                    .setTypeFilter(TypeFilter.ADDRESS)
+                    .setSessionToken(token)
+                    .setQuery(query)
+                    .build();
 
-           /* markerMenlyn = map.addMarker(new MarkerOptions()
-                    .position(menlyn)
-                    .title("Menlyn Mang"));
-            markerMenlyn.setTag(0);*/
-
-        // Construct a CameraPosition focusing on Mountain View and animate the camera to that position.
-            /*CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(userPosition)      // Sets the center of the map to Mountain View
-                    .zoom(13)                   // Sets the zoom
-                    .bearing(90)                // Sets the orientation of the camera to east
-                    .tilt(30)                   // Sets the tilt of the camera to 30 degrees
-                    .build();                   // Creates a CameraPosition from the builder
-            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
-
+            placesClient.findAutocompletePredictions(request).addOnSuccessListener((response) -> {
+                for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
+                    Log.i(TAG, prediction.getPlaceId());
+                    Log.i(TAG, prediction.getPrimaryText(null).toString());
+                }
+            }).addOnFailureListener((exception) -> {
+                if (exception instanceof ApiException) {
+                    ApiException apiException = (ApiException) exception;
+                    Log.e(TAG, "Place not found: " + apiException.getStatusCode());
+                }
+            });*/
         }
 
         @Override
@@ -165,18 +221,6 @@ public class MapsActivity extends FragmentActivity implements
                     == PackageManager.PERMISSION_GRANTED) {
                 if (map != null) {
                     map.setMyLocationEnabled(true);
-                    /*fusedLocationClient.getLastLocation()
-                            .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                                @Override
-                                public void onSuccess(Location location) {
-                                    // Got last known location. In some rare situations this can be null.
-                                    if (location != null) {
-                                        // Logic to handle location object
-                                        usersLocation = location;
-                                    }
-                                }
-                            });*/
-
                 }
             } else {
                 // Permission to access the location is missing. Show rationale and request permission
@@ -282,7 +326,7 @@ public class MapsActivity extends FragmentActivity implements
             }
         }
 
-        private void MoveCamera(LatLng latLng, float zoom, String name)
+        private void MoveCamera(LatLng latLng, float zoom)
         {
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(latLng)      // Sets the center of the map to Mountain View
@@ -291,11 +335,6 @@ public class MapsActivity extends FragmentActivity implements
                     .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-            Marker marker = map.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title(name));
-            marker.setTag(0);
         }
 
         private void hideSoftKeyboard(){
