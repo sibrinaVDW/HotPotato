@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">HotPotato</string>
+    <string name="google_maps_API_key">AIzaSyAIuRKBOcw8JNfNSDqmsO0d93k_pnf3MUk</string>
     <string name="title_activity_maps">MapsActivity</string>
 </resources>
