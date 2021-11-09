@@ -95,7 +95,16 @@ public class MapsActivity extends FragmentActivity implements
                 Places.initialize(getApplicationContext(), "AIzaSyAIuRKBOcw8JNfNSDqmsO0d93k_pnf3MUk", Locale.UK);
             }
 
-            init();
+            // Set the fields to specify which types of place data to
+            // return after the user has made a selection.
+            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
+            // Start the autocomplete intent.
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                    .build(MapsActivity.this);
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+
+            //init();
         }
 
         /**
