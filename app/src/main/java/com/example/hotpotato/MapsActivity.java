@@ -38,11 +38,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.hotpotato.databinding.ActivityMapsBinding;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -61,19 +64,26 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.maps.MapView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements
     GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener,
-    OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback{
+    OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback,
+    TaskLoadedCallback{
 
         private ActivityMapsBinding binding;
         private ImageButton search;
@@ -82,6 +92,7 @@ public class MapsActivity extends FragmentActivity implements
         private static int AUTOCOMPLETE_REQUEST_CODE = 1;
         private boolean permissionDenied = false;
         private GoogleMap map;
+        private UiSettings mUiSettings;
         private FusedLocationProviderClient fusedLocationClient;
         private Location usersLocation;
         private PlacesClient placesClient;
@@ -91,9 +102,29 @@ public class MapsActivity extends FragmentActivity implements
         private Button recenterUserLocation;
 
 
+        private Polyline currentPolyline;
+
+        private MapView mapView;
+
+
     @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            Mapbox.getInstance(this,getString(R.string.mapbox_access_token));
+            setContentView(R.layout.activity_maps);
+            mapView = (MapView) findViewById(R.id.mapView);
+            mapView.onCreate(savedInstanceState);
+
+
+            //binding = ActivityMapsBinding.inflate(getLayoutInflater());
+            //setContentView(binding.getRoot());
+            search = findViewById(R.id.btnSearch);
+            //searchText = findViewById(R.id.SearchText);
+            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+            //        .findFragmentById(R.id.map);
+            //mapFragment.getMapAsync(MapsActivity.this);
+            //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
             //Login
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -112,24 +143,58 @@ public class MapsActivity extends FragmentActivity implements
                 String uid = user.getUid();
             }
 
-            binding = ActivityMapsBinding.inflate(getLayoutInflater());
-            setContentView(binding.getRoot());
-            //search = findViewById(R.id.btnSearch);
-            //searchText = findViewById(R.id.SearchText);
-            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
-            mapFragment.getMapAsync(MapsActivity.this);
 
             if (!Places.isInitialized()) {
                 Places.initialize(getApplicationContext(), "AIzaSyAIuRKBOcw8JNfNSDqmsO0d93k_pnf3MUk", Locale.UK);
             }
             placesClient = Places.createClient(this);
 
+            search.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AutoComplete();
+                }
+            });
             //init();
         }
 
-        @SuppressLint("MissingPermission")
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @SuppressLint("MissingPermission")
         @Override
         public void onMapReady(GoogleMap googleMap)
         {
@@ -137,8 +202,27 @@ public class MapsActivity extends FragmentActivity implements
             map.setOnMyLocationButtonClickListener(this);
             map.setOnMyLocationClickListener(this);
 
+            mUiSettings = googleMap.getUiSettings();
+
+            mUiSettings.setZoomControlsEnabled(true);
+
+            LatLng sydney = new LatLng(-26.1400, 28.1130);
+            googleMap.addMarker(new MarkerOptions()
+                    .position(sydney)
+                    .title("Marker in Fairvale"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+            LatLng sydney1 = new LatLng(-26.1302, 28.1132);
+            googleMap.addMarker(new MarkerOptions()
+                    .position(sydney1)
+                    .title("Marker in NOT Fairvale"));
+
+            String url = getUrl(sydney,sydney1,"driving");
+            new FetchURL(MapsActivity.this).execute(url, "driving");
             if(!permissionDenied){
                 GetDeviceLocation();
+                enableMyLocation();
+
             }
 
             recenterUserLocation = findViewById(R.id.btnRecenter);
@@ -173,6 +257,23 @@ public class MapsActivity extends FragmentActivity implements
                 }
             });
         }
+
+    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
+        return url;
+    }
+
 
         public void GetDeviceLocation()
         {
@@ -326,6 +427,12 @@ public class MapsActivity extends FragmentActivity implements
     public void onMyLocationClick(@NonNull Location location) { Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onTaskDone(Object... values) {
+        if (currentPolyline != null)
+            currentPolyline.remove();
+        currentPolyline = map.addPolyline((PolylineOptions) values[0]);
+    }
 
 
     //-- BACKUP IDEA --
