@@ -60,12 +60,15 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.maps.MapView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements
     GoogleMap.OnMyLocationButtonClickListener,
@@ -87,18 +90,24 @@ public class MapsActivity extends FragmentActivity implements
 
         private Polyline currentPolyline;
 
+        private MapView mapView;
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            Mapbox.getInstance(this,getString(R.string.mapbox_access_token));
+            setContentView(R.layout.activity_maps);
+            mapView = (MapView) findViewById(R.id.mapView);
+            mapView.onCreate(savedInstanceState);
 
-            binding = ActivityMapsBinding.inflate(getLayoutInflater());
-            setContentView(binding.getRoot());
+            //binding = ActivityMapsBinding.inflate(getLayoutInflater());
+            //setContentView(binding.getRoot());
             search = findViewById(R.id.btnSearch);
             //searchText = findViewById(R.id.SearchText);
             // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
-            mapFragment.getMapAsync(MapsActivity.this);
+            //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+            //        .findFragmentById(R.id.map);
+            //mapFragment.getMapAsync(MapsActivity.this);
             //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
             if (!Places.isInitialized()) {
@@ -112,14 +121,46 @@ public class MapsActivity extends FragmentActivity implements
                     AutoComplete();
                 }
             });
-
-
-
-
             //init();
         }
 
-        @SuppressLint("MissingPermission")
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @SuppressLint("MissingPermission")
         @Override
         public void onMapReady(GoogleMap googleMap)
         {
