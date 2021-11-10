@@ -49,6 +49,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.model.OpeningHours;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
@@ -85,6 +86,9 @@ public class MapsActivity extends FragmentActivity implements
         private Location usersLocation;
         private PlacesClient placesClient;
         private List<Place.Field> placeFields;
+        Place mPlace;
+        private Marker mMarker;
+        private Button recenterUserLocation;
 
 
     @Override
@@ -122,13 +126,6 @@ public class MapsActivity extends FragmentActivity implements
             }
             placesClient = Places.createClient(this);
 
-            /*search.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AutoComplete();
-                }
-            });*/
-
             //init();
         }
 
@@ -142,8 +139,15 @@ public class MapsActivity extends FragmentActivity implements
 
             if(!permissionDenied){
                 GetDeviceLocation();
-                enableMyLocation();
             }
+
+            recenterUserLocation = findViewById(R.id.btnRecenter);
+            recenterUserLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    GetDeviceLocation();
+                }
+            });
 
             AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
             List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
@@ -159,8 +163,13 @@ public class MapsActivity extends FragmentActivity implements
                 @Override
                 public void onPlaceSelected(@NonNull Place place) {
                     //LatLng selectedPlaceLatLng = new LatLng(place.getLatLng())
-                    //CameraPosition()
 
+                    String landmarkName = place.getName();
+                    String landmarkAddress = place.getAddress();
+                    OpeningHours landmarkHours = place.getOpeningHours();
+                    String landmarkPhoneNumber = place.getPhoneNumber();
+                    Log.d(TAG, "Landmark Info: "+ landmarkName + " " + landmarkAddress + " " + landmarkPhoneNumber + " " + landmarkHours);
+                    MoveCamera(place.getLatLng(),15f,landmarkName);
                 }
             });
         }
@@ -183,6 +192,7 @@ public class MapsActivity extends FragmentActivity implements
                                     usersLocation = (Location) task.getResult();
                                     LatLng userLatLng = new LatLng(usersLocation.getLatitude(), usersLocation.getLongitude());
                                     MoveCamera(userLatLng,15f);
+                                    enableMyLocation();
                                 }
                                 else{
                                     Log.d(TAG,"location is null");
@@ -192,9 +202,6 @@ public class MapsActivity extends FragmentActivity implements
                         });
 
                     }
-
-
-
                 }
 
             }catch (SecurityException e)
@@ -203,52 +210,6 @@ public class MapsActivity extends FragmentActivity implements
             }
         }
 
-
-        public void AutoComplete()
-        {
-            // Set the fields to specify which types of place data to
-            // return after the user has made a selection.
-            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
-
-
-            // Start the autocomplete intent.
-            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                    .build(MapsActivity.this);
-            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
-
-            // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest,
-            // and once again when the user makes a selection (for example when calling fetchPlace()).
-            /*AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
-
-            // Create a RectangularBounds object.
-            RectangularBounds bounds = RectangularBounds.newInstance(
-                    new LatLng(-33.880490, 151.184363),
-                    new LatLng(-33.858754, 151.229596));
-            // Use the builder to create a FindAutocompletePredictionsRequest.
-
-            FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
-                    // Call either setLocationBias() OR setLocationRestriction().
-                    .setLocationBias(bounds)
-                    //.setLocationRestriction(bounds)
-                    .setOrigin(new LatLng(-33.8749937,151.2041382))
-                    .setCountries("AU", "NZ")
-                    .setTypeFilter(TypeFilter.ADDRESS)
-                    .setSessionToken(token)
-                    .setQuery(query)
-                    .build();
-
-            placesClient.findAutocompletePredictions(request).addOnSuccessListener((response) -> {
-                for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
-                    Log.i(TAG, prediction.getPlaceId());
-                    Log.i(TAG, prediction.getPrimaryText(null).toString());
-                }
-            }).addOnFailureListener((exception) -> {
-                if (exception instanceof ApiException) {
-                    ApiException apiException = (ApiException) exception;
-                    Log.e(TAG, "Place not found: " + apiException.getStatusCode());
-                }
-            });*/
-        }
 
         @Override
         public void onPointerCaptureChanged(boolean hasCapture) {
@@ -345,7 +306,65 @@ public class MapsActivity extends FragmentActivity implements
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
 
+    private void MoveCamera(LatLng latLng, float zoom, String title)
+    {
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLng)      // Sets the center of the map to Mountain View
+                .zoom(zoom)                   // Sets the zoom
+                .bearing(90)                // Sets the orientation of the camera to east
+                .tilt(30)                   // Sets the tilt of the camera to 30 degrees
+                .build();                   // Creates a CameraPosition from the builder
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        MarkerOptions options = new MarkerOptions().position(latLng).title(title);
+        map.addMarker(options);
+        mMarker = map.addMarker(options);
+
+    }
+
     @Override
     public void onMyLocationClick(@NonNull Location location) { Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
     }
+
+
+
+    //-- BACKUP IDEA --
+    /*private void init()
+    {
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH ||
+                        i == EditorInfo.IME_ACTION_DONE ||
+                        keyEvent.getAction()==KeyEvent.ACTION_DOWN ||
+                        keyEvent.getAction()==KeyEvent.KEYCODE_ENTER)
+                {
+                    geolocation();
+                }
+                return false;
+            }
+        });
+    }
+
+    private void geolocation()
+    {
+        String searching = searchText.getText().toString();
+        Geocoder geocoder = new Geocoder(MapsActivity.this);
+        List<Address> list = new ArrayList<>();
+        Toast.makeText(MapsActivity.this, "yes", Toast.LENGTH_LONG).show();
+        try
+        {
+            list = geocoder.getFromLocationName(searching,1);
+        }
+        catch (IOException e)
+        {
+
+        }
+        if (list.size() > 0)
+        {
+            Address address = list.get(0);
+            Toast.makeText(this, address.toString(), Toast.LENGTH_LONG).show();
+        }
+    }*/
+
 }
