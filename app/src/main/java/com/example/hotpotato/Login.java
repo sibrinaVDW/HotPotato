@@ -5,13 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Login extends AppCompatActivity {
 
@@ -19,14 +31,43 @@ public class Login extends AppCompatActivity {
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
+    private EditText name;
+    private EditText password;
+    private Button add;
+    private Button signin;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference ref = db.collection("Users");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
         // [START initialize_auth]
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+
+        name = findViewById(R.id.edtName);
+        password = findViewById(R.id.edtPassword);
+        add = findViewById(R.id.btnAdd);
+        signin = findViewById(R.id.btnEnter);
+        signin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String nameText = name.getText().toString();
+                String passwordtext = password.getText().toString();
+                signIn(nameText,passwordtext);
+            }
+        });
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String nameText = name.getText().toString();
+                String passwordtext = password.getText().toString();
+                createAccount(nameText,passwordtext);
+            }
+        });
     }
 
     // [START on_start_check_user]
@@ -51,11 +92,37 @@ public class Login extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
                             updateUI(user);
+
+                            Map<String, Object> userObj = new HashMap<>();
+                            userObj.put("name", "lilly");
+                            userObj.put("email", email);
+                            userObj.put("favoritesID", "");
+                            userObj.put("prefLandmarks", "Modern");
+                            userObj.put("unitsPref", "km");
+
+                            ref.document(user.getUid())
+                                    .set(userObj)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully written!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error writing document", e);
+                                        }
+                                    });
+                            Toast.makeText(Login.this, "Authentication success.",
+                                    Toast.LENGTH_SHORT).show();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(Login.this, "Authentication failed.",
+                            Toast.makeText(Login.this, "Authentication failed. Invalid email format",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
