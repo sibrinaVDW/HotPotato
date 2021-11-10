@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "66059108716",
+    "project_id": "hotpotato-69bad",
+    "storage_bucket": "hotpotato-69bad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66059108716:android:a729a0ac3a62702cfaf349",
+        "android_client_info": {
+          "package_name": "com.example.hotpotato"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "66059108716-52bski0upmipogd0qkvs0jgr1u6oeg74.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEV8kEtO6RCXvBFWqxTdUKztoYf7pEcOs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "66059108716-52bski0upmipogd0qkvs0jgr1u6oeg74.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
