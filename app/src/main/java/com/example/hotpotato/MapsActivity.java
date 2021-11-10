@@ -57,6 +57,8 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -82,8 +84,10 @@ public class MapsActivity extends FragmentActivity implements
         private FusedLocationProviderClient fusedLocationClient;
         private Location usersLocation;
         private PlacesClient placesClient;
+        private List<Place.Field> placeFields;
 
-        @Override
+
+    @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
@@ -106,25 +110,24 @@ public class MapsActivity extends FragmentActivity implements
 
             binding = ActivityMapsBinding.inflate(getLayoutInflater());
             setContentView(binding.getRoot());
-            search = findViewById(R.id.btnSearch);
+            //search = findViewById(R.id.btnSearch);
             //searchText = findViewById(R.id.SearchText);
             // Obtain the SupportMapFragment and get notified when the map is ready to be used.
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(MapsActivity.this);
-            //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
             if (!Places.isInitialized()) {
-                Places.initialize(getApplicationContext(), "@string/google_maps_API_key", Locale.UK);
+                Places.initialize(getApplicationContext(), "AIzaSyAIuRKBOcw8JNfNSDqmsO0d93k_pnf3MUk", Locale.UK);
             }
             placesClient = Places.createClient(this);
 
-            search.setOnClickListener(new View.OnClickListener() {
+            /*search.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AutoComplete();
                 }
-            });
+            });*/
 
             //init();
         }
@@ -141,6 +144,25 @@ public class MapsActivity extends FragmentActivity implements
                 GetDeviceLocation();
                 enableMyLocation();
             }
+
+            AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG);
+            autocompleteFragment.setPlaceFields(fields);
+            //set bounds for in radius of user location.
+            //autocompleteFragment.setLocationBias(RectangularBounds.newInstance(new LatLng()));
+            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onError(@NonNull Status status) {
+
+                }
+
+                @Override
+                public void onPlaceSelected(@NonNull Place place) {
+                    //LatLng selectedPlaceLatLng = new LatLng(place.getLatLng())
+                    //CameraPosition()
+
+                }
+            });
         }
 
         public void GetDeviceLocation()
@@ -150,22 +172,29 @@ public class MapsActivity extends FragmentActivity implements
             {
                 if(!permissionDenied)
                 {
-                    Task location =  fusedLocationClient.getLastLocation();
-                    location.addOnCompleteListener(new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            if(task.isSuccessful()){
-                                Log.d(TAG,"found location");
-                                usersLocation = (Location) task.getResult();
-                                LatLng userLatLng = new LatLng(usersLocation.getLatitude(), usersLocation.getLongitude());
-                                MoveCamera(userLatLng,15f);
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        Task location =  fusedLocationClient.getLastLocation();
+                        location.addOnCompleteListener(new OnCompleteListener() {
+                            @Override
+                            public void onComplete(@NonNull Task task) {
+                                if(task.isSuccessful()){
+                                    Log.d(TAG,"found location");
+                                    usersLocation = (Location) task.getResult();
+                                    LatLng userLatLng = new LatLng(usersLocation.getLatitude(), usersLocation.getLongitude());
+                                    MoveCamera(userLatLng,15f);
+                                }
+                                else{
+                                    Log.d(TAG,"location is null");
+                                    Toast.makeText(MapsActivity.this,"Couldn't find user location",Toast.LENGTH_SHORT).show();
+                                }
                             }
-                            else{
-                                Log.d(TAG,"location is null");
-                                Toast.makeText(MapsActivity.this,"Couldn't find user location",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                        });
+
+                    }
+
+
+
                 }
 
             }catch (SecurityException e)
@@ -174,11 +203,13 @@ public class MapsActivity extends FragmentActivity implements
             }
         }
 
+
         public void AutoComplete()
         {
             // Set the fields to specify which types of place data to
             // return after the user has made a selection.
             List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
 
             // Start the autocomplete intent.
             Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
@@ -241,6 +272,7 @@ public class MapsActivity extends FragmentActivity implements
                     == PackageManager.PERMISSION_GRANTED) {
                 if (map != null) {
                     map.setMyLocationEnabled(true);
+                    //map.getUiSettings().setMyLocationButtonEnabled(true);
                 }
             } else {
                 // Permission to access the location is missing. Show rationale and request permission
@@ -280,33 +312,6 @@ public class MapsActivity extends FragmentActivity implements
             PermissionUtils.PermissionDeniedDialog.newInstance(true).show(getSupportFragmentManager(), "dialog");
         }
 
-        private void init()
-        {
-            searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int i, KeyEvent keyEvent) {
-
-                    // Set the fields to specify which types of place data to
-                    // return after the user has made a selection.
-                    List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
-
-                    // Start the autocomplete intent.
-                    Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                            .build(MapsActivity.this);
-                    startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
-
-                    if (i == EditorInfo.IME_ACTION_SEARCH ||
-                            i == EditorInfo.IME_ACTION_DONE ||
-                            keyEvent.getAction()==KeyEvent.ACTION_DOWN ||
-                            keyEvent.getAction()==KeyEvent.KEYCODE_ENTER)
-                    {
-                        Toast.makeText(MapsActivity.this,"Searching",Toast.LENGTH_SHORT).show();
-                    }
-                    return false;
-                }
-            });
-        }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
@@ -324,27 +329,6 @@ public class MapsActivity extends FragmentActivity implements
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-        private void geolocation()
-        {
-            String searching = searchText.getText().toString();
-            Geocoder geocoder = new Geocoder(MapsActivity.this);
-            List<Address> list = new ArrayList<>();
-            Toast.makeText(MapsActivity.this, "yes", Toast.LENGTH_LONG).show();
-            try
-            {
-                list = geocoder.getFromLocationName(searching,1);
-            }
-            catch (IOException e)
-            {
-
-            }
-            if (list.size() > 0)
-            {
-                Address address = list.get(0);
-                Toast.makeText(this, address.toString(), Toast.LENGTH_LONG).show();
-            }
-        }
 
         private void MoveCamera(LatLng latLng, float zoom)
         {
