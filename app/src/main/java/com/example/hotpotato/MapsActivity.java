@@ -37,11 +37,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.hotpotato.databinding.ActivityMapsBinding;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -67,7 +70,8 @@ import java.util.Locale;
 public class MapsActivity extends FragmentActivity implements
     GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener,
-    OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback{
+    OnMapReadyCallback,ActivityCompat.OnRequestPermissionsResultCallback,
+    TaskLoadedCallback{
 
         private ActivityMapsBinding binding;
         private ImageButton search;
@@ -76,9 +80,12 @@ public class MapsActivity extends FragmentActivity implements
         private static int AUTOCOMPLETE_REQUEST_CODE = 1;
         private boolean permissionDenied = false;
         private GoogleMap map;
+        private UiSettings mUiSettings;
         private FusedLocationProviderClient fusedLocationClient;
         private Location usersLocation;
         private PlacesClient placesClient;
+
+        private Polyline currentPolyline;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +102,7 @@ public class MapsActivity extends FragmentActivity implements
             //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
             if (!Places.isInitialized()) {
-                Places.initialize(getApplicationContext(), "@string/google_maps_API_key", Locale.UK);
+                Places.initialize(getApplicationContext(), "AIzaSyAIuRKBOcw8JNfNSDqmsO0d93k_pnf3MUk", Locale.UK);
             }
             placesClient = Places.createClient(this);
 
@@ -105,6 +112,9 @@ public class MapsActivity extends FragmentActivity implements
                     AutoComplete();
                 }
             });
+
+
+
 
             //init();
         }
@@ -117,11 +127,47 @@ public class MapsActivity extends FragmentActivity implements
             map.setOnMyLocationButtonClickListener(this);
             map.setOnMyLocationClickListener(this);
 
+            mUiSettings = googleMap.getUiSettings();
+
+            mUiSettings.setZoomControlsEnabled(true);
+
+            LatLng sydney = new LatLng(-26.1400, 28.1130);
+            googleMap.addMarker(new MarkerOptions()
+                    .position(sydney)
+                    .title("Marker in Fairvale"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+            LatLng sydney1 = new LatLng(-26.1302, 28.1132);
+            googleMap.addMarker(new MarkerOptions()
+                    .position(sydney1)
+                    .title("Marker in NOT Fairvale"));
+
+            String url = getUrl(sydney,sydney1,"driving");
+            new FetchURL(MapsActivity.this).execute(url, "driving");
             if(!permissionDenied){
                 GetDeviceLocation();
                 enableMyLocation();
+
+
             }
         }
+
+    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
+        return url;
+    }
+
 
         public void GetDeviceLocation()
         {
@@ -343,5 +389,12 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onMyLocationClick(@NonNull Location location) { Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onTaskDone(Object... values) {
+        if (currentPolyline != null)
+            currentPolyline.remove();
+        currentPolyline = map.addPolyline((PolylineOptions) values[0]);
     }
 }
