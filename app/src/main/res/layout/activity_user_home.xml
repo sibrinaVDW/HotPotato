@@ -27,15 +27,19 @@
                 android:layout_width="338dp"
                 android:layout_height="111dp"
                 android:layout_marginTop="90dp"
+
                 android:foreground="@drawable/hellotextuser_txt"
+
                 app:srcCompat="@drawable/hellouser_txt" />
 
             <ImageView
                 android:id="@+id/imageView9"
                 android:layout_width="92dp"
                 android:layout_height="86dp"
+
                 android:layout_marginTop="-190dp"
                 android:foreground="@drawable/user_btn"
+
                 app:srcCompat="@drawable/usericon_btn" />
 
             <ImageView

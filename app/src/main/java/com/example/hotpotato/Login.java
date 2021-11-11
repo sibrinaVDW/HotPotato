@@ -38,7 +38,9 @@ public class Login extends AppCompatActivity {
     // [END declare_auth]
     private EditText name;
     private EditText password;
-    private Button add;
+
+    private ImageButton add;
+
     private ImageButton signin;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
@@ -51,6 +53,7 @@ public class Login extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+
 
         name = findViewById(R.id.edtName);
         password = findViewById(R.id.edtPassword);

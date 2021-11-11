@@ -26,7 +26,9 @@
             android:layout_marginTop="-48dp"
             android:layout_marginRight="20dp"
             android:backgroundTint="#00FFFFFF"
+
             app:srcCompat="@drawable/loginwhite_btn" />
+
 
         <ImageButton
             android:id="@+id/getstarted_btn"
