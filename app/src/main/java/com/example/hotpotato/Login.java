@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity {
     // [END declare_auth]
     private EditText name;
     private EditText password;
-    private Button add;
+    private ImageButton add;
     private ImageButton signin;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
@@ -54,7 +54,7 @@ public class Login extends AppCompatActivity {
 
         name = findViewById(R.id.edtName);
         password = findViewById(R.id.edtPassword);
-        //add = findViewById(R.id.btnAdd);
+        add = findViewById(R.id.signupnew_btn);
         signin = findViewById(R.id.btnEnter);
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +101,7 @@ public class Login extends AppCompatActivity {
                             updateUI(user);
 
                             Map<String, Object> userObj = new HashMap<>();
-                            userObj.put("name", "lilly");
+                            userObj.put("name", "");
                             userObj.put("email", email);
                             userObj.put("favoritesID", "");
                             userObj.put("prefLandmarks", "Modern");
@@ -121,6 +121,11 @@ public class Login extends AppCompatActivity {
                                             Log.w(TAG, "Error writing document", e);
                                         }
                                     });
+
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("ListLandmarks", "");
+                            ref.document(user.getUid()).collection("FavouriteLandmarks").document("Landmarks").set(data);
+
                             Toast.makeText(Login.this, "Authentication success.",
                                     Toast.LENGTH_SHORT).show();
 
