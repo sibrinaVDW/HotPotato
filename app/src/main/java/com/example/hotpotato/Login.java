@@ -3,6 +3,7 @@ package com.example.hotpotato;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,10 +22,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Login extends AppCompatActivity {
@@ -35,7 +38,9 @@ public class Login extends AppCompatActivity {
     // [END declare_auth]
     private EditText name;
     private EditText password;
+
     private ImageButton add;
+
     private ImageButton signin;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
@@ -49,10 +54,11 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
 
-        name = findViewById(R.id.email_txt);
-        password = findViewById(R.id.editTextTextPassword);
-        add = findViewById(R.id.signupnew_btn);
-        signin = findViewById(R.id.login_btn);
+
+        name = findViewById(R.id.edtName);
+        password = findViewById(R.id.edtPassword);
+        //add = findViewById(R.id.btnAdd);
+        signin = findViewById(R.id.btnEnter);
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,22 +155,32 @@ public class Login extends AppCompatActivity {
                             //when launching intent for profile activity, pass 'extra' of user (firebase.curr).
 
                             //Getting data, just putting here for now.
-                            /*DocumentReference docRef = db.collection("cities").document("BJ");
-                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            DocumentReference docRef = ref.document(user.getUid());
+                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    City city = documentSnapshot.toObject(City.class);
-                                }
-                            });*/
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            String username = document.getString("email");
+                                            int numFavLandmarks;
+                                            String favLandmarks = document.getString("favoritesID");
 
-                            /*ref.document("BJ");
-                            ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    //City city = documentSnapshot.toObject(City.class);
-                                    String name;
+                                            Intent i = new Intent(Login.this,UserHome.class);
+                                            i.putExtra("landmarkID",favLandmarks);
+                                            i.putExtra("user", user.getUid());
+                                            startActivity(i);
+                                            //List<String> landmarksFound = ref.document(user.getUid()).get("existing") as List<String>
+
+                                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                        } else {
+                                            Log.d(TAG, "No such document");
+                                        }
+                                    } else {
+                                        Log.d(TAG, "get failed with ", task.getException());
+                                    }
                                 }
-                            });*/
+                            });
 
                             updateUI(user);
                         } else {

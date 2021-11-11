@@ -20,13 +20,15 @@
 
         <ImageButton
             android:id="@+id/loginstart_btn"
-            android:layout_width="92dp"
-            android:layout_height="55dp"
-            android:layout_marginLeft="300dp"
-            android:layout_marginTop="-60dp"
+            android:layout_width="69dp"
+            android:layout_height="33dp"
+            android:layout_marginLeft="310dp"
+            android:layout_marginTop="-48dp"
             android:layout_marginRight="20dp"
             android:backgroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/login_btn" />
+
+            app:srcCompat="@drawable/loginwhite_btn" />
+
 
         <ImageButton
             android:id="@+id/getstarted_btn"
