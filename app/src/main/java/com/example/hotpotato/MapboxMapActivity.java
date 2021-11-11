@@ -43,6 +43,10 @@ import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
 //import com.mapbox.mapboxsdk.constants.Style;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -70,6 +74,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineCap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
+import static com.mapbox.mapboxsdk.style.layers.Property.LINE_JOIN_ROUND;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -92,12 +97,20 @@ public class MapboxMapActivity extends AppCompatActivity implements OnMapReadyCa
     private Location originLocation;
     private PermissionsManager permissionsManager;
 
+    private static final String DISTANCE_SOURCE_ID = "DISTANCE_SOURCE_ID";
+    private static final String DISTANCE_LINE_LAYER_ID = "DISTANCE_LINE_LAYER_ID";
+
+    // Adjust private static final variables below to change the example's UI
+    private static final int LINE_COLOR = Color.RED;
+    private static final float LINE_WIDTH = 2f;
+
     private static final String ROUTE_LAYER_ID = "route-layer-id";
     private static final String ROUTE_SOURCE_ID = "route-source-id";
     private static final String ICON_LAYER_ID = "icon-layer-id";
     private static final String ICON_SOURCE_ID = "icon-source-id";
     private static final String RED_PIN_ICON_ID = "red-pin-icon-id";
     private MapView viewMap;
+    private MapboxMap mapboxMap;
     private DirectionsRoute currentRoute;
     private MapboxDirections client;
     private Point origin;
@@ -121,9 +134,22 @@ public class MapboxMapActivity extends AppCompatActivity implements OnMapReadyCa
         viewMap.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull MapboxMap mapboxMap) {
-                mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
+                MapboxMapActivity.this.mapboxMap = mapboxMap;
+                mapboxMap.setStyle(new Style.Builder()
+                        .fromUri(Style.DARK)
+
+// Add the source to the map
+                        .withSource(new GeoJsonSource(DISTANCE_SOURCE_ID))
+
+// Style and add the LineLayer to the map.
+                        .withLayer(new LineLayer(DISTANCE_LINE_LAYER_ID, DISTANCE_SOURCE_ID).withProperties(
+                                lineColor(LINE_COLOR),
+                                lineWidth(LINE_WIDTH),
+                                lineJoin(LINE_JOIN_ROUND))), new Style.OnStyleLoaded() {
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
+                        enableLocationComponent(style);
+
 // Set the origin location to the Alhambra landmark in Granada, Spain.
                         origin = Point.fromLngLat(-3.588098, 37.176164);
 
@@ -144,6 +170,32 @@ public class MapboxMapActivity extends AppCompatActivity implements OnMapReadyCa
 //        SearchBottomSheetView searchBottomSheetView = findViewById(R.id.search_view);
 //        searchBottomSheetView.initializeSearch(savedInstanceState, new SearchBottomSheetView.Configuration());
 
+    }
+
+    @SuppressWarnings( {"MissingPermission"})
+    private void enableLocationComponent(@NonNull Style loadedMapStyle) {
+// Check if permissions are enabled and if not request
+        if (PermissionsManager.areLocationPermissionsGranted(this)) {
+
+// Get an instance of the component
+            LocationComponent locationComponent = mapboxMap.getLocationComponent();
+
+// Activate with options
+            locationComponent.activateLocationComponent(
+                    LocationComponentActivationOptions.builder(this, loadedMapStyle).build());
+
+// Enable to make component visible
+            locationComponent.setLocationComponentEnabled(true);
+
+// Set the component's camera mode
+            locationComponent.setCameraMode(CameraMode.TRACKING);
+
+// Set the component's render mode
+            locationComponent.setRenderMode(RenderMode.COMPASS);
+        } else {
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(this);
+        }
     }
 
     public void enableLocation() {
@@ -306,15 +358,24 @@ public class MapboxMapActivity extends AppCompatActivity implements OnMapReadyCa
 
         @Override
         public void onExplanationNeeded (List < String > list) {
-
+            Toast.makeText(this, "ON EXPLANATION NEEDED",
+                    Toast.LENGTH_LONG).show();
         }
 
-        @Override
-        public void onPermissionResult ( boolean b){
-            if (b) {
-                enableLocation();
-            }
+    @Override
+    public void onPermissionResult(boolean granted) {
+        if (granted) {
+            mapboxMap.getStyle(new Style.OnStyleLoaded() {
+                @Override
+                public void onStyleLoaded(@NonNull Style style) {
+                    enableLocationComponent(style);
+                }
+            });
+        } else {
+            Toast.makeText(this, "PERMISSION NOT GRANTED", Toast.LENGTH_LONG).show();
+            finish();
         }
+    }
 
         @Override
         public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
