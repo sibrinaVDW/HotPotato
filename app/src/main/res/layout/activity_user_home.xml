@@ -27,14 +27,14 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="90dp"
-                app:srcCompat="@drawable/helloUser_txt" />
+                app:srcCompat="@drawable/hellouser_txt" />
 
             <ImageView
                 android:id="@+id/imageView9"
                 android:layout_width="wrap_content"
                 android:layout_height="86dp"
                 android:layout_marginTop="-170dp"
-                app:srcCompat="@drawable/userIcon_btn" />
+                app:srcCompat="@drawable/usericon_btn" />
 
             <ImageView
                 android:id="@+id/imageView10"

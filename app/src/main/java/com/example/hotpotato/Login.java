@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,8 +35,8 @@ public class Login extends AppCompatActivity {
     // [END declare_auth]
     private EditText name;
     private EditText password;
-    private Button add;
-    private Button signin;
+    private ImageButton add;
+    private ImageButton signin;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
 
@@ -48,10 +49,10 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
 
-        name = findViewById(R.id.edtName);
-        password = findViewById(R.id.edtPassword);
-        add = findViewById(R.id.btnAdd);
-        signin = findViewById(R.id.btnEnter);
+        name = findViewById(R.id.email_txt);
+        password = findViewById(R.id.editTextTextPassword);
+        add = findViewById(R.id.signupnew_btn);
+        signin = findViewById(R.id.login_btn);
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

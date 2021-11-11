@@ -26,7 +26,7 @@
             android:layout_marginTop="-60dp"
             android:layout_marginRight="20dp"
             android:backgroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/logIn_btn" />
+            app:srcCompat="@drawable/login_btn" />
 
         <ImageButton
             android:id="@+id/getstarted_btn"
@@ -35,6 +35,6 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="-150dp"
             android:backgroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/getStarted_btn" />
+            app:srcCompat="@drawable/getstarted_btn" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
