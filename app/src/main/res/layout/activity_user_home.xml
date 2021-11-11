@@ -46,6 +46,12 @@
                 android:layout_marginTop="120dp"
                 app:srcCompat="@drawable/myfav" />
 
+            <TextView
+                android:id="@+id/txtLandmarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview_settings"
                 android:layout_width="match_parent"
