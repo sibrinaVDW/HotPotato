@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Settings">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_bgmerge"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="60dp"
+            app:srcCompat="@drawable/settings_txt" />
+
+        <ImageButton
+            android:id="@+id/settingsback_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="-80dp"
+            android:backgroundTint="#00FFFFFF"
+            app:srcCompat="@drawable/back_btn" />
+
+        <RadioGroup
+            android:id="@+id/miles_radiobtn"
+            android:layout_width="85dp"
+            android:layout_height="84dp"
+            android:layout_marginStart="110dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginBottom="50dp"
+            android:foreground="@drawable/MILES"
+            android:transitionGroup="false" />
+
+        <RadioGroup
+            android:id="@+id/km_radiobtn"
+            android:layout_width="85dp"
+            android:layout_height="86dp"
+            android:layout_marginStart="270dp"
+            android:layout_marginTop="-135dp"
+            android:layout_marginBottom="10dp"
+            android:foreground="@drawable/KM"
+            android:transitionGroup="false" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="71dp"
+            android:layout_marginLeft="115dp"
+            android:layout_marginTop="-160dp"
+            android:fontFamily="@font/montserrat_alternates"
+            android:text="Choose a system:"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

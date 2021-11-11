@@ -3,11 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_mapbox_map.xml" value="0.1" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_login.xml" value="0.264" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_mapbox_map.xml" value="0.22282608695652173" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_maps.xml" value="0.22282608695652173" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_settings.xml" value="0.264" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_signup.xml" value="0.22282608695652173" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_user_home.xml" value="0.264" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/signup.xml" value="0.15443840579710144" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/splashscreen.xml" value="0.152" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/startscreen.xml" value="0.22282608695652173" />
         <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_maps.xml" value="0.20520833333333333" />
-        <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/signup.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/drawable/ic_search.xml" value="0.403125" />
-        <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/activity_mapbox_map.xml" value="0.26132246376811596" />
+        <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/activity_login.xml" value="0.3555253623188406" />
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/activity_maps.xml" value="0.2907608695652174" />
       </map>
     </option>

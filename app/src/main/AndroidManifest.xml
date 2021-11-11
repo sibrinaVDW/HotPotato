@@ -20,6 +20,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HotPotato">
         <activity
+            android:name=".UserHome"
+            android:exported="false" />
+        <activity
+            android:name=".Signup"
+            android:exported="false" />
+        <activity
+            android:name=".Settings"
+            android:exported="false" />
+        <activity
             android:name=".MapboxMapActivity"
             android:exported="true">
             <intent-filter>
@@ -54,6 +63,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAIuRKBOcw8JNfNSDqmsO0d93k_pnf3MUk" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity
             android:name=".MapsActivity"
