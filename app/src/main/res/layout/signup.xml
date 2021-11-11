@@ -17,13 +17,13 @@
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
             android:layout_marginRight="120dp"
-            app:srcCompat="@drawable/signUp_txt" />
+            app:srcCompat="@drawable/signup_txt" />
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="50"
-            android:layout_height="20"
-            android:layout_marginLeft="35"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="35dp"
             android:layout_marginTop="-20dp"
             android:layout_marginRight="50dp"
             app:srcCompat="@drawable/indicator_img" />
@@ -32,27 +32,27 @@
             android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="250"
-            android:layout_marginTop="-70"
+            android:layout_marginLeft="250dp"
+            android:layout_marginTop="-70dp"
             android:backgroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/logInGrey_btn" />
+            app:srcCompat="@drawable/logingrey_btn" />
 
         <ImageButton
             android:id="@+id/imageButton2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="0"
-            android:layout_marginTop="300"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="300dp"
             android:backgroundTint="#00FFFFFF"
             android:foregroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/signUp_btn" />
+            app:srcCompat="@drawable/signup_btn" />
 
         <EditText
             android:id="@+id/editTextTextEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10"
-            android:layout_marginTop="-300"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="-300dp"
             android:ems="10"
             android:hint="Signup with your email."
             android:inputType="textEmailAddress" />
@@ -61,8 +61,8 @@
             android:id="@+id/editTextTextPassword2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10"
-            android:layout_marginTop="30"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
             android:ems="10"
             android:hint="Create new password"
             android:inputType="textPassword" />
