@@ -2,5 +2,5 @@
     <string name="app_name">HotPotato</string>
     <string name="google_maps_API_key">AIzaSyAIuRKBOcw8JNfNSDqmsO0d93k_pnf3MUk</string>
     <string name="title_activity_maps">MapsActivity</string>
-    <string name="mapbox_access_token">pk.eyJ1IjoibWFqb3Job2JvIiwiYSI6ImNrdnR4Nzd6dDFmZzYycHFwbWtjeTBwNHQifQ.mv-6Gi-UwwXq9GnQiZvyIw</string>
+    <string name="mapbox_access_token">sk.eyJ1IjoiaG90cG90YXRvdmVnYSIsImEiOiJja3Z1M3Z2cGYwcng3Mm9vMm03cjJ6YXd2In0.IUyDJoXkwz0X27Y8UY3-Gg</string>
 </resources>
