@@ -44,8 +44,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // Mapbox dependencies
-    implementation 'com.mapbox.maps:android:v10.1.0'
-
+    //implementation 'com.mapbox.maps:android:10.0.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.0.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.5.0'
 
 }
