@@ -29,6 +29,7 @@ import com.mapbox.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.geojson.Point;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserHome extends AppCompatActivity {
@@ -51,16 +52,17 @@ public class UserHome extends AppCompatActivity {
         String userID = intent.getStringExtra("user").toString();
 
 
-        DocumentReference docRef = ref.document(userID).collection("FavouriteLandmarks").document("Landmarks");
+        /*DocumentReference docRef = ref.document(userID).collection("FavouriteLandmarks").document("Landmarks");
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        //List<GeoPoint> landmarksFound = (List<GeoPoint>)document.get("ListLandmarks") ;
+                        List<GeoPoint> landmarksFound = (List<GeoPoint>)document.get("ListLandmarks") ;
                         //List<GeoPoint> landmarksFound = (List<GeoPoint>) document.getGeoPoint("ListLandmarks");
                         List<Object> geoPoint = (List<Object>) document.get("ListLandmarks");
+
                         for (Object geoObject : geoPoint){
                             GeoPoint gp = (GeoPoint) geoPoint;
                             MapboxGeocoding reverseGeocode = MapboxGeocoding.builder()
@@ -81,15 +83,14 @@ public class UserHome extends AppCompatActivity {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
-        });
-
-
-
+        });*/
+        landmarksDisplay.setText("Your list of favourite landmarks will be here");
 
         goToMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(UserHome.this,MapboxMapActivity.class);
+                startActivity(i);
             }
         });
     }
