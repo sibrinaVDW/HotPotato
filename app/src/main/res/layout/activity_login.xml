@@ -32,7 +32,7 @@
             app:srcCompat="@drawable/indicator_img" />
 
         <ImageButton
-            android:id="@+id/login_btn"
+            android:id="@+id/btnEnter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -41,21 +41,24 @@
             app:srcCompat="@drawable/login2_btn" />
 
         <EditText
-            android:id="@+id/email_txt"
+            android:id="@+id/edtName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="43dp"
+            android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="-300dp"
+            android:backgroundTint="#000000"
             android:ems="10"
             android:hint="Please enter your email."
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/editTextTextPassword"
+            android:id="@+id/edtPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="30dp"
+            android:backgroundTint="#000000"
             android:ems="10"
             android:hint="Please enter your password."
             android:inputType="textPassword" />
@@ -65,59 +68,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="250dp"
-            android:layout_marginTop="-300dp"
+            android:layout_marginTop="-230dp"
             android:backgroundTint="#00FFFFFF"
             app:srcCompat="@drawable/signupgrey_btn" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-=======
-    <Button
-        android:id="@+id/btnEnter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginBottom="16dp"
-        android:text="enter"
-        app:layout_constraintBottom_toTopOf="@+id/btnAdd"
-        app:layout_constraintStart_toStartOf="@+id/btnAdd" />
-
-    <EditText
-        android:id="@+id/edtPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="31dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
-        app:layout_constraintStart_toStartOf="@+id/edtName"
-        app:layout_constraintTop_toBottomOf="@+id/edtName"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <Button
-        android:id="@+id/btnAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="109dp"
-        android:text="Add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtPassword" />
-
-    <EditText
-        android:id="@+id/edtName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:text="Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
->>>>>>> afcad217510ddb49cec0d60da7437667e1d2110b

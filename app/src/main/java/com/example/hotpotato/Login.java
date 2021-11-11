@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,7 +39,7 @@ public class Login extends AppCompatActivity {
     private EditText name;
     private EditText password;
     private Button add;
-    private Button signin;
+    private ImageButton signin;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
 
@@ -53,7 +54,7 @@ public class Login extends AppCompatActivity {
 
         name = findViewById(R.id.edtName);
         password = findViewById(R.id.edtPassword);
-        add = findViewById(R.id.btnAdd);
+        //add = findViewById(R.id.btnAdd);
         signin = findViewById(R.id.btnEnter);
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
