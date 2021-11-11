@@ -3,7 +3,8 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-
+        jcenter()
+        /*maven { url 'https://mapbox.bintray.com/mapbox' }
         maven {
             url 'https://api.mapbox.com/downloads/v2/releases/maven'
             authentication {
@@ -14,9 +15,11 @@ buildscript {
                 // This should always be `mapbox` (not your username).
                 username = 'mapbox'
                 // Use the secret token you stored in gradle.properties as the password
-                password = project.properties['sk.eyJ1IjoibWFqb3Job2JvIiwiYSI6ImNrdnR6cG05d2JodWozMHM3MW5udzhvMWkifQ.9hXJQ3dq_vYeRZqLA5YIog'] ?: ""
+
+                //sk.eyJ1IjoibWFqb3Job2JvIiwiYSI6ImNrdnR6cG05d2JodWozMHM3MW5udzhvMWkifQ.9hXJQ3dq_vYeRZqLA5YIog
+                password = project.properties['sk.eyJ1IjoiaG90cG90YXRvdmVnYSIsImEiOiJja3Z1M3Z2cGYwcng3Mm9vMm03cjJ6YXd2In0.IUyDJoXkwz0X27Y8UY3-Gg'] ?: ""
             }
-        }
+        }*/
 
     }
     dependencies {
@@ -27,11 +30,28 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
-
 }
 
-
-
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://mapbox.bintray.com/mapbox' }
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                // Do not change the username below.
+                // This should always be `mapbox` (not your username).
+                username = 'mapbox'
+                // Use the secret token you stored in gradle.properties as the password
+                password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+            }
+        }
+    }
+}
 
 task clean(type: Delete) {
     delete rootProject.buildDir

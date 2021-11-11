@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -119,6 +120,8 @@ public class Login extends AppCompatActivity {
                             Toast.makeText(Login.this, "Authentication success.",
                                     Toast.LENGTH_SHORT).show();
 
+                            //Open intent for profile activity
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -141,6 +144,27 @@ public class Login extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            //when launching intent for profile activity, pass 'extra' of user (firebase.curr).
+
+                            //Getting data, just putting here for now.
+                            /*DocumentReference docRef = db.collection("cities").document("BJ");
+                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    City city = documentSnapshot.toObject(City.class);
+                                }
+                            });*/
+
+                            /*ref.document("BJ");
+                            ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    //City city = documentSnapshot.toObject(City.class);
+                                    String name;
+                                }
+                            });*/
+
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
