@@ -57,7 +57,7 @@ public class Login extends AppCompatActivity {
 
         name = findViewById(R.id.edtName);
         password = findViewById(R.id.edtPassword);
-        //add = findViewById(R.id.btnAdd);
+        add = findViewById(R.id.signupnew_btn);
         signin = findViewById(R.id.btnEnter);
         signin.setOnClickListener(new View.OnClickListener() {
             @Override

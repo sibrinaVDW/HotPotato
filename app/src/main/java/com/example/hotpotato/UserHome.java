@@ -42,7 +42,7 @@ public class UserHome extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
-        goToMap = findViewById(R.id.btnMap);
+        goToMap = findViewById(R.id.imageButton9);
         landmarksDisplay = findViewById(R.id.txtLandmarks);
         Intent intent = getIntent();
 
