@@ -36,7 +36,7 @@
             android:layout_marginStart="100dp"
             android:layout_marginTop="200dp"
             android:layout_marginBottom="51dp"
-            android:foreground="@drawable/MILES"
+            android:foreground="@drawable/miles"
             android:transitionGroup="false" />
 
         <RadioGroup
@@ -46,7 +46,7 @@
             android:layout_marginStart="230dp"
             android:layout_marginTop="-135dp"
             android:layout_marginBottom="10dp"
-            android:foreground="@drawable/KM"
+            android:foreground="@drawable/km"
             android:transitionGroup="false" />
 
         <TextView
