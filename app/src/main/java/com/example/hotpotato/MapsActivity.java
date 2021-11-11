@@ -2,8 +2,6 @@ package com.example.hotpotato;
 
 import static android.content.ContentValues.TAG;
 
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
