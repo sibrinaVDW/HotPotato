@@ -18,29 +18,31 @@
         tools:layout_editor_absoluteX="31dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/imageView8"
-                android:layout_width="320dp"
-                android:layout_height="wrap_content"
+                android:layout_width="338dp"
+                android:layout_height="111dp"
                 android:layout_marginTop="90dp"
-                app:srcCompat="@drawable/helloUser_txt" />
+                android:foreground="@drawable/hellotextuser_txt"
+                app:srcCompat="@drawable/hellouser_txt" />
 
             <ImageView
                 android:id="@+id/imageView9"
-                android:layout_width="wrap_content"
+                android:layout_width="92dp"
                 android:layout_height="86dp"
-                android:layout_marginTop="-170dp"
-                app:srcCompat="@drawable/userIcon_btn" />
+                android:layout_marginTop="-190dp"
+                android:foreground="@drawable/user_btn"
+                app:srcCompat="@drawable/usericon_btn" />
 
             <ImageView
                 android:id="@+id/imageView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="50dp"
                 android:layout_marginTop="120dp"
                 app:srcCompat="@drawable/myfav" />
 
@@ -52,8 +54,8 @@
 
             <ImageButton
                 android:id="@+id/imageButton9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="104dp"
+                android:layout_height="93dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="190dp"
                 android:backgroundTint="#00FFFFFF"

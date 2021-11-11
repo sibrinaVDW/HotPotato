@@ -3,7 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/drawable/hotpotato_icon_background.xml" value="0.26875" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_login.xml" value="0.4" />
         <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_mapbox_map.xml" value="0.22282608695652173" />
         <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_maps.xml" value="0.22282608695652173" />
         <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_settings.xml" value="0.264" />
