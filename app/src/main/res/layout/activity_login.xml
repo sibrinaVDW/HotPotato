@@ -4,73 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_bgmerge"
-    android:orientation="vertical"
     tools:context=".Login">
 
+    <Button
+        android:id="@+id/btnEnter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginBottom="16dp"
+        android:text="enter"
+        app:layout_constraintBottom_toTopOf="@+id/btnAdd"
+        app:layout_constraintStart_toStartOf="@+id/btnAdd" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <EditText
+        android:id="@+id/edtPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="31dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintStart_toStartOf="@+id/edtName"
+        app:layout_constraintTop_toBottomOf="@+id/edtName"
+        tools:ignore="SpeakableTextPresentCheck" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="100dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:layout_marginRight="120dp"
-            app:srcCompat="@drawable/logIn_txt" />
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="109dp"
+        android:text="Add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtPassword" />
 
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="50"
-            android:layout_height="20"
-            android:layout_marginLeft="35"
-            android:layout_marginTop="-20dp"
-            android:layout_marginRight="50dp"
-            app:srcCompat="@drawable/indicator_img" />
-
-        <ImageButton
-            android:id="@+id/login_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20"
-            android:layout_marginTop="300"
-            android:backgroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/logIn3_btn" />
-
-        <EditText
-            android:id="@+id/email_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10"
-            android:layout_marginTop="-300"
-            android:ems="10"
-            android:hint="Please enter your email."
-            android:inputType="textEmailAddress" />
-
-        <EditText
-            android:id="@+id/editTextTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10"
-            android:layout_marginTop="30"
-            android:ems="10"
-            android:hint="Please enter your password."
-            android:inputType="textPassword" />
-
-        <ImageButton
-            android:id="@+id/signupnew_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="250"
-            android:layout_marginTop="-270"
-            android:backgroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/signUpGrey_btn" />
-
-    </LinearLayout>
+    <EditText
+        android:id="@+id/edtName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="220dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
