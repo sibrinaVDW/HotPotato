@@ -39,6 +39,7 @@ public class Login extends AppCompatActivity {
     private EditText name;
     private EditText password;
     private ImageButton add;
+
     private ImageButton signin;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");

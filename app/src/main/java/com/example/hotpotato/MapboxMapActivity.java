@@ -92,7 +92,7 @@ import com.mapbox.android.core.location.LocationEngine;
 import java.util.List;
 
 public class MapboxMapActivity extends AppCompatActivity implements OnMapReadyCallback, LocationEngine, PermissionsListener {
-    private LocationEngine locationEngine;
+    public LocationEngine locationEngine;
     private LocationLayerPlugin locationLayerPlugin;
     private Location originLocation;
     private PermissionsManager permissionsManager;
@@ -118,6 +118,7 @@ public class MapboxMapActivity extends AppCompatActivity implements OnMapReadyCa
     private String TAG = "LOG";
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +137,7 @@ public class MapboxMapActivity extends AppCompatActivity implements OnMapReadyCa
             public void onMapReady(@NonNull MapboxMap mapboxMap) {
                 MapboxMapActivity.this.mapboxMap = mapboxMap;
                 mapboxMap.setStyle(new Style.Builder()
-                        .fromUri(Style.DARK)
+                        .fromUri(Style.MAPBOX_STREETS)
 
 // Add the source to the map
                         .withSource(new GeoJsonSource(DISTANCE_SOURCE_ID))
@@ -150,18 +151,30 @@ public class MapboxMapActivity extends AppCompatActivity implements OnMapReadyCa
                     public void onStyleLoaded(@NonNull Style style) {
                         enableLocationComponent(style);
 
-// Set the origin location to the Alhambra landmark in Granada, Spain.
-                        origin = Point.fromLngLat(-3.588098, 37.176164);
 
-// Set the destination location to the Plaza del Triunfo in Granada, Spain.
-                        destination = Point.fromLngLat(-3.601845, 37.184080);
+//                        Location lastKnownLocation = mapboxMap.getLocationComponent().getLastKnownLocation();
+//                        if (lastKnownLocation!=null){
+//                            origin = Point.fromLngLat(lastKnownLocation.getLongitude(),lastKnownLocation.getLatitude());
+//                            origin = Point.fromLngLat(-26.1449,28.1702);
+//                            destination = Point.fromLngLat(-26.1170, 28.1547);
+//                            initSource(style);
+//
+//                            initLayers(style);
+//                            // Get the directions route from the Mapbox Directions API
+//                            getRoute(mapboxMap, origin, destination);
+//                        }
+                        origin = Point.fromLngLat(28.1647, -26.1470);
 
+                        destination = Point.fromLngLat(28.1547, -26.1170);
                         initSource(style);
 
                         initLayers(style);
-
-// Get the directions route from the Mapbox Directions API
+                        // Get the directions route from the Mapbox Directions API
                         getRoute(mapboxMap, origin, destination);
+
+
+
+
                     }
                 });
             }
@@ -212,6 +225,7 @@ public class MapboxMapActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void initializeLocationEngine() {
+
     }
 
     /**
@@ -287,7 +301,7 @@ public class MapboxMapActivity extends AppCompatActivity implements OnMapReadyCa
 
 // Make a toast which displays the route's distance
                     Toast.makeText(MapboxMapActivity.this,
-                            (currentRoute.distance()) + " meters", Toast.LENGTH_LONG).show();
+                            (currentRoute.distance()/1000) + " Kilometers", Toast.LENGTH_LONG).show();
 
                     if (mapboxMap != null) {
                         mapboxMap.getStyle(new Style.OnStyleLoaded() {
