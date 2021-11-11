@@ -26,6 +26,7 @@ public class MapboxMapActivity extends AppCompatActivity {
         viewMap = findViewById(R.id.mapView);
         //viewMap.onCreate(savedInstanceState);
         viewMap.getMapAsync(this::onMapReady);
+
         //viewMap.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
         /*mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -34,6 +35,7 @@ public class MapboxMapActivity extends AppCompatActivity {
 
     public void onMapReady(MapboxMap mapboxMap) {
         mapMB = mapboxMap;
+
     }
 
     @Override
