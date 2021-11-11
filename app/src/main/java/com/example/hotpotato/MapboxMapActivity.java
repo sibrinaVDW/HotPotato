@@ -24,7 +24,7 @@ public class MapboxMapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mapbox_map);
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         viewMap = findViewById(R.id.mapView);
-        viewMap.onCreate(savedInstanceState);
+        //viewMap.onCreate(savedInstanceState);
         viewMap.getMapAsync(this::onMapReady);
         //viewMap.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
         /*mapView = findViewById(R.id.mapView);
