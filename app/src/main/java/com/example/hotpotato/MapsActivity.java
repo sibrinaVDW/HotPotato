@@ -36,6 +36,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
@@ -66,7 +67,6 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.maps.MapView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -104,7 +104,7 @@ public class MapsActivity extends FragmentActivity implements
 
         private Polyline currentPolyline;
 
-        private MapView mapView;
+        //private MapView mapView;
 
 
     @Override
@@ -112,13 +112,13 @@ public class MapsActivity extends FragmentActivity implements
             super.onCreate(savedInstanceState);
             Mapbox.getInstance(this,getString(R.string.mapbox_access_token));
             setContentView(R.layout.activity_maps);
-            mapView = (MapView) findViewById(R.id.mapView);
-            mapView.onCreate(savedInstanceState);
+           // mapView = (MapView) findViewById(R.id.mapView);
+           // mapView.onCreate(savedInstanceState);
 
 
             //binding = ActivityMapsBinding.inflate(getLayoutInflater());
             //setContentView(binding.getRoot());
-            search = findViewById(R.id.btnSearch);
+           // search = findViewById(R.id.btnSearch);
             //searchText = findViewById(R.id.SearchText);
             // Obtain the SupportMapFragment and get notified when the map is ready to be used.
             //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -152,13 +152,13 @@ public class MapsActivity extends FragmentActivity implements
             search.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AutoComplete();
+                    //AutoComplete();
                 }
             });
             //init();
         }
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
         mapView.onStart();
@@ -192,7 +192,7 @@ public class MapsActivity extends FragmentActivity implements
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
-    }
+    }*/
 
     @SuppressLint("MissingPermission")
         @Override
