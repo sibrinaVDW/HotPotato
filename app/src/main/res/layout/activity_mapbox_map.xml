@@ -19,15 +19,23 @@
 <!--        mapbox:mapbox_cameraZoom="9.0"-->
 <!--        ></com.mapbox.mapboxsdk.maps.MapView>-->
 
-    <com.mapbox.maps.MapView
+<!--    <com.mapbox.maps.MapView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/mapView"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        mapbox:mapbox_cameraTargetLat="40.7128"-->
+<!--        mapbox:mapbox_cameraTargetLng="-74.0060"-->
+<!--        mapbox:mapbox_cameraZoom="9.0"-->
+<!--        ></com.mapbox.maps.MapView>-->
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mapView"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        mapbox:mapbox_cameraTargetLat="40.7128"
-        mapbox:mapbox_cameraTargetLng="-74.0060"
-        mapbox:mapbox_cameraZoom="9.0"
-        ></com.mapbox.maps.MapView>
+        mapbox:mapbox_cameraTargetLat="37.1792"
+        mapbox:mapbox_cameraTargetLng="-3.5953"
+        mapbox:mapbox_cameraZoom="14" />
 
 </RelativeLayout>
