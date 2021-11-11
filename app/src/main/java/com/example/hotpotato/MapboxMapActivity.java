@@ -15,7 +15,7 @@ import com.mapbox.maps.MapView;
 public class MapboxMapActivity extends AppCompatActivity {
 
     MapView mapView;
-    com.mapbox.mapboxsdk.maps.MapView viewMap;
+    public com.mapbox.maps.MapView viewMap;
     MapboxMap mapMB;
 
     @Override
@@ -25,9 +25,9 @@ public class MapboxMapActivity extends AppCompatActivity {
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         viewMap = findViewById(R.id.mapView);
         //viewMap.onCreate(savedInstanceState);
-        viewMap.getMapAsync(this::onMapReady);
+        //viewMap.getMapAsync(this::onMapReady);
 
-        //viewMap.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
+        viewMap.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
         /*mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync((OnMapReadyCallback) this);*/
@@ -45,22 +45,22 @@ public class MapboxMapActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        viewMap.onResume();
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
         viewMap.onStop();
     }
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        viewMap.onSaveInstanceState(outState);
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        viewMap.onResume();
+//    }
+//
+//    @Override
+//    protected void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        viewMap.onSaveInstanceState(outState);
+//    }
 
     @Override
     public void onLowMemory() {
