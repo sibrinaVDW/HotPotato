@@ -58,8 +58,8 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recLandmarkView"
-                android:layout_width="408dp"
-                android:layout_height="381dp"
+                android:layout_width="match_parent"
+                android:layout_height="137dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -69,12 +69,13 @@
 
             <ImageButton
                 android:id="@+id/imageButton9"
-                android:layout_width="104dp"
+                android:layout_width="wrap_content"
                 android:layout_height="93dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="190dp"
                 android:backgroundTint="#00FFFFFF"
-                app:srcCompat="@drawable/mapbtn" />
+                app:srcCompat="@drawable/mapbtn"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <ImageButton
                 android:id="@+id/imageButton13"
@@ -83,7 +84,8 @@
                 android:layout_marginLeft="300dp"
                 android:layout_marginTop="-90dp"
                 android:backgroundTint="#00FFFFFF"
-                app:srcCompat="@drawable/settings" />
+                app:srcCompat="@drawable/settings"
+                tools:ignore="SpeakableTextPresentCheck" />
 
 
         </LinearLayout>

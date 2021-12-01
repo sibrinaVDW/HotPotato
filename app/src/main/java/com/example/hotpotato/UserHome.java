@@ -58,7 +58,8 @@ public class UserHome extends AppCompatActivity {
         landmarksDisplay = findViewById(R.id.txtLandmarks);
         Intent intent = getIntent();
         String userID = intent.getStringExtra("user").toString();
-
+        landmarkData = new ArrayList<>();
+        //landmarkData = fill_with_data();
         DocumentReference docRef = ref.document(userID).collection("FavouriteLandmarks").document("Landmarks");
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -88,7 +89,7 @@ public class UserHome extends AppCompatActivity {
                                         Toast.makeText(UserHome.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
                                         landmarksDisplay.setText(feature.placeName());
                                         dispLandmarks += "" + feature.placeName() + "\n";
-                                        landmarkData.add(new Data(feature.placeName(),R.drawable.hotpotato_icon_foreground));
+                                        //landmarkData.add(new Data(feature.placeName(),R.drawable.hotpotato_icon_foreground));
                                     } else {
                                         // No result for your request were found.
                                         Toast.makeText(UserHome.this, "Not found", Toast.LENGTH_SHORT).show();
@@ -102,8 +103,12 @@ public class UserHome extends AppCompatActivity {
                             });
                         }
 
-                        Toast.makeText(UserHome.this, "outside " + dispLandmarks , Toast.LENGTH_LONG).show();
                         landmarksDisplay.setText(dispLandmarks);
+
+                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recLandmarkView);
+                        FavLandmarksAdapter adapter = new FavLandmarksAdapter(landmarkData, getApplication());
+                        recyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
+                        recyclerView.setAdapter(adapter);
 
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
@@ -115,10 +120,7 @@ public class UserHome extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recLandmarkView);
-        FavLandmarksAdapter adapter = new FavLandmarksAdapter(landmarkData, getApplication());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
 
         goToMap.setOnClickListener(new View.OnClickListener() {
@@ -128,5 +130,15 @@ public class UserHome extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    //tester, this somehow works
+    public List<Data> fill_with_data() {
+
+        List<Data> data = new ArrayList<>();
+        data.add(new Data("C", R.drawable.hotpotato_icon_foreground));
+        data.add(new Data("C++", R.drawable.hotpotato_icon_foreground));
+        data.add(new Data("Java", R.drawable.hotpotato_icon_foreground));
+        return data;
     }
 }
