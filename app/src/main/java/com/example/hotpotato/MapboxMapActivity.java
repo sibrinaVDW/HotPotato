@@ -270,7 +270,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                     public boolean onMapClick(@NonNull LatLng point) {
 
                         if (c == 0) {
-                            origin = Point.fromLngLat(point.getLongitude(), point.getLatitude());
+                            origin = Point.fromLngLat(mapboxMap.getLocationComponent().getLastKnownLocation().getLongitude(), mapboxMap.getLocationComponent().getLastKnownLocation().getLatitude());
                             source = point;
                             MarkerOptions markerOptions = new MarkerOptions();
                             markerOptions.position(point);
@@ -278,7 +278,14 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                             mapboxMap.addMarker(markerOptions);
                             reverseGeocodeFunc(point, c);
 
-
+                            destination = Point.fromLngLat(point.getLongitude(), point.getLatitude());
+                            //getRoute(mapboxMap, origin, destination);
+                            MarkerOptions markerOptions2 = new MarkerOptions();
+                            markerOptions2.position(point);
+                            markerOptions2.title("destination");
+                            mapboxMap.addMarker(markerOptions2);
+                            reverseGeocodeFunc(point, c);
+                            getRoute(mapboxMap, origin, destination);
                         }
                         if (c == 1) {
                             destination = Point.fromLngLat(point.getLongitude(), point.getLatitude());
@@ -305,7 +312,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                                                 .build())
                                         .build(this), REQUEST_CODE);
                         */
-                        if (c > 1) {
+                        if (c > 0) {
                             c = 0;
                             recreate();
                             // mapboxMap.clear();
@@ -325,40 +332,40 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         });
     }
 
-        @SuppressWarnings( {"MissingPermission"})
+    @SuppressWarnings( {"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {
 // Check if permissions are enabled and if not request
-            if (PermissionsManager.areLocationPermissionsGranted(MapboxMapActivity.this)) {
+        if (PermissionsManager.areLocationPermissionsGranted(MapboxMapActivity.this)) {
 
-                // Get an instance of the component
-                LocationComponent locationComponent = mapboxMap.getLocationComponent();
+            // Get an instance of the component
+            LocationComponent locationComponent = mapboxMap.getLocationComponent();
 
-                // Activate with options
-                locationComponent.activateLocationComponent(
-                        LocationComponentActivationOptions.builder(MapboxMapActivity.this, loadedMapStyle).build());
+            // Activate with options
+            locationComponent.activateLocationComponent(
+                    LocationComponentActivationOptions.builder(MapboxMapActivity.this, loadedMapStyle).build());
 
-                // Enable to make component visible
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                locationComponent.setLocationComponentEnabled(true);
-
-                // Set the component's camera mode
-                locationComponent.setCameraMode(CameraMode.TRACKING);
-
-                // Set the component's render mode
-                locationComponent.setRenderMode(RenderMode.COMPASS);
-            } else {
-                permissionsManager = new PermissionsManager(this);
-                permissionsManager.requestLocationPermissions(this);
+            // Enable to make component visible
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
             }
+            locationComponent.setLocationComponentEnabled(true);
+
+            // Set the component's camera mode
+            locationComponent.setCameraMode(CameraMode.TRACKING);
+
+            // Set the component's render mode
+            locationComponent.setRenderMode(RenderMode.COMPASS);
+        } else {
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(this);
+        }
     }
 
 
@@ -516,23 +523,23 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 .build();
     }
 
-        /**
-         * Make a request to the Mapbox Directions API. Once successful, pass the route to the
-         * route layer.
-         * @param mapboxMap the Mapbox map object that the route will be drawn on
-         * @param origin      the starting point of the route
-         * @param destination the desired finish point of the route
-         */
-        private void getRoute (MapboxMap mapboxMap, Point origin, Point destination){
-            client = MapboxDirections.builder()
-                    .origin(origin)
-                    .destination(destination)
-                    .overview(DirectionsCriteria.OVERVIEW_FULL)
-                    .profile(DirectionsCriteria.PROFILE_DRIVING)
-                    .accessToken(getString(R.string.mapbox_access_token))
-                    .build();
+    /**
+     * Make a request to the Mapbox Directions API. Once successful, pass the route to the
+     * route layer.
+     * @param mapboxMap the Mapbox map object that the route will be drawn on
+     * @param origin      the starting point of the route
+     * @param destination the desired finish point of the route
+     */
+    private void getRoute (MapboxMap mapboxMap, Point origin, Point destination){
+        client = MapboxDirections.builder()
+                .origin(origin)
+                .destination(destination)
+                .overview(DirectionsCriteria.OVERVIEW_FULL)
+                .profile(DirectionsCriteria.PROFILE_DRIVING)
+                .accessToken(getString(R.string.mapbox_access_token))
+                .build();
 
-            client.enqueueCall( this);
+        client.enqueueCall( this);
             /*client.enqueueCall(new Callback<DirectionsResponse>() {
                 @Override
                 public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
@@ -579,7 +586,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                             Toast.LENGTH_SHORT).show();
                 }
             });*/
-        }
+    }
 
     public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
 // You can get the generic HTTP info about the response
@@ -734,51 +741,51 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 ), LAYER_BELOW_ID);
     }
 
-        @Override
-        protected void onStart () {
-            super.onStart();
-            viewMap.onStart();
-        }
+    @Override
+    protected void onStart () {
+        super.onStart();
+        viewMap.onStart();
+    }
 
-        @Override
-        protected void onStop () {
-            super.onStop();
-            viewMap.onStop();
-        }
+    @Override
+    protected void onStop () {
+        super.onStop();
+        viewMap.onStop();
+    }
 
-        @Override
-        protected void onResume () {
-            super.onResume();
-            viewMap.onResume();
-        }
+    @Override
+    protected void onResume () {
+        super.onResume();
+        viewMap.onResume();
+    }
 
-        @Override
-        protected void onSaveInstanceState (@NonNull Bundle outState){
-            super.onSaveInstanceState(outState);
-            viewMap.onSaveInstanceState(outState);
-        }
+    @Override
+    protected void onSaveInstanceState (@NonNull Bundle outState){
+        super.onSaveInstanceState(outState);
+        viewMap.onSaveInstanceState(outState);
+    }
 
-        @Override
-        public void onLowMemory () {
-            super.onLowMemory();
-            viewMap.onLowMemory();
-        }
+    @Override
+    public void onLowMemory () {
+        super.onLowMemory();
+        viewMap.onLowMemory();
+    }
 
-        @Override
-        protected void onDestroy() {
-            super.onDestroy();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 // Cancel the Directions API request
-            if (client != null) {
-                client.cancelCall();
-            }
-            viewMap.onDestroy();
+        if (client != null) {
+            client.cancelCall();
         }
+        viewMap.onDestroy();
+    }
 
-        @Override
-        public void onExplanationNeeded (List < String > list) {
-            Toast.makeText(this, "ON EXPLANATION NEEDED",
-                    Toast.LENGTH_LONG).show();
-        }
+    @Override
+    public void onExplanationNeeded (List < String > list) {
+        Toast.makeText(this, "ON EXPLANATION NEEDED",
+                Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public void onPermissionResult(boolean granted) {
@@ -795,42 +802,42 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         }
     }
 
-        @Override
-        public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
-        @NonNull int[] grantResults){
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
+    @Override
+    public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
+                                             @NonNull int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
-        @Override
-        public void getLastLocation
-        (@NonNull LocationEngineCallback < LocationEngineResult > locationEngineCallback) throws
-        SecurityException {
+    @Override
+    public void getLastLocation
+            (@NonNull LocationEngineCallback < LocationEngineResult > locationEngineCallback) throws
+            SecurityException {
 
-        }
+    }
 
-        @Override
-        public void requestLocationUpdates (@NonNull LocationEngineRequest
-        locationEngineRequest, @NonNull LocationEngineCallback < LocationEngineResult > locationEngineCallback, @Nullable Looper
-        looper) throws SecurityException {
+    @Override
+    public void requestLocationUpdates (@NonNull LocationEngineRequest
+                                                locationEngineRequest, @NonNull LocationEngineCallback < LocationEngineResult > locationEngineCallback, @Nullable Looper
+                                                looper) throws SecurityException {
 
-        }
+    }
 
-        @Override
-        public void requestLocationUpdates (@NonNull LocationEngineRequest
-        locationEngineRequest, PendingIntent pendingIntent) throws SecurityException {
+    @Override
+    public void requestLocationUpdates (@NonNull LocationEngineRequest
+                                                locationEngineRequest, PendingIntent pendingIntent) throws SecurityException {
 
-        }
+    }
 
-        @Override
-        public void removeLocationUpdates
-        (@NonNull LocationEngineCallback < LocationEngineResult > locationEngineCallback) {
+    @Override
+    public void removeLocationUpdates
+            (@NonNull LocationEngineCallback < LocationEngineResult > locationEngineCallback) {
 
-        }
+    }
 
-        @Override
-        public void removeLocationUpdates (PendingIntent pendingIntent){
+    @Override
+    public void removeLocationUpdates (PendingIntent pendingIntent){
 
-        }
+    }
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {

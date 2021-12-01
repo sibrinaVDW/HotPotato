@@ -43,10 +43,17 @@
             android:layout_width="133dp"
             android:layout_height="53dp"
             android:text="Distance goes here" />
+
+
     </com.mapbox.mapboxsdk.maps.MapView>
 
+
+
+
+
+
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -58,6 +65,13 @@
 <!--            android:elevation="8dp"-->
 <!--            />-->
 
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </RelativeLayout>

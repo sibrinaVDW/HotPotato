@@ -4,4 +4,8 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="mapbox_access_token">sk.eyJ1IjoibWFqb3Job2JvIiwiYSI6ImNrdnR6cG05d2JodWozMHM3MW5udzhvMWkifQ.9hXJQ3dq_vYeRZqLA5YIog</string>
     <string name="route_distance_toast_message">Route is %1$f kilometers long.</string>
+
+    <string name="driving_profile">%1$sm\nby car</string>
+    <string name="walking_profile">%1$sm\non foot</string>
+    <string name="cycling_profile">%1$sm\nby bike</string>
 </resources>
