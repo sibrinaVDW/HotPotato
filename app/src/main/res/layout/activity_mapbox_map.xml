@@ -36,7 +36,14 @@
         android:layout_height="match_parent"
         mapbox:mapbox_cameraTargetLat="40.7128"
         mapbox:mapbox_cameraTargetLng="-74.0060"
-        mapbox:mapbox_cameraZoom="14" />
+        mapbox:mapbox_cameraZoom="14" >
+
+        <TextView
+            android:id="@+id/distanceText"
+            android:layout_width="133dp"
+            android:layout_height="53dp"
+            android:text="Distance goes here" />
+    </com.mapbox.mapboxsdk.maps.MapView>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
