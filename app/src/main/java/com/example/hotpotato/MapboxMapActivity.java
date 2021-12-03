@@ -154,6 +154,11 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private CarmenFeature home;
     private CarmenFeature work;
 
+    private String[] profiles = new String[]{
+            DirectionsCriteria.PROFILE_DRIVING,
+            DirectionsCriteria.PROFILE_CYCLING,
+            DirectionsCriteria.PROFILE_WALKING
+    };
 
 
     @Override
@@ -285,9 +290,9 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                             markerOptions2.title("destination");
                             mapboxMap.addMarker(markerOptions2);
                             reverseGeocodeFunc(point, c);
-                            getRoute(mapboxMap, origin, destination);
+                            getRoute(mapboxMap, origin, destination, profiles[0]);
                         }
-                        if (c == 1) {
+                        /*if (c == 1) {
                             destination = Point.fromLngLat(point.getLongitude(), point.getLatitude());
                             getRoute(mapboxMap, origin, destination);
                             MarkerOptions markerOptions2 = new MarkerOptions();
@@ -295,11 +300,11 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                             markerOptions2.title("destination");
                             mapboxMap.addMarker(markerOptions2);
                             reverseGeocodeFunc(point, c);
-                            getRoute(mapboxMap, origin, destination);
+                            //getRoute(mapboxMap, origin, destination);
                             // double d = point.distanceTo(source);
 
 
-                        }
+                        }*/
 
 
 
@@ -470,7 +475,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
     @Override
     public void onCameraIdle() {
-        if (mapboxMap != null) {
+        /*if (mapboxMap != null) {
             Location lastKnownLocation = mapboxMap.getLocationComponent().getLastKnownLocation();
             if (lastKnownLocation!=null){
                 origin = Point.fromLngLat(lastKnownLocation.getLongitude(),lastKnownLocation.getLatitude());
@@ -487,7 +492,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 getRoute(mapboxMap, origin, destinationPoint);
             }
             Log.e("origin is nulL!!!!!!!!","WHY IS ORIGIN NULl?????????");
-        }
+        }*/
     }
     /*private void initSearchFab() {
         findViewById(R.id.fab_location_search).setOnClickListener(new View.OnClickListener() {
@@ -530,12 +535,12 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
      * @param origin      the starting point of the route
      * @param destination the desired finish point of the route
      */
-    private void getRoute (MapboxMap mapboxMap, Point origin, Point destination){
+    private void getRoute (MapboxMap mapboxMap, Point origin, Point destination, String profile){
         client = MapboxDirections.builder()
                 .origin(origin)
                 .destination(destination)
                 .overview(DirectionsCriteria.OVERVIEW_FULL)
-                .profile(DirectionsCriteria.PROFILE_DRIVING)
+                .profile(profile)
                 .accessToken(getString(R.string.mapbox_access_token))
                 .build();
 
