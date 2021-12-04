@@ -46,6 +46,7 @@ public class UserHome extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
     ImageButton goToMap;
+    ImageButton imageButton13;
     TextView landmarksDisplay;
     String dispLandmarks = "";
     List<Data> landmarkData;
@@ -55,7 +56,7 @@ public class UserHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
         goToMap = findViewById(R.id.imageButton9);
-        landmarksDisplay = findViewById(R.id.txtLandmarks);
+        //landmarksDisplay = findViewById(R.id.txtLandmarks);
         Intent intent = getIntent();
         String userID = intent.getStringExtra("user").toString();
         landmarkData = new ArrayList<>();
@@ -87,7 +88,7 @@ public class UserHome extends AppCompatActivity {
                                         Point firstResultPoint = results.get(0).center();
                                         feature=results.get(0);
                                         Toast.makeText(UserHome.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
-                                        landmarksDisplay.setText(feature.placeName());
+                                        //landmarksDisplay.setText(feature.placeName());
                                         dispLandmarks += "" + feature.placeName() + "\n";
                                         //landmarkData.add(new Data(feature.placeName(),R.drawable.hotpotato_icon_foreground));
                                     } else {
@@ -103,7 +104,7 @@ public class UserHome extends AppCompatActivity {
                             });
                         }
 
-                        landmarksDisplay.setText(dispLandmarks);
+                        //landmarksDisplay.setText(dispLandmarks);
 
                         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recLandmarkView);
                         FavLandmarksAdapter adapter = new FavLandmarksAdapter(landmarkData, getApplication());
@@ -127,6 +128,16 @@ public class UserHome extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(UserHome.this,MapboxMapActivity.class);
+                startActivity(i);
+            }
+        });
+
+        imageButton13 = (ImageButton) findViewById(R.id.imageButton13);
+
+        imageButton13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext() , MenuPop.class);
                 startActivity(i);
             }
         });

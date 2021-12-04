@@ -11,83 +11,97 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/splash_bg"
+        android:background="@drawable/bg_bgmerge"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="31dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="338dp"
-                android:layout_height="111dp"
-                android:layout_marginTop="90dp"
-
-                android:foreground="@drawable/hellotextuser_txt"
-
-                app:srcCompat="@drawable/hellouser_txt" />
-
-            <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="92dp"
-                android:layout_height="86dp"
-
-                android:layout_marginTop="-190dp"
-                android:foreground="@drawable/user_btn"
-
-                app:srcCompat="@drawable/usericon_btn" />
-
-            <ImageView
-                android:id="@+id/imageView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="120dp"
-                app:srcCompat="@drawable/myfav" />
-
-            <TextView
-                android:id="@+id/txtLandmarks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recLandmarkView"
-                android:layout_width="match_parent"
-                android:layout_height="137dp"
-                android:layout_marginTop="8dp"
+            <ImageButton
+                android:id="@+id/imageButton13"
+                android:layout_width="45dp"
+                android:layout_height="69dp"
+                android:backgroundTint="#00FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.923"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtGoal"
-                tools:listitem="@layout/recycler_list" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.025"
+                app:srcCompat="@drawable/menuopt"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <ImageButton
                 android:id="@+id/imageButton9"
                 android:layout_width="wrap_content"
                 android:layout_height="93dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="190dp"
+                android:layout_marginBottom="16dp"
                 android:backgroundTint="#00FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recLandmarkView"
+                app:layout_constraintVertical_bias="1.0"
                 app:srcCompat="@drawable/mapbtn"
                 tools:ignore="SpeakableTextPresentCheck" />
 
-            <ImageButton
-                android:id="@+id/imageButton13"
-                android:layout_width="112dp"
-                android:layout_height="93dp"
-                android:layout_marginLeft="300dp"
-                android:layout_marginTop="-90dp"
-                android:backgroundTint="#00FFFFFF"
-                app:srcCompat="@drawable/settings"
-                tools:ignore="SpeakableTextPresentCheck" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recLandmarkView"
+                android:layout_width="367dp"
+                android:layout_height="159dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.363"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.547"
+                tools:listitem="@layout/recycler_list" />
 
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.37"
+                app:srcCompat="@drawable/favlandm" />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="85dp"
+                android:layout_height="78dp"
+
+                android:foreground="@drawable/user_btn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.05"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.024"
+                app:srcCompat="@drawable/usericon_btn" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="328dp"
+                android:layout_height="84dp"
+
+                android:foreground="@drawable/headerusertest"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.207"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.222" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
