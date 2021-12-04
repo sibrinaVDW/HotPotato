@@ -7,23 +7,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -129,12 +135,61 @@ public class UserHome extends AppCompatActivity {
         });
 
         imageButton13 = (ImageButton) findViewById(R.id.imageButton13);
-
         imageButton13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext() , MenuPop.class);
-                startActivity(i);
+                //Popup for clicking on settings
+                LayoutInflater li = LayoutInflater.from(getApplicationContext());
+                View popupView = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_menu_pop,null);
+                AlertDialog.Builder alertBuild = new AlertDialog.Builder(UserHome.this).setView(popupView).setTitle("Settings");
+                AlertDialog alertDiag = alertBuild.show();
+
+                ImageButton apply = popupView.findViewById(R.id.btnApply);
+                apply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Spinner unitsSpin = popupView.findViewById(R.id.spinner);
+                        // Create an ArrayAdapter using the string array and a default spinner layout
+                        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(UserHome.this,
+                                R.array.units_array, android.R.layout.simple_spinner_item);
+                        // Specify the layout to use when the list of choices appears
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        // Apply the adapter to the spinner
+                        unitsSpin.setAdapter(adapter);
+                        String units = unitsSpin.getSelectedItem().toString();
+                        ref.document(userID).update("unitsPref",units).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(UserHome.this, "Unit preference changed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        Spinner landmarkPref = popupView.findViewById(R.id.spinner2);
+                        ArrayAdapter<CharSequence> adapterL = ArrayAdapter.createFromResource(UserHome.this,
+                                R.array.landmarkopt_array, android.R.layout.simple_spinner_item);
+                        adapterL.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        // Apply the adapter to the spinner
+                        landmarkPref.setAdapter(adapterL);
+                        String landmarkTypes = landmarkPref.getSelectedItem().toString();
+                        ref.document(userID).update("prefLandmarks",landmarkTypes).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(UserHome.this, "Landmark preference changed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        alertDiag.dismiss();
+                    }
+                });
+
+                ImageButton back = popupView.findViewById(R.id.btnSettingsBack);
+                back.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDiag.dismiss();
+                    }
+                });
+
             }
         });
     }

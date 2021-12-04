@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="units_array">
-        <item>METRIC</item>
-        <item>IMPERIAL</item>
+        <item>km</item>
+        <item>mi</item>
     </string-array>
 </resources>
