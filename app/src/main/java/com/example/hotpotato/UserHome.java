@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -129,12 +131,14 @@ public class UserHome extends AppCompatActivity {
         });
 
         imageButton13 = (ImageButton) findViewById(R.id.imageButton13);
-
         imageButton13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext() , MenuPop.class);
-                startActivity(i);
+                //Popup for clicking on settings
+                LayoutInflater li = LayoutInflater.from(getApplicationContext());
+                View popupView = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_menu_pop,null);
+                AlertDialog.Builder alertBuild = new AlertDialog.Builder(UserHome.this).setView(popupView).setTitle("Settings");
+                AlertDialog alertDiag = alertBuild.show();
             }
         });
     }

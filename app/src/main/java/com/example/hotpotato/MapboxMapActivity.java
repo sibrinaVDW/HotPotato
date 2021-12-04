@@ -132,6 +132,8 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textHaloBlur;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textIgnorePlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textSize;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class MapboxMapActivity extends AppCompatActivity implements LocationEngine, PermissionsListener, MapboxMap.OnCameraIdleListener, OnMapReadyCallback, Callback<DirectionsResponse> {
@@ -307,8 +309,12 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                         //Popup for clicking on a landmark to bring up options for that landmark.
                         LayoutInflater li = LayoutInflater.from(getApplicationContext());
                         View popupView = LayoutInflater.from(MapboxMapActivity.this).inflate(R.layout.activity_pop_information,null);
-                        AlertDialog.Builder alertBuild = new AlertDialog.Builder(MapboxMapActivity.this).setView(popupView).setTitle("Create category");
+                        AlertDialog.Builder alertBuild = new AlertDialog.Builder(MapboxMapActivity.this).setView(popupView).setTitle("Select Option");
                         AlertDialog alertDiag = alertBuild.show();
+
+                        TextView address = popupView.findViewById(R.id.txtPopupAddress);
+                        reverseGeocodeFunc(point,c);
+                        address.setText(selectedPointInfo);
 
                         ImageButton route = popupView.findViewById(R.id.btnRoute);
                         route.setOnClickListener(new View.OnClickListener() {
