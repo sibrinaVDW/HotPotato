@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PopInformation"
-    android:background="@drawable/header_img">
+    android:background="@drawable/header_img"
+    tools:context=".PopInformation">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/txtPopupName"
         android:layout_width="150dp"
-        android:layout_height="44dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="176dp"
+        android:layout_marginBottom="164dp"
         android:text="Name"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnRatings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.103"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +23,7 @@
         app:layout_constraintVertical_bias="0.256" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/txtPopupAddress"
         android:layout_width="150dp"
         android:layout_height="44dp"
         android:text="Address"
@@ -30,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.103"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/txtPopupName"
         app:layout_constraintVertical_bias="0.047" />
 
     <TextView
@@ -43,20 +45,62 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.103"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/txtPopupAddress"
         app:layout_constraintVertical_bias="0.079" />
 
     <ImageButton
-        android:id="@+id/imageButton4"
+        android:id="@+id/btnMapPopupBack"
         android:layout_width="102dp"
-        android:layout_height="54dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="122dp"
+        android:layout_marginBottom="208dp"
         android:backgroundTint="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/btnFavorite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.948"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/back_btn" />
+        app:srcCompat="@drawable/back_btn"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/btnRoute"
+        android:layout_width="0dp"
+        android:layout_height="68dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="70dp"
+        app:layout_constraintEnd_toStartOf="@+id/btnRatings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:srcCompat="@drawable/ic_baseline_location_on_24"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/btnRatings"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="284dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnFavorite"
+        app:layout_constraintStart_toEndOf="@+id/btnRoute"
+        app:layout_constraintTop_toBottomOf="@+id/txtPopupName"
+        app:srcCompat="@drawable/hotpotato_icon_foreground"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/btnFavorite"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="284dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnRatings"
+        app:layout_constraintTop_toBottomOf="@+id/btnMapPopupBack"
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

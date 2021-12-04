@@ -46,12 +46,8 @@ public class UserHome extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
     ImageButton goToMap;
-
     ImageButton imageButton13;
-
     ImageButton goToPlayerList;
-
-    TextView landmarksDisplay;
     List<Data> landmarkData;
 
     @Override
@@ -59,10 +55,7 @@ public class UserHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
         goToMap = findViewById(R.id.imageButton9);
-
-
         goToPlayerList = findViewById(R.id.playerListButton);
-        landmarksDisplay = findViewById(R.id.txtLandmarks);
 
         Intent intent = getIntent();
         String userID = intent.getStringExtra("user");
@@ -96,10 +89,6 @@ public class UserHome extends AppCompatActivity {
                                         feature=results.get(0);
                                       
                                         Toast.makeText(UserHome.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
-                                        //landmarksDisplay.setText(feature.placeName());
-                                        dispLandmarks += "" + feature.placeName() + "\n";
-                                        //landmarkData.add(new Data(feature.placeName(),R.drawable.hotpotato_icon_foreground));
-
                                         landmarkData.add(new Data(feature.placeName(),R.drawable.hotpotato_icon_foreground));
                                         RecyclerView recyclerView = findViewById(R.id.recLandmarkView);
                                         FavLandmarksAdapter adapter = new FavLandmarksAdapter(landmarkData, getApplication());
@@ -120,14 +109,6 @@ public class UserHome extends AppCompatActivity {
                         }
 
 
-                        
-
-                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recLandmarkView);
-                        FavLandmarksAdapter adapter = new FavLandmarksAdapter(landmarkData, getApplication());
-                        recyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
-                        recyclerView.setAdapter(adapter);
-
-
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
                         Log.d(TAG, "No such document");
@@ -137,9 +118,6 @@ public class UserHome extends AppCompatActivity {
                 }
             }
         });
-
-
-
 
         goToMap.setOnClickListener(new View.OnClickListener() {
             @Override
