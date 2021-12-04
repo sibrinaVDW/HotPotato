@@ -24,7 +24,7 @@ public class MenuPop extends AppCompatActivity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width*.9), (int)(height*.2));
+        getWindow().setLayout((int)(width*.9), (int)(height*.4));
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;
@@ -39,5 +39,15 @@ public class MenuPop extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+
+        Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapterL = ArrayAdapter.createFromResource(this,
+                R.array.landmarkopt_array, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        adapterL.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner2.setAdapter(adapterL);
     }
 }
