@@ -536,6 +536,10 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                     // No result for your request were found.
                     Toast.makeText(MapboxMapActivity.this, "Not found", Toast.LENGTH_SHORT).show();
                 }
+
+                Intent i = new Intent(getApplicationContext() , PopInformation.class);
+                startActivity(i);
+
             }
 
             @Override

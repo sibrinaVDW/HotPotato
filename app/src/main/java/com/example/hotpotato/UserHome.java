@@ -46,7 +46,11 @@ public class UserHome extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
     ImageButton goToMap;
+
+    ImageButton imageButton13;
+
     ImageButton goToPlayerList;
+
     TextView landmarksDisplay;
     List<Data> landmarkData;
 
@@ -55,8 +59,11 @@ public class UserHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
         goToMap = findViewById(R.id.imageButton9);
+
+
         goToPlayerList = findViewById(R.id.playerListButton);
         landmarksDisplay = findViewById(R.id.txtLandmarks);
+
         Intent intent = getIntent();
         String userID = intent.getStringExtra("user");
         landmarkData = new ArrayList<>();
@@ -87,11 +94,18 @@ public class UserHome extends AppCompatActivity {
                                         CarmenFeature feature;
                                         Point firstResultPoint = results.get(0).center();
                                         feature=results.get(0);
+                                      
+                                        Toast.makeText(UserHome.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
+                                        //landmarksDisplay.setText(feature.placeName());
+                                        dispLandmarks += "" + feature.placeName() + "\n";
+                                        //landmarkData.add(new Data(feature.placeName(),R.drawable.hotpotato_icon_foreground));
+
                                         landmarkData.add(new Data(feature.placeName(),R.drawable.hotpotato_icon_foreground));
                                         RecyclerView recyclerView = findViewById(R.id.recLandmarkView);
                                         FavLandmarksAdapter adapter = new FavLandmarksAdapter(landmarkData, getApplication());
                                         recyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
                                         recyclerView.setAdapter(adapter);
+
                                     } else {
                                         // No result for the request were found.
                                         Toast.makeText(UserHome.this, "Not found", Toast.LENGTH_SHORT).show();
@@ -104,6 +118,15 @@ public class UserHome extends AppCompatActivity {
                                 }
                             });
                         }
+
+
+                        
+
+                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recLandmarkView);
+                        FavLandmarksAdapter adapter = new FavLandmarksAdapter(landmarkData, getApplication());
+                        recyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
+                        recyclerView.setAdapter(adapter);
+
 
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
@@ -123,6 +146,16 @@ public class UserHome extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(UserHome.this,MapboxMapActivity.class);
                 i.putExtra("user",userID);
+                startActivity(i);
+            }
+        });
+
+        imageButton13 = (ImageButton) findViewById(R.id.imageButton13);
+
+        imageButton13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext() , MenuPop.class);
                 startActivity(i);
             }
         });
