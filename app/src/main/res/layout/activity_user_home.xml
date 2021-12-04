@@ -87,6 +87,12 @@
                 app:srcCompat="@drawable/settings"
                 tools:ignore="SpeakableTextPresentCheck" />
 
+            <ImageButton
+                android:id="@+id/playerListButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:srcCompat="@android:drawable/ic_dialog_email" />
+
 
         </LinearLayout>
     </LinearLayout>
