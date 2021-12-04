@@ -1,6 +1,8 @@
 package com.example.hotpotato;
 
 
+import static android.content.ContentValues.TAG;
+
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -31,10 +33,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.JsonObject;
 import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
@@ -54,6 +61,8 @@ import com.mapbox.geojson.Point;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineCallback;
@@ -187,7 +196,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private TextView poiInfoText;
     private String selectedPointInfo;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    CollectionReference ref = db.collection("Users");
+    String units;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -331,14 +341,14 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                             @Override
                             public void onClick(View v) {
                                 CollectionReference ref = db.collection("Users");
+                                GeoPoint newPoint = new GeoPoint(point.getLatitude(),point.getLongitude());
                                 ref.document(userID).collection("FavouriteLandmarks").document("Landmarks")
-                                 .update("ListLandmarks", FieldValue.arrayUnion(point.getLongitude(),point.getLatitude())).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                 .update("ListLandmarks", FieldValue.arrayUnion(newPoint)).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
                                         Toast.makeText(MapboxMapActivity.this, "Added to your favorites!", Toast.LENGTH_LONG).show();
                                     }
                                 });
-
                                 alertDiag.dismiss();
                             }
                         });
@@ -730,7 +740,33 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         client.enqueueCall( this);
 
         //popup for time and distance.
+        LayoutInflater li = LayoutInflater.from(getApplicationContext());
+        View popupView = LayoutInflater.from(MapboxMapActivity.this).inflate(R.layout.activity_pop_information,null);
+        AlertDialog.Builder alertBuild = new AlertDialog.Builder(MapboxMapActivity.this).setView(popupView).setTitle("Select Option");
+        AlertDialog alertDiag = alertBuild.show();
 
+        DocumentReference docRef = ref.document(userID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        DocumentSnapshot doc = task.getResult();
+                        if (document != null) {
+                            units = document.getString("unitsPref");
+                            //also get landmark pref.
+                        }
+
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
             /*client.enqueueCall(new Callback<DirectionsResponse>() {
                 @Override
                 public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
@@ -794,7 +830,13 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         if (routeFound){
             final DirectionsRoute currentRoute = response.body().routes().get(0);
             // Toast.makeText(MainActivity.this,currentRoute.distance()+" metres ",Toast.LENGTH_SHORT).show();
-            distance = currentRoute.distance() / 1000;
+            if(units == "km"){
+                distance = currentRoute.distance() / 1000;
+            }
+            else if(units == "mi"){
+                distance = (currentRoute.distance() / 1000) / 1.609344;
+            }
+
             st = String.format("%.2f K.M", distance);
             TextView dv=findViewById(R.id.distanceText);
             dv.setText(st);
