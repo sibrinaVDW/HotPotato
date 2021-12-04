@@ -131,6 +131,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private LocationLayerPlugin locationLayerPlugin;
     private Location originLocation;
     private PermissionsManager permissionsManager;
+    Intent intent = getIntent();
+    String userID = intent.getStringExtra("user");
 
     private static final String DISTANCE_SOURCE_ID = "DISTANCE_SOURCE_ID";
     private static final String DISTANCE_LINE_LAYER_ID = "DISTANCE_LINE_LAYER_ID";
