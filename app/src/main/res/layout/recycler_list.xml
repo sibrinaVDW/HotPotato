@@ -20,15 +20,26 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
+
         <TextView
+            android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtTitle"
-            android:text="Main Text"
-            android:textStyle="bold"
-            android:textSize="20dp"
             android:layout_margin="5dp"
-            android:textColor="#000"></TextView>
+            android:text="Main Text"
+            android:textColor="#000"
+            android:textSize="18dp"
+            android:textStyle="bold"></TextView>
+
+        <TextView
+            android:id="@+id/txtAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Click on address for more details"
+            android:textColor="#000"
+            android:textSize="10dp"
+            android:textStyle="bold"></TextView>
 
     </LinearLayout>
 

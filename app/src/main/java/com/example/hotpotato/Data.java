@@ -2,6 +2,15 @@ package com.example.hotpotato;
 
 public class Data {
     public String name;
+    public String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public String getName() {
         return name;
@@ -23,6 +32,7 @@ public class Data {
 
     Data(String name, int imageId) {
         this.name = name;
+        //this.address = address;
         this.imageId = imageId;
     }
 }
