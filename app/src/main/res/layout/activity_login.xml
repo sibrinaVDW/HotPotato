@@ -8,70 +8,86 @@
     android:orientation="vertical"
     tools:context=".Login">
 
-    <LinearLayout
+    <ImageButton
+        android:id="@+id/signupnew_btn"
+        android:layout_width="111dp"
+        android:layout_height="53dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.878"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05"
+        app:srcCompat="@drawable/signupgrey_btn" />
+
+    <EditText
+        android:id="@+id/edtPassword"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="42dp"
+        android:backgroundTint="#000000"
+        android:ems="10"
+        android:hint="Please enter your password."
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="100dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:layout_marginRight="120dp"
-            app:srcCompat="@drawable/login_txt" />
+    <EditText
+        android:id="@+id/edtName"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:backgroundTint="#000000"
+        android:ems="10"
+        android:hint="Please enter your email."
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.332" />
 
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="50dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="-20dp"
-            android:layout_marginRight="50dp"
-            app:srcCompat="@drawable/indicator_img" />
+    <ImageButton
+        android:id="@+id/btnEnter"
+        android:layout_width="373dp"
+        android:layout_height="119dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.421"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.867"
+        app:srcCompat="@drawable/login2_btn" />
 
-        <ImageButton
-            android:id="@+id/btnEnter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="300dp"
-            android:backgroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/login2_btn" />
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="107dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.121"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.122"
+        app:srcCompat="@drawable/indicator_img" />
 
-        <EditText
-            android:id="@+id/edtName"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="-300dp"
-            android:backgroundTint="#000000"
-            android:ems="10"
-            android:hint="Please enter your email."
-            android:inputType="textEmailAddress" />
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="150dp"
+        android:layout_height="83dp"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.141"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.024"
+        app:srcCompat="@drawable/login_txt" />
 
-        <EditText
-            android:id="@+id/edtPassword"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
-            android:backgroundTint="#000000"
-            android:ems="10"
-            android:hint="Please enter your password."
-            android:inputType="textPassword" />
-
-        <ImageButton
-            android:id="@+id/signupnew_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="250dp"
-            android:layout_marginTop="-230dp"
-            android:backgroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/signupgrey_btn" />
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
