@@ -31,6 +31,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.JsonObject;
 import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
@@ -135,8 +139,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private LocationLayerPlugin locationLayerPlugin;
     private Location originLocation;
     private PermissionsManager permissionsManager;
-    //Intent intent = getIntent();
-    //String userID = intent.getStringExtra("user");
+    String userID;
 
     private static final String DISTANCE_SOURCE_ID = "DISTANCE_SOURCE_ID";
     private static final String DISTANCE_LINE_LAYER_ID = "DISTANCE_LINE_LAYER_ID";
@@ -181,6 +184,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
     private TextView poiInfoText;
     private String selectedPointInfo;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
     @Override
@@ -189,6 +193,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_mapbox_map);
+        Intent intent = getIntent();
+        userID = intent.getStringExtra("user");
 
         poiInfoText = findViewById(R.id.elevation_query_api_response_elevation_numbers_only);
 
@@ -318,7 +324,15 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                         favourite.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //ref.document(user.getUid()).collection("FavouriteLandmarks").document("Landmarks").set(data);
+                                CollectionReference ref = db.collection("Users");
+                                ref.document(userID).collection("FavouriteLandmarks").document("Landmarks")
+                                 .update("ListLandmarks", FieldValue.arrayUnion(point.getLongitude(),point.getLatitude())).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(MapboxMapActivity.this, "Added to your favorites!", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
                                 alertDiag.dismiss();
                             }
                         });
