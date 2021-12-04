@@ -42,7 +42,9 @@
             android:layout_marginLeft="250dp"
             android:layout_marginTop="-70dp"
             android:backgroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/logingrey_btn" />
+            android:minHeight="48dp"
+            app:srcCompat="@drawable/logingrey_btn"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/btnSignUp"
@@ -52,7 +54,8 @@
             android:layout_marginTop="300dp"
             android:backgroundTint="#00FFFFFF"
             android:foregroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/signup_btn" />
+            app:srcCompat="@drawable/signup_btn"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <EditText
             android:id="@+id/edtSignupEmail"
@@ -62,7 +65,8 @@
             android:layout_marginTop="-300dp"
             android:ems="10"
             android:hint="Signup with your email."
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/edtSignupPassword"
@@ -72,7 +76,8 @@
             android:layout_marginTop="30dp"
             android:ems="10"
             android:hint="Create new password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:minHeight="48dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
