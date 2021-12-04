@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MapsActivity">
 
 <!--    <com.mapbox.mapboxsdk.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"-->
@@ -44,6 +45,23 @@
             android:layout_height="53dp"
             android:text="Distance goes here" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:id="@+id/elevation_query_api_response_elevation_numbers_only"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="numbers here"
+                mapbox:layout_constraintBottom_toBottomOf="parent"
+                mapbox:layout_constraintEnd_toEndOf="parent"
+                mapbox:layout_constraintStart_toStartOf="parent"
+                mapbox:layout_constraintTop_toTopOf="parent"
+                mapbox:layout_constraintVertical_bias="0.977" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </com.mapbox.mapboxsdk.maps.MapView>
 
@@ -65,13 +83,19 @@
 <!--            android:elevation="8dp"-->
 <!--            />-->
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_location_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:tint="@android:color/white"
+            app:backgroundTint="@color/design_default_color_primary"
+            app:srcCompat="@android:drawable/ic_search_category_default" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </RelativeLayout>

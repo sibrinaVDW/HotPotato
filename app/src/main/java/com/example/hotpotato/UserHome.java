@@ -37,6 +37,7 @@ public class UserHome extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
     ImageButton goToMap;
+    ImageButton goToPlayerList;
     TextView landmarksDisplay;
     String dispLandmarks = "";
 
@@ -45,6 +46,7 @@ public class UserHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
         goToMap = findViewById(R.id.imageButton9);
+        goToPlayerList = findViewById(R.id.playerListButton);
         landmarksDisplay = findViewById(R.id.txtLandmarks);
         Intent intent = getIntent();
 
