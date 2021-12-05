@@ -42,6 +42,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.JsonObject;
 import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
@@ -209,6 +211,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         userID = intent.getStringExtra("user");
 
         poiInfoText = findViewById(R.id.elevation_query_api_response_elevation_numbers_only);
+
 
 
         viewMap = findViewById(R.id.mapView);
@@ -910,6 +913,9 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             // Create a new FeatureCollection and add a new Feature to it using selectedCarmenFeature above.
             // Then retrieve and update the source designated for showing a selected location's symbol layer icon
 
+
+
+
             if (mapboxMap != null) {
                 Style style = mapboxMap.getStyle();
                 if (style != null) {
@@ -918,6 +924,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                         source.setGeoJson(FeatureCollection.fromFeatures(
                                 new Feature[]{Feature.fromJson(selectedCarmenFeature.toJson())}));
                     }
+
+
 
                     // Move map camera to the selected location
                     mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(

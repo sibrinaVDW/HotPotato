@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 import com.mapbox.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
@@ -54,6 +55,7 @@ public class UserHome extends AppCompatActivity {
     ImageButton goToMap;
     ImageButton imageButton13;
     ImageButton goToPlayerList;
+    TextView userList;
     List<Data> landmarkData;
 
     @Override
@@ -61,7 +63,10 @@ public class UserHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
         goToMap = findViewById(R.id.imageButton9);
-        goToPlayerList = findViewById(R.id.playerListButton);
+        goToPlayerList = findViewById(R.id.otherUsersButton);
+
+        //userList = findViewById(R.id.userListTextbox);
+        final String[] userListString = {""};
 
         Intent intent = getIntent();
         String userID = intent.getStringExtra("user");
@@ -133,6 +138,38 @@ public class UserHome extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        goToPlayerList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.collection("Users")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+
+
+
+                                        userListString[0] += document.getId() + " => " + document.getString("name") + "\n";
+                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                    }
+                                    LayoutInflater li = LayoutInflater.from(getApplicationContext());
+                                    View userListpopup = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_userlist_popup,null);
+                                    AlertDialog.Builder alertBuild = new AlertDialog.Builder(UserHome.this).setView(userListpopup).setTitle("VisibleUsers");
+                                    AlertDialog alertDiag = alertBuild.show();
+                                    userList = userListpopup.findViewById(R.id.userListTextbox);
+                                    userList.setText(userListString[0]);
+                                } else {
+                                    Log.d(TAG, "Error getting documents: ", task.getException());
+                                }
+
+                            }
+                        });
+            }
+        });
+
 
         imageButton13 = (ImageButton) findViewById(R.id.imageButton13);
         imageButton13.setOnClickListener(new View.OnClickListener() {
