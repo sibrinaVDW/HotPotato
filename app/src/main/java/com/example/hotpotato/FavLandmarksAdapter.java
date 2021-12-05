@@ -36,6 +36,7 @@ public void onBindViewHolder(@NonNull View_Holder holder, int position) {
 
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
         holder.name.setText(list.get(position).name);
+        //holder.address.setText(list.get(position).address);
         holder.imageView.setImageResource(list.get(position).imageId);
 
         }

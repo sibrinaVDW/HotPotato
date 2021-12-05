@@ -1,6 +1,9 @@
 package com.example.hotpotato;
 
 
+import static android.content.ContentValues.TAG;
+
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
@@ -21,13 +24,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.JsonObject;
 import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
@@ -47,6 +61,8 @@ import com.mapbox.geojson.Point;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineCallback;
@@ -64,6 +80,7 @@ import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
+import com.mapbox.mapboxsdk.maps.Image;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -124,6 +141,8 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textHaloBlur;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textIgnorePlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textSize;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class MapboxMapActivity extends AppCompatActivity implements LocationEngine, PermissionsListener, MapboxMap.OnCameraIdleListener, OnMapReadyCallback, Callback<DirectionsResponse> {
@@ -131,6 +150,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private LocationLayerPlugin locationLayerPlugin;
     private Location originLocation;
     private PermissionsManager permissionsManager;
+    String userID;
 
     private static final String DISTANCE_SOURCE_ID = "DISTANCE_SOURCE_ID";
     private static final String DISTANCE_LINE_LAYER_ID = "DISTANCE_LINE_LAYER_ID";
@@ -175,8 +195,9 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
     private TextView poiInfoText;
     private String selectedPointInfo;
-
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference ref = db.collection("Users");
+    String units;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,6 +205,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_mapbox_map);
+        Intent intent = getIntent();
+        userID = intent.getStringExtra("user");
 
         poiInfoText = findViewById(R.id.elevation_query_api_response_elevation_numbers_only);
 
@@ -293,9 +316,64 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                     @Override
                     public boolean onMapClick(@NonNull LatLng point) {
 
+                        //Popup for clicking on a landmark to bring up options for that landmark.
+                        LayoutInflater li = LayoutInflater.from(getApplicationContext());
+                        View popupView = LayoutInflater.from(MapboxMapActivity.this).inflate(R.layout.activity_pop_information,null);
+                        AlertDialog.Builder alertBuild = new AlertDialog.Builder(MapboxMapActivity.this).setView(popupView).setTitle("Select Option");
+                        AlertDialog alertDiag = alertBuild.show();
 
+                        TextView address = popupView.findViewById(R.id.txtPopupAddress);
+                        reverseGeocodeFunc(point,c);
+                        address.setText(selectedPointInfo);
 
-                        reverseGeocodeFunc(point, 0);
+                        ImageButton route = popupView.findViewById(R.id.btnRoute);
+                        route.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                moveDestinationMarkerToNewLocation(point);
+                                reverseGeocodeFunc(point, c);
+                                alertDiag.dismiss();
+                            }
+                        });
+
+                        ImageButton favourite  = popupView.findViewById(R.id.btnFavorite);
+                        favourite.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                CollectionReference ref = db.collection("Users");
+                                GeoPoint newPoint = new GeoPoint(point.getLatitude(),point.getLongitude());
+                                ref.document(userID).collection("FavouriteLandmarks").document("Landmarks")
+                                 .update("ListLandmarks", FieldValue.arrayUnion(newPoint)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(MapboxMapActivity.this, "Added to your favorites!", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                alertDiag.dismiss();
+                            }
+                        });
+
+                        ImageButton ratings = popupView.findViewById(R.id.btnMapPopupBack);
+                        ratings.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDiag.dismiss();
+                                reverseGeocodeFunc(point, c);
+                                Intent i = new Intent(MapboxMapActivity.this,Ratings.class);
+                                i.putExtra("place", selectedPointInfo);
+                                startActivity(i);
+                            }
+                        });
+
+                        ImageButton back = popupView.findViewById(R.id.btnMapPopupBack);
+                        back.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDiag.dismiss();
+                            }
+                        });
+
+                        //reverseGeocodeFunc(point, 0);
 
                         /*if (c == 0) {
                             origin = Point.fromLngLat(mapboxMap.getLocationComponent().getLastKnownLocation().getLongitude(), mapboxMap.getLocationComponent().getLastKnownLocation().getLatitude());
@@ -526,6 +604,12 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                     Toast.makeText(MapboxMapActivity.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
                     poiInfoText.setText(""+feature.placeName());
 
+
+                    /*Intent i = new Intent(getApplicationContext() , PopInformation.class);
+                    i.putExtra("address", feature.address());
+                    i.putExtra("name",feature.placeName());
+                    i.putExtra("latlng",point);
+                    startActivity(i);*/
                     //  }
                     Log.d("MyActivity", "onResponse: " + firstResultPoint.toString());
 
@@ -534,6 +618,9 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                     // No result for your request were found.
                     Toast.makeText(MapboxMapActivity.this, "Not found", Toast.LENGTH_SHORT).show();
                 }
+
+
+
             }
 
             @Override
@@ -638,7 +725,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
      * @param mapboxMap the Mapbox map object that the route will be drawn on
      * @param destination the desired finish point of the route
      */
-    private void getRoute (MapboxMap mapboxMap, Point destination, String profile){
+    public void getRoute (MapboxMap mapboxMap, Point destination, String profile){
 
         origin = Point.fromLngLat(mapboxMap.getLocationComponent().getLastKnownLocation().getLongitude(), mapboxMap.getLocationComponent().getLastKnownLocation().getLatitude());
 
@@ -651,6 +738,35 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 .build();
 
         client.enqueueCall( this);
+
+        //popup for time and distance.
+        LayoutInflater li = LayoutInflater.from(getApplicationContext());
+        View popupView = LayoutInflater.from(MapboxMapActivity.this).inflate(R.layout.activity_pop_information,null);
+        AlertDialog.Builder alertBuild = new AlertDialog.Builder(MapboxMapActivity.this).setView(popupView).setTitle("Select Option");
+        AlertDialog alertDiag = alertBuild.show();
+
+        DocumentReference docRef = ref.document(userID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        DocumentSnapshot doc = task.getResult();
+                        if (document != null) {
+                            units = document.getString("unitsPref");
+                            //also get landmark pref.
+                        }
+
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
             /*client.enqueueCall(new Callback<DirectionsResponse>() {
                 @Override
                 public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
@@ -714,7 +830,13 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         if (routeFound){
             final DirectionsRoute currentRoute = response.body().routes().get(0);
             // Toast.makeText(MainActivity.this,currentRoute.distance()+" metres ",Toast.LENGTH_SHORT).show();
-            distance = currentRoute.distance() / 1000;
+            if(units == "km"){
+                distance = currentRoute.distance() / 1000;
+            }
+            else if(units == "mi"){
+                distance = (currentRoute.distance() / 1000) / 1.609344;
+            }
+
             st = String.format("%.2f K.M", distance);
             TextView dv=findViewById(R.id.distanceText);
             dv.setText(st);
@@ -814,6 +936,11 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 }
             }
         }
+
+        if(requestCode == 2){
+            //response from popup.
+        }
+
         /*if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
 // Retrieve the information from the selected location's CarmenFeature
             CarmenFeature carmenFeature = PlacePicker.getPlace(data);
@@ -856,7 +983,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
      *
      * @param pointToMoveMarkerTo where the map was tapped on
      */
-    private void moveDestinationMarkerToNewLocation(LatLng pointToMoveMarkerTo) {
+    public void moveDestinationMarkerToNewLocation(LatLng pointToMoveMarkerTo) {
         mapboxMap.getStyle(new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {

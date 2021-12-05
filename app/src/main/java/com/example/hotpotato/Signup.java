@@ -5,9 +5,12 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,8 +22,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Signup extends AppCompatActivity {
@@ -28,20 +34,33 @@ public class Signup extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
+    private ImageButton add;
+    private EditText email;
+    private EditText password;
+
+    List<GeoPoint> points;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        /*add.setOnClickListener(new View.OnClickListener() {
+        mAuth = FirebaseAuth.getInstance();
+
+        points = new ArrayList<>();
+
+        email = findViewById(R.id.edtSignupEmail);
+        password = findViewById(R.id.edtSignupPassword);
+        add = findViewById(R.id.btnSignUp);
+
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nameText = name.getText().toString();
-                String passwordtext = password.getText().toString();
-                createAccount(nameText,passwordtext);
+                String nameText = email.getText().toString();
+                String passwordText = password.getText().toString();
+                createAccount(nameText,passwordText);
             }
-        });*/
+        });
     }
 
     private void createAccount(String email, String password) {
@@ -60,7 +79,6 @@ public class Signup extends AppCompatActivity {
                             Map<String, Object> userObj = new HashMap<>();
                             userObj.put("name", "");
                             userObj.put("email", email);
-                            userObj.put("favoritesID", "");
                             userObj.put("prefLandmarks", "Modern");
                             userObj.put("unitsPref", "km");
 
@@ -80,13 +98,16 @@ public class Signup extends AppCompatActivity {
                                     });
 
                             Map<String, Object> data = new HashMap<>();
-                            data.put("ListLandmarks", "");
+                            data.put("ListLandmarks", points);
                             ref.document(user.getUid()).collection("FavouriteLandmarks").document("Landmarks").set(data);
 
-                            Toast.makeText(Signup.this, "Authentication success.",
+                            Toast.makeText(Signup.this, email + " created successfully!",
                                     Toast.LENGTH_SHORT).show();
 
                             //Open intent for profile activity
+                            Intent i = new Intent(Signup.this,UserHome.class);
+                            i.putExtra("user", user.getUid());
+                            startActivity(i);
 
                         } else {
                             // If sign in fails, display a message to the user.

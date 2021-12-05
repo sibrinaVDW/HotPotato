@@ -7,23 +7,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -46,9 +52,8 @@ public class UserHome extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
     ImageButton goToMap;
+    ImageButton imageButton13;
     ImageButton goToPlayerList;
-    TextView landmarksDisplay;
-    String dispLandmarks = "";
     List<Data> landmarkData;
 
     @Override
@@ -57,11 +62,11 @@ public class UserHome extends AppCompatActivity {
         setContentView(R.layout.activity_user_home);
         goToMap = findViewById(R.id.imageButton9);
         goToPlayerList = findViewById(R.id.playerListButton);
-        landmarksDisplay = findViewById(R.id.txtLandmarks);
+
         Intent intent = getIntent();
-        String userID = intent.getStringExtra("user").toString();
+        String userID = intent.getStringExtra("user");
         landmarkData = new ArrayList<>();
-        //landmarkData = fill_with_data();
+
         DocumentReference docRef = ref.document(userID).collection("FavouriteLandmarks").document("Landmarks");
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -75,7 +80,7 @@ public class UserHome extends AppCompatActivity {
                             MapboxGeocoding reverseGeocode = MapboxGeocoding.builder()
                                     .accessToken(getString(R.string.mapbox_access_token))
                                     .query(Point.fromLngLat(gp.getLongitude(),gp.getLatitude()))
-                                    .geocodingTypes(GeocodingCriteria.TYPE_PLACE)
+                                    .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
                                     .build();
 
                             reverseGeocode.enqueueCall(new Callback<GeocodingResponse>() {
@@ -88,12 +93,16 @@ public class UserHome extends AppCompatActivity {
                                         CarmenFeature feature;
                                         Point firstResultPoint = results.get(0).center();
                                         feature=results.get(0);
+                                      
                                         Toast.makeText(UserHome.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
-                                        landmarksDisplay.setText(feature.placeName());
-                                        dispLandmarks += "" + feature.placeName() + "\n";
-                                        //landmarkData.add(new Data(feature.placeName(),R.drawable.hotpotato_icon_foreground));
+                                        landmarkData.add(new Data(feature.placeName(),R.drawable.hotpotato_icon_foreground));
+                                        RecyclerView recyclerView = findViewById(R.id.recLandmarkView);
+                                        FavLandmarksAdapter adapter = new FavLandmarksAdapter(landmarkData, getApplication());
+                                        recyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
+                                        recyclerView.setAdapter(adapter);
+
                                     } else {
-                                        // No result for your request were found.
+                                        // No result for the request were found.
                                         Toast.makeText(UserHome.this, "Not found", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -105,12 +114,6 @@ public class UserHome extends AppCompatActivity {
                             });
                         }
 
-                        landmarksDisplay.setText(dispLandmarks);
-
-                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recLandmarkView);
-                        FavLandmarksAdapter adapter = new FavLandmarksAdapter(landmarkData, getApplication());
-                        recyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
-                        recyclerView.setAdapter(adapter);
 
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
@@ -122,25 +125,73 @@ public class UserHome extends AppCompatActivity {
             }
         });
 
-
-
-
         goToMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(UserHome.this,MapboxMapActivity.class);
+                i.putExtra("user",userID);
                 startActivity(i);
+            }
+        });
+
+        imageButton13 = (ImageButton) findViewById(R.id.imageButton13);
+        imageButton13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Popup for clicking on settings
+                LayoutInflater li = LayoutInflater.from(getApplicationContext());
+                View popupView = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_menu_pop,null);
+                AlertDialog.Builder alertBuild = new AlertDialog.Builder(UserHome.this).setView(popupView).setTitle("Settings");
+                AlertDialog alertDiag = alertBuild.show();
+
+                ImageButton apply = popupView.findViewById(R.id.btnApply);
+                apply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Spinner unitsSpin = popupView.findViewById(R.id.spinner);
+                        // Create an ArrayAdapter using the string array and a default spinner layout
+                        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(UserHome.this,
+                                R.array.units_array, android.R.layout.simple_spinner_item);
+                        // Specify the layout to use when the list of choices appears
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        // Apply the adapter to the spinner
+                        unitsSpin.setAdapter(adapter);
+                        String units = unitsSpin.getSelectedItem().toString();
+                        ref.document(userID).update("unitsPref",units).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(UserHome.this, "Unit preference changed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        Spinner landmarkPref = popupView.findViewById(R.id.spinner2);
+                        ArrayAdapter<CharSequence> adapterL = ArrayAdapter.createFromResource(UserHome.this,
+                                R.array.landmarkopt_array, android.R.layout.simple_spinner_item);
+                        adapterL.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        // Apply the adapter to the spinner
+                        landmarkPref.setAdapter(adapterL);
+                        String landmarkTypes = landmarkPref.getSelectedItem().toString();
+                        ref.document(userID).update("prefLandmarks",landmarkTypes).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(UserHome.this, "Landmark preference changed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        alertDiag.dismiss();
+                    }
+                });
+
+                ImageButton back = popupView.findViewById(R.id.btnSettingsBack);
+                back.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDiag.dismiss();
+                    }
+                });
+
             }
         });
     }
 
-    //tester, this somehow works
-    public List<Data> fill_with_data() {
-
-        List<Data> data = new ArrayList<>();
-        data.add(new Data("C", R.drawable.hotpotato_icon_foreground));
-        data.add(new Data("C++", R.drawable.hotpotato_icon_foreground));
-        data.add(new Data("Java", R.drawable.hotpotato_icon_foreground));
-        return data;
-    }
 }

@@ -16,11 +16,22 @@ import java.util.List;
 public class View_Holder extends RecyclerView.ViewHolder {
 
         TextView name;
+        // address;
         ImageView imageView;
 
         View_Holder(View itemView) {
         super(itemView);
-        name = (TextView) itemView.findViewById(R.id.txtTitle);
-        imageView = (ImageView) itemView.findViewById(R.id.imgThumbnail);
+        name = itemView.findViewById(R.id.txtTitle);
+        //address = itemView.findViewById(R.id.txtAddress);
+        imageView = itemView.findViewById(R.id.imgThumbnail);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        //popup to go to map.
+                }
+        });
+
+
         }
         }
