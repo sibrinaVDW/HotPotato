@@ -164,6 +164,8 @@ public class UserHome extends AppCompatActivity {
                             }
                         });
 
+                        //trying to push again
+
                         Spinner landmarkPref = popupView.findViewById(R.id.spinner2);
                         ArrayAdapter<CharSequence> adapterL = ArrayAdapter.createFromResource(UserHome.this,
                                 R.array.landmarkopt_array, android.R.layout.simple_spinner_item);
