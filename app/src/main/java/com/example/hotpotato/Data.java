@@ -2,14 +2,14 @@ package com.example.hotpotato;
 
 public class Data {
     public String name;
-    public String address;
+    public String extraInfo;
 
     public String getAddress() {
-        return address;
+        return extraInfo;
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.extraInfo = address;
     }
 
     public String getName() {
@@ -30,9 +30,9 @@ public class Data {
 
     public int imageId;
 
-    Data(String name, int imageId) {
+    Data(String name, String extraInfo, int imageId) {
         this.name = name;
-        //this.address = address;
+        this.extraInfo = extraInfo;
         this.imageId = imageId;
     }
 }

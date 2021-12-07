@@ -34,6 +34,7 @@ public class Signup extends AppCompatActivity {
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
+    ImageButton login;
     private ImageButton add;
     private EditText email;
     private EditText password;
@@ -52,6 +53,15 @@ public class Signup extends AppCompatActivity {
         email = findViewById(R.id.edtSignupEmail);
         password = findViewById(R.id.edtSignupPassword);
         add = findViewById(R.id.btnSignUp);
+        login = findViewById(R.id.btnLoginBack);
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Signup.this, Login.class);
+                startActivity(i);
+            }
+        });
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
