@@ -4,6 +4,28 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/drawable/hotpotato_icon_background.xml" value="0.19895833333333332" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/drawable/dialog_bg.xml" value="0.26875" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/drawable/menu_bg.xml" value="0.26875" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/drawable/pop_bg.xml" value="0.26875" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/drawable/settings_bg.xml" value="0.26875" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_login.xml" value="0.2526041666666667" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_mapbox_map.xml" value="0.2526041666666667" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_maps.xml" value="0.23052536231884058" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_menu_pop.xml" value="0.2375" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_pop_information.xml" value="0.264" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_ratings.xml" value="0.2526041666666667" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_settings.xml" value="0.23052536231884058" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_signup.xml" value="0.23052536231884058" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_user_home.xml" value="0.264" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/activity_userlist_popup.xml" value="0.2526041666666667" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/bottompreflayout.xml" value="0.2526041666666667" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/bottomsettings.xml" value="0.2526041666666667" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/bottomsettingslayout.xml" value="0.22554347826086957" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/bottomsheetlayout.xml" value="0.2526041666666667" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/bottomunitslayout.xml" value="0.2526041666666667" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/bottumdistancelayout.xml" value="0.2526041666666667" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/recycler_list.xml" value="0.4" />
+        <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/startscreen.xml" value="0.2526041666666667" />
         <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_login.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_mapbox_map.xml" value="0.1" />
         <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_maps.xml" value="0.20520833333333333" />
