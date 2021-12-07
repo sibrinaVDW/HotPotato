@@ -29,6 +29,7 @@ public class View_Holder extends RecyclerView.ViewHolder implements View.OnClick
                 Context v = view.getContext();
                 Intent i = new Intent(v,Ratings.class);
                 v.startActivity(i);
+                Toast.makeText(v,"Clicked",Toast.LENGTH_SHORT).show();
         }
 
         }
