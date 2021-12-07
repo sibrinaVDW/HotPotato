@@ -26,14 +26,14 @@
         <ImageView
             android:layout_width="66dp"
             android:layout_height="66dp"
-            />
+            android:src="@drawable/emptylocation"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Historical"
             android:layout_marginLeft="30dp"
-            android:textSize="16sp"/>
+            android:textSize="20sp"/>
 
 
     </LinearLayout>
@@ -46,16 +46,16 @@
         android:padding="8dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/hotpotato_icon"/>
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:src="@drawable/emptylocation"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Popular"
             android:layout_marginLeft="30dp"
-            android:textSize="16sp"/>
+            android:textSize="20sp"/>
 
 
     </LinearLayout>
@@ -68,16 +68,16 @@
         android:padding="8dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/hotpotato_icon"/>
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:src="@drawable/emptylocation"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Modern"
             android:layout_marginLeft="30dp"
-            android:textSize="16sp"/>
+            android:textSize="20sp"/>
 
 
     </LinearLayout>
