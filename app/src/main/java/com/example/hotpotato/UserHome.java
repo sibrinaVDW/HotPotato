@@ -8,13 +8,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -174,62 +181,133 @@ public class UserHome extends AppCompatActivity {
         imageButton13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Popup for clicking on settings
-                LayoutInflater li = LayoutInflater.from(getApplicationContext());
-                View popupView = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_menu_pop,null);
-                AlertDialog.Builder alertBuild = new AlertDialog.Builder(UserHome.this).setView(popupView).setTitle("Settings");
-                AlertDialog alertDiag = alertBuild.show();
 
-                ImageButton apply = popupView.findViewById(R.id.btnApply);
-                apply.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Spinner unitsSpin = popupView.findViewById(R.id.spinner);
-                        // Create an ArrayAdapter using the string array and a default spinner layout
-                        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(UserHome.this,
-                                R.array.units_array, android.R.layout.simple_spinner_item);
-                        // Specify the layout to use when the list of choices appears
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        // Apply the adapter to the spinner
-                        unitsSpin.setAdapter(adapter);
-                        String units = unitsSpin.getSelectedItem().toString();
-                        ref.document(userID).update("unitsPref",units).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(UserHome.this, "Unit preference changed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                showDialog();
+            }
+        });
 
-                        //trying to push again
 
-                        Spinner landmarkPref = popupView.findViewById(R.id.spinner2);
-                        ArrayAdapter<CharSequence> adapterL = ArrayAdapter.createFromResource(UserHome.this,
-                                R.array.landmarkopt_array, android.R.layout.simple_spinner_item);
-                        adapterL.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        // Apply the adapter to the spinner
-                        landmarkPref.setAdapter(adapterL);
-                        String landmarkTypes = landmarkPref.getSelectedItem().toString();
-                        ref.document(userID).update("prefLandmarks",landmarkTypes).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(UserHome.this, "Landmark preference changed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+    }
 
-                        alertDiag.dismiss();
-                    }
-                });
+    private void showDialog()
+    {
+        final Dialog dialog = new Dialog(UserHome.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottomsettingslayout);
 
-                ImageButton back = popupView.findViewById(R.id.btnSettingsBack);
-                back.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDiag.dismiss();
-                    }
-                });
+        LinearLayout ratingLayout = dialog.findViewById(R.id.layoutUnits);
+        LinearLayout favLayout = dialog.findViewById(R.id.layoutLandmarkpref);
+
+        ratingLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(UserHome.this, "Units is clicked",Toast.LENGTH_LONG).show();
+                showUnits();
+                dialog.dismiss();
 
             }
         });
+
+        favLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(UserHome.this, "Landmark Pref is clicked",Toast.LENGTH_LONG).show();
+                showLandpref();
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private void showUnits()
+    {
+        final Dialog dialog = new Dialog(UserHome.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottomunitslayout);
+
+        LinearLayout kmLayout = dialog.findViewById(R.id.layoutKm);
+        LinearLayout miLayout = dialog.findViewById(R.id.layoutMi);
+
+        kmLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(UserHome.this, "KM chosen",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        miLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(UserHome.this, "Mi chosen",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private void showLandpref()
+    {
+        final Dialog dialog = new Dialog(UserHome.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottompreflayout);
+
+        LinearLayout historyLayout = dialog.findViewById(R.id.layoutHistorical);
+        LinearLayout popularLayout = dialog.findViewById(R.id.layoutPopular);
+        LinearLayout modernLayout = dialog.findViewById(R.id.layoutModern);
+
+        historyLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(UserHome.this, "Historical chosen",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        popularLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(UserHome.this, "Popular chosen",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        modernLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(UserHome.this, "Modern chosen",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
 }

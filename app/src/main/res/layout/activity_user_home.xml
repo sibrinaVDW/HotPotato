@@ -11,10 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_bgmerge"
+        android:background="@drawable/userhomepagenew"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="31dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,12 +24,12 @@
                 android:layout_width="45dp"
                 android:layout_height="69dp"
                 android:backgroundTint="#00FFFFFF"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/otherUsersButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.923"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.736"
+                app:layout_constraintStart_toEndOf="@+id/otherUsersButton"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.025"
+                app:layout_constraintVertical_bias="0.987"
                 app:srcCompat="@drawable/menuopt"
                 tools:ignore="SpeakableTextPresentCheck" />
 
@@ -39,42 +37,41 @@
                 android:id="@+id/imageButton9"
                 android:layout_width="wrap_content"
                 android:layout_height="93dp"
-                android:layout_marginBottom="16dp"
                 android:backgroundTint="#00FFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintHorizontal_bias="0.086"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recLandmarkView"
-                app:layout_constraintVertical_bias="1.0"
-                app:srcCompat="@drawable/mapbtn"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.987"
+                app:srcCompat="@drawable/barcomp"
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <ImageButton
                 android:id="@+id/otherUsersButton"
-                android:layout_width="wrap_content"
-                android:layout_height="93dp"
-                android:layout_marginBottom="16dp"
+                android:layout_width="94dp"
+                android:layout_height="89dp"
                 android:backgroundTint="#00FFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.831"
+                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recLandmarkView"
-                app:layout_constraintVertical_bias="1.0"
-                app:srcCompat="@drawable/user_btn"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.987"
+                app:srcCompat="@drawable/baruser"
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recLandmarkView"
-                android:layout_width="367dp"
-                android:layout_height="159dp"
+                android:layout_width="342dp"
+                android:layout_height="241dp"
+                android:backgroundTint="#E2FFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.363"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.547"
+                app:layout_constraintVertical_bias="0.65"
                 tools:listitem="@layout/recycler_list" />
 
             <ImageView
@@ -86,22 +83,8 @@
                 app:layout_constraintHorizontal_bias="0.1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.37"
+                app:layout_constraintVertical_bias="0.376"
                 app:srcCompat="@drawable/favlandm" />
-
-            <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="85dp"
-                android:layout_height="78dp"
-
-                android:foreground="@drawable/user_btn"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.05"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.024"
-                app:srcCompat="@drawable/usericon_btn" />
 
             <ImageView
                 android:id="@+id/imageView8"
@@ -111,10 +94,33 @@
                 android:foreground="@drawable/headerusertest"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.207"
+                app:layout_constraintHorizontal_bias="0.192"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.222" />
+                app:layout_constraintVertical_bias="0.244" />
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="94dp"
+                android:layout_height="77dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.006"
+                app:srcCompat="@drawable/potatologo" />
+
+            <ImageView
+                android:id="@+id/imageView11"
+                android:layout_width="151dp"
+                android:layout_height="37dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.116"
+                app:srcCompat="@drawable/hotpotato" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
