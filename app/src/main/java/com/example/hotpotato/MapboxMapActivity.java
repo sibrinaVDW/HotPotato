@@ -970,10 +970,10 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             TextView dv=findViewById(R.id.distanceText);
             dv.setText(st);
 
-            if (mapboxMap != null) {
-                mapboxMap.getStyle(new Style.OnStyleLoaded() {
-                    @Override
-                    public void onStyleLoaded(@NonNull Style style) {
+            if (mapboxMap != null) {eLoaded() {
+                @Override
+                public void onStyleLoade
+                mapboxMap.getStyle(new Style.OnStyld(@NonNull Style style) {
 
 // Retrieve and update the source designated for showing the directions route
                         GeoJsonSource source = style.getSourceAs(ROUTE_SOURCE_ID);
