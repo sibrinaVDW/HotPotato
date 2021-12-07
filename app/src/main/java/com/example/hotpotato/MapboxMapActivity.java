@@ -869,7 +869,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         //AlertDialog alertDiag = alertBuild.show();
 
         //Bottom Sheet pop up
-        
         DocumentReference docRef = ref.document(userID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
