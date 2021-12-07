@@ -150,10 +150,12 @@ public class UserHome extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
 
+                                        if (!document.getId().equals(userID)){
+                                            userListString[0] += document.getId() + " => " + document.getString("name") + "\n";
+                                            Log.d(TAG, document.getId() + " => " + document.getData());
+                                        }
 
 
-                                        userListString[0] += document.getId() + " => " + document.getString("name") + "\n";
-                                        Log.d(TAG, document.getId() + " => " + document.getData());
                                     }
                                     LayoutInflater li = LayoutInflater.from(getApplicationContext());
                                     View userListpopup = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_userlist_popup,null);
