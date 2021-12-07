@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Collections;
 import java.util.List;
 
-public class FavLandmarksAdapter extends RecyclerView.Adapter<View_Holder> {
+public class RecAdapter extends RecyclerView.Adapter<View_Holder> {
 
         List<Data> list = Collections.emptyList();
         Context context;
 
-public FavLandmarksAdapter(List<Data> data, Application application) {
+public RecAdapter(List<Data> data, Application application) {
         this.list = data;
         this.context = application;
         }
@@ -36,7 +36,7 @@ public void onBindViewHolder(@NonNull View_Holder holder, int position) {
 
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
         holder.name.setText(list.get(position).name);
-        //holder.address.setText(list.get(position).address);
+        holder.extraInfo.setText(list.get(position).extraInfo);
         holder.imageView.setImageResource(list.get(position).imageId);
 
         }

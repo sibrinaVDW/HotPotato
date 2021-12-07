@@ -14,27 +14,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
 import com.mapbox.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
@@ -99,10 +94,11 @@ public class UserHome extends AppCompatActivity {
                                         Point firstResultPoint = results.get(0).center();
                                         feature=results.get(0);
                                       
-                                        Toast.makeText(UserHome.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
-                                        landmarkData.add(new Data(feature.placeName(),R.drawable.hotpotato_icon_foreground));
+                                       // Toast.makeText(UserHome.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
+                                        List<Data> users = new ArrayList<>();
+                                        landmarkData.add(new Data(feature.placeName(), "Click for more options",R.drawable.hotpotato_icon_foreground));
                                         RecyclerView recyclerView = findViewById(R.id.recLandmarkView);
-                                        FavLandmarksAdapter adapter = new FavLandmarksAdapter(landmarkData, getApplication());
+                                        RecAdapter adapter = new RecAdapter(landmarkData, getApplication());
                                         recyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
                                         recyclerView.setAdapter(adapter);
 
@@ -160,6 +156,7 @@ public class UserHome extends AppCompatActivity {
                                     LayoutInflater li = LayoutInflater.from(getApplicationContext());
                                     View userListpopup = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_userlist_popup,null);
                                     AlertDialog.Builder alertBuild = new AlertDialog.Builder(UserHome.this).setView(userListpopup).setTitle("VisibleUsers");
+                                    //recycler
                                     AlertDialog alertDiag = alertBuild.show();
                                     userList = userListpopup.findViewById(R.id.userListTextbox);
                                     userList.setText(userListString[0]);
