@@ -335,7 +335,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
                         TextView address = popupView.findViewById(R.id.txtPopupAddress);
                         reverseGeocodeFunc(point,c);
-                        address.setText(selectedPointInfo);
+                        address.setText("" + selectedPointInfo);
+                        Toast.makeText(MapboxMapActivity.this, ""  + selectedPointInfo, Toast.LENGTH_LONG).show();
 
                         ImageButton route = popupView.findViewById(R.id.btnRoute);
                         route.setOnClickListener(new View.OnClickListener() {
@@ -443,8 +444,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
                         c++;*/
                         return true;
-
-
                     }
 
 
@@ -728,7 +727,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                     //   Toast.makeText(MainActivity.this, "" + results.get(i), Toast.LENGTH_LONG).show();
                     selectedPointInfo = feature.placeName();
 
-                    Toast.makeText(MapboxMapActivity.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(MapboxMapActivity.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
                     poiInfoText.setText(""+feature.placeName());
 
 
@@ -745,9 +744,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                     // No result for your request were found.
                     Toast.makeText(MapboxMapActivity.this, "Not found", Toast.LENGTH_SHORT).show();
                 }
-
-
-
             }
 
             @Override
