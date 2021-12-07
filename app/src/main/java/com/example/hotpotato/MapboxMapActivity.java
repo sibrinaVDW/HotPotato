@@ -4,6 +4,7 @@ package com.example.hotpotato;
 import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
@@ -12,6 +13,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -27,9 +29,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -319,8 +324,11 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                     @Override
                     public boolean onMapClick(@NonNull LatLng point) {
 
+                        reverseGeocodeFunc(point,c);
+                        showDialog(point);
+
                         //Popup for clicking on a landmark to bring up options for that landmark.
-                        LayoutInflater li = LayoutInflater.from(getApplicationContext());
+                       /* LayoutInflater li = LayoutInflater.from(getApplicationContext());
                         View popupView = LayoutInflater.from(MapboxMapActivity.this).inflate(R.layout.activity_pop_information,null);
                         AlertDialog.Builder alertBuild = new AlertDialog.Builder(MapboxMapActivity.this).setView(popupView).setTitle("Select Option");
                         AlertDialog alertDiag = alertBuild.show();
@@ -376,6 +384,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                                 alertDiag.dismiss();
                             }
                         });
+                        */
 
                         //reverseGeocodeFunc(point, 0);
 
@@ -437,10 +446,125 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                         return true;
                     }
 
+
+
+
                 });
 
             }
         });
+    }
+
+    private void showDialog(LatLng point)
+    {
+        final Dialog dialog = new Dialog(MapboxMapActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottomsheetlayout);
+
+        LinearLayout ratingLayout = dialog.findViewById(R.id.layoutRating);
+        LinearLayout favLayout = dialog.findViewById(R.id.layoutFav);
+        LinearLayout bikeLayout = dialog.findViewById(R.id.layoutBike);
+        LinearLayout carLayout = dialog.findViewById(R.id.layoutCar);
+        LinearLayout walkLayout = dialog.findViewById(R.id.layoutWalk);
+
+        ratingLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "Rating is clicked",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        favLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "Fav is clicked",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        carLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "car is clicked",Toast.LENGTH_LONG).show();
+                //showPref();
+                moveDestinationMarkerToNewLocation(point);
+                reverseGeocodeFunc(point,c);
+                dialog.dismiss();
+
+            }
+        });
+
+        walkLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "walk is clicked",Toast.LENGTH_LONG).show();
+                showPref();
+                dialog.dismiss();
+
+            }
+        });
+
+        bikeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "Bike is clicked",Toast.LENGTH_LONG).show();
+                showPref();
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+    }
+
+    private void showPref()
+    {
+        final Dialog dialog = new Dialog(MapboxMapActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottumdistancelayout);
+
+        LinearLayout kmLayout = dialog.findViewById(R.id.layoutDistance);
+        LinearLayout miLayout = dialog.findViewById(R.id.layoutTime);
+        TextView dist = dialog.findViewById(R.id.txtDistance);
+        dist.setText("Distance : " + st);
+
+        kmLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "Distance is chosen",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+
+        miLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "Time is chosen",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
     //tile query stuff that gets elevation and puts numbers where you click,
 
@@ -739,11 +863,13 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         client.enqueueCall( this);
 
         //popup for time and distance.
-        LayoutInflater li = LayoutInflater.from(getApplicationContext());
-        View popupView = LayoutInflater.from(MapboxMapActivity.this).inflate(R.layout.activity_pop_information,null);
-        AlertDialog.Builder alertBuild = new AlertDialog.Builder(MapboxMapActivity.this).setView(popupView).setTitle("Select Option");
-        AlertDialog alertDiag = alertBuild.show();
+        //LayoutInflater li = LayoutInflater.from(getApplicationContext());
+        //View popupView = LayoutInflater.from(MapboxMapActivity.this).inflate(R.layout.activity_pop_information,null);
+        //AlertDialog.Builder alertBuild = new AlertDialog.Builder(MapboxMapActivity.this).setView(popupView).setTitle("Select Option");
+        //AlertDialog alertDiag = alertBuild.show();
 
+        //Bottom Sheet pop up
+        
         DocumentReference docRef = ref.document(userID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -857,7 +983,11 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
                 });
 
+                showPref();
             }
+
+
+
         }
 
 // Get the directions route

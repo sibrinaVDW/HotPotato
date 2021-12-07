@@ -53,15 +53,15 @@
 
     <ImageButton
         android:id="@+id/btnEnter"
-        android:layout_width="373dp"
-        android:layout_height="119dp"
+        android:layout_width="368dp"
+        android:layout_height="117dp"
         android:backgroundTint="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.421"
+        app:layout_constraintHorizontal_bias="0.372"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.867"
+        app:layout_constraintVertical_bias="0.864"
         app:srcCompat="@drawable/login2_btn" />
 
     <ImageView

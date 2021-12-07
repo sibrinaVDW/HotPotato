@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class MenuPop extends AppCompatActivity {
 
@@ -41,6 +42,8 @@ public class MenuPop extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
 
+
+
         Spinner spinner2 = (Spinner) findViewById(R.id.spinner2);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapterL = ArrayAdapter.createFromResource(this,
@@ -49,5 +52,6 @@ public class MenuPop extends AppCompatActivity {
         adapterL.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         spinner2.setAdapter(adapterL);
+        Toast.makeText(MenuPop.this, "Landmarks work", Toast.LENGTH_LONG).show();
     }
 }
