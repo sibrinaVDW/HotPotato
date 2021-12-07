@@ -446,120 +446,126 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
 
                     }
-                    private void showPref()
-                    {
-                        final Dialog dialog = new Dialog(MapboxMapActivity.this);
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setContentView(R.layout.bottumdistancelayout);
 
-                        LinearLayout kmLayout = dialog.findViewById(R.id.layoutDistance);
-                        LinearLayout miLayout = dialog.findViewById(R.id.layoutTime);
 
-                        kmLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
 
-                                Toast.makeText(MapboxMapActivity.this, "Distance is chosen",Toast.LENGTH_LONG).show();
-                                dialog.dismiss();
-                            }
-                        });
-
-                        miLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Toast.makeText(MapboxMapActivity.this, "Time is chosen",Toast.LENGTH_LONG).show();
-                                dialog.dismiss();
-
-                            }
-                        });
-
-                        dialog.show();
-                        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                        dialog.getWindow().setGravity(Gravity.BOTTOM);
-                    }
-
-                    private void showDialog(LatLng point)
-                    {
-                        final Dialog dialog = new Dialog(MapboxMapActivity.this);
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setContentView(R.layout.bottomsheetlayout);
-
-                        LinearLayout ratingLayout = dialog.findViewById(R.id.layoutRating);
-                        LinearLayout favLayout = dialog.findViewById(R.id.layoutFav);
-                        LinearLayout bikeLayout = dialog.findViewById(R.id.layoutBike);
-                        LinearLayout carLayout = dialog.findViewById(R.id.layoutCar);
-                        LinearLayout walkLayout = dialog.findViewById(R.id.layoutWalk);
-
-                        ratingLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Toast.makeText(MapboxMapActivity.this, "Rating is clicked",Toast.LENGTH_LONG).show();
-                                dialog.dismiss();
-
-                            }
-                        });
-
-                        favLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Toast.makeText(MapboxMapActivity.this, "Fav is clicked",Toast.LENGTH_LONG).show();
-                                dialog.dismiss();
-
-                            }
-                        });
-
-                        carLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Toast.makeText(MapboxMapActivity.this, "car is clicked",Toast.LENGTH_LONG).show();
-                                showPref();
-                                moveDestinationMarkerToNewLocation(point);
-                                reverseGeocodeFunc(point,c);
-                                dialog.dismiss();
-
-                            }
-                        });
-
-                        walkLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Toast.makeText(MapboxMapActivity.this, "walk is clicked",Toast.LENGTH_LONG).show();
-                                showPref();
-                                dialog.dismiss();
-
-                            }
-                        });
-
-                        bikeLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Toast.makeText(MapboxMapActivity.this, "Bike is clicked",Toast.LENGTH_LONG).show();
-                                showPref();
-                                dialog.dismiss();
-
-                            }
-                        });
-
-                        dialog.show();
-                        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                        dialog.getWindow().setGravity(Gravity.BOTTOM);
-
-                    }
 
                 });
 
             }
         });
+    }
+
+    private void showDialog(LatLng point)
+    {
+        final Dialog dialog = new Dialog(MapboxMapActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottomsheetlayout);
+
+        LinearLayout ratingLayout = dialog.findViewById(R.id.layoutRating);
+        LinearLayout favLayout = dialog.findViewById(R.id.layoutFav);
+        LinearLayout bikeLayout = dialog.findViewById(R.id.layoutBike);
+        LinearLayout carLayout = dialog.findViewById(R.id.layoutCar);
+        LinearLayout walkLayout = dialog.findViewById(R.id.layoutWalk);
+
+        ratingLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "Rating is clicked",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        favLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "Fav is clicked",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        carLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "car is clicked",Toast.LENGTH_LONG).show();
+                //showPref();
+                moveDestinationMarkerToNewLocation(point);
+                reverseGeocodeFunc(point,c);
+                dialog.dismiss();
+
+            }
+        });
+
+        walkLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "walk is clicked",Toast.LENGTH_LONG).show();
+                showPref();
+                dialog.dismiss();
+
+            }
+        });
+
+        bikeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "Bike is clicked",Toast.LENGTH_LONG).show();
+                showPref();
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+    }
+
+    private void showPref()
+    {
+        final Dialog dialog = new Dialog(MapboxMapActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottumdistancelayout);
+
+        LinearLayout kmLayout = dialog.findViewById(R.id.layoutDistance);
+        LinearLayout miLayout = dialog.findViewById(R.id.layoutTime);
+        TextView dist = dialog.findViewById(R.id.txtDistance);
+        dist.setText("Distance : " + st);
+
+        kmLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "Distance is chosen",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+
+        miLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(MapboxMapActivity.this, "Time is chosen",Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
     //tile query stuff that gets elevation and puts numbers where you click,
 
@@ -867,8 +873,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         //AlertDialog alertDiag = alertBuild.show();
 
         //Bottom Sheet pop up
-
-
+        
         DocumentReference docRef = ref.document(userID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -982,7 +987,11 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
                 });
 
+                showPref();
             }
+
+
+
         }
 
 // Get the directions route
