@@ -52,6 +52,7 @@ public class UserHome extends AppCompatActivity {
     ImageButton goToPlayerList;
     TextView userList;
     List<Data> landmarkData;
+    List<Data> userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class UserHome extends AppCompatActivity {
         Intent intent = getIntent();
         String userID = intent.getStringExtra("user");
         landmarkData = new ArrayList<>();
+        userData = new ArrayList<>();
 
         DocumentReference docRef = ref.document(userID).collection("FavouriteLandmarks").document("Landmarks");
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -144,22 +146,30 @@ public class UserHome extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
+                                    LayoutInflater li = LayoutInflater.from(getApplicationContext());
+                                    View userListpopup = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_userlist_popup,null);
+                                    AlertDialog.Builder alertBuild = new AlertDialog.Builder(UserHome.this).setView(userListpopup).setTitle("VisibleUsers");
                                     for (QueryDocumentSnapshot document : task.getResult()) {
 
                                         if (!document.getId().equals(userID)){
-                                            userListString[0] += document.getId() + " => " + document.getString("name") + "\n";
-                                            Log.d(TAG, document.getId() + " => " + document.getData());
+                                            //userListString[0] += document.getId() + " => " + document.getString("name") + "\n";
+                                            //Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                            //List<Data> users = new ArrayList<>();
+                                            userData.add(new Data(document.getString("name"), "Click to follow",R.drawable.user_btn));
+                                            RecyclerView userListRecyclerView = userListpopup.findViewById(R.id.userList_rcv);
+                                            RecAdapter userListAdapter = new RecAdapter(userData, getApplication());
+                                            userListRecyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
+                                            userListRecyclerView.setAdapter(userListAdapter);
                                         }
 
 
                                     }
-                                    LayoutInflater li = LayoutInflater.from(getApplicationContext());
-                                    View userListpopup = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_userlist_popup,null);
-                                    AlertDialog.Builder alertBuild = new AlertDialog.Builder(UserHome.this).setView(userListpopup).setTitle("VisibleUsers");
+
                                     //recycler
                                     AlertDialog alertDiag = alertBuild.show();
-                                    userList = userListpopup.findViewById(R.id.userListTextbox);
-                                    userList.setText(userListString[0]);
+                                    /*userList = userListpopup.findViewById(R.id.userListTextbox);
+                                    userList.setText(userListString[0]);*/
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
                                 }
