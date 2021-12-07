@@ -60,6 +60,7 @@ public class UserHome extends AppCompatActivity {
     TextView userList;
     List<Data> landmarkData;
     List<Data> userData;
+    String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class UserHome extends AppCompatActivity {
         final String[] userListString = {""};
 
         Intent intent = getIntent();
-        String userID = intent.getStringExtra("user");
+        userID = intent.getStringExtra("user");
         landmarkData = new ArrayList<>();
         userData = new ArrayList<>();
 
@@ -169,8 +170,6 @@ public class UserHome extends AppCompatActivity {
                                             userListRecyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
                                             userListRecyclerView.setAdapter(userListAdapter);
                                         }
-
-
                                     }
 
                                     //recycler
@@ -205,25 +204,23 @@ public class UserHome extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsettingslayout);
 
-        LinearLayout ratingLayout = dialog.findViewById(R.id.layoutUnits);
-        LinearLayout favLayout = dialog.findViewById(R.id.layoutLandmarkpref);
+        LinearLayout unitLayout = dialog.findViewById(R.id.layoutUnits);
+        LinearLayout landmarkPrefLayout = dialog.findViewById(R.id.layoutLandmarkpref);
 
-        ratingLayout.setOnClickListener(new View.OnClickListener() {
+        unitLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(UserHome.this, "Units is clicked",Toast.LENGTH_LONG).show();
+                //Toast.makeText(UserHome.this, "Units is clicked",Toast.LENGTH_LONG).show();
                 showUnits();
                 dialog.dismiss();
 
             }
         });
 
-        favLayout.setOnClickListener(new View.OnClickListener() {
+        landmarkPrefLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(UserHome.this, "Landmark Pref is clicked",Toast.LENGTH_LONG).show();
+                //Toast.makeText(UserHome.this, "Landmark Pref is clicked",Toast.LENGTH_LONG).show();
                 showLandpref();
                 dialog.dismiss();
 
@@ -249,8 +246,14 @@ public class UserHome extends AppCompatActivity {
         kmLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ref.document(userID).update("unitsPref","km").addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(UserHome.this, "Unit preference changed to km", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-                Toast.makeText(UserHome.this, "KM chosen",Toast.LENGTH_LONG).show();
+                //Toast.makeText(UserHome.this, "KM chosen",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
 
             }
@@ -259,8 +262,13 @@ public class UserHome extends AppCompatActivity {
         miLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(UserHome.this, "Mi chosen",Toast.LENGTH_LONG).show();
+                ref.document(userID).update("unitsPref","mi").addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(UserHome.this, "Unit preference changed to mi", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                //Toast.makeText(UserHome.this, "Mi chosen",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
 
             }
@@ -286,8 +294,13 @@ public class UserHome extends AppCompatActivity {
         historyLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(UserHome.this, "Historical chosen",Toast.LENGTH_LONG).show();
+                ref.document(userID).update("prefLandmarks","Historical").addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(UserHome.this, "Landmark preference changed to Historical", Toast.LENGTH_LONG).show();
+                    }
+                });
+                //Toast.makeText(UserHome.this, "Historical chosen",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
 
             }
@@ -296,8 +309,13 @@ public class UserHome extends AppCompatActivity {
         popularLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(UserHome.this, "Popular chosen",Toast.LENGTH_LONG).show();
+                ref.document(userID).update("prefLandmarks","Popular").addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(UserHome.this, "Landmark preference changed to Popular", Toast.LENGTH_LONG).show();
+                    }
+                });
+                //Toast.makeText(UserHome.this, "Popular chosen",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
 
             }
@@ -306,8 +324,13 @@ public class UserHome extends AppCompatActivity {
         modernLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(UserHome.this, "Modern chosen",Toast.LENGTH_LONG).show();
+                ref.document(userID).update("prefLandmarks","Modern").addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(UserHome.this, "Landmark preference changed to Modern", Toast.LENGTH_LONG).show();
+                    }
+                });
+                //Toast.makeText(UserHome.this, "Modern chosen",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
 
             }

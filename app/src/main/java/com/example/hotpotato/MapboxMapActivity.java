@@ -470,7 +470,10 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         ratingLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                reverseGeocodeFunc(point,c);
+                Intent i = new Intent(MapboxMapActivity.this, Ratings.class);
+                i.putExtra("landmark", selectedPointInfo);
+                startActivity(i);
                 Toast.makeText(MapboxMapActivity.this, "Rating is clicked",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
 
@@ -480,8 +483,16 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         favLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(MapboxMapActivity.this, "Fav is clicked",Toast.LENGTH_LONG).show();
+                CollectionReference ref = db.collection("Users");
+                GeoPoint newPoint = new GeoPoint(point.getLatitude(),point.getLongitude());
+                ref.document(userID).collection("FavouriteLandmarks").document("Landmarks")
+                        .update("ListLandmarks", FieldValue.arrayUnion(newPoint)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(MapboxMapActivity.this, "Added to your favorites!", Toast.LENGTH_LONG).show();
+                    }
+                });
+                //Toast.makeText(MapboxMapActivity.this, "Fav is clicked",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
 
             }
@@ -505,7 +516,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             public void onClick(View v) {
 
                 Toast.makeText(MapboxMapActivity.this, "walk is clicked",Toast.LENGTH_LONG).show();
-                showPref();
+                moveDestinationMarkerToNewLocation(point);
+                reverseGeocodeFunc(point,c);
                 dialog.dismiss();
 
             }
@@ -516,7 +528,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             public void onClick(View v) {
 
                 Toast.makeText(MapboxMapActivity.this, "Bike is clicked",Toast.LENGTH_LONG).show();
-                showPref();
+                moveDestinationMarkerToNewLocation(point);
+                reverseGeocodeFunc(point,c);
                 dialog.dismiss();
 
             }
@@ -544,7 +557,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         kmLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Toast.makeText(MapboxMapActivity.this, "Distance is chosen",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
             }
@@ -553,7 +565,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         miLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Toast.makeText(MapboxMapActivity.this, "Time is chosen",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
 
@@ -869,28 +880,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         //AlertDialog alertDiag = alertBuild.show();
 
         //Bottom Sheet pop up
-        DocumentReference docRef = ref.document(userID);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        DocumentSnapshot doc = task.getResult();
-                        if (document != null) {
-                            units = document.getString("unitsPref");
-                            //also get landmark pref.
-                        }
 
-                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
             /*client.enqueueCall(new Callback<DirectionsResponse>() {
                 @Override
                 public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
@@ -954,6 +944,35 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         if (routeFound){
             final DirectionsRoute currentRoute = response.body().routes().get(0);
             // Toast.makeText(MainActivity.this,currentRoute.distance()+" metres ",Toast.LENGTH_SHORT).show();
+
+            DocumentReference docRef = ref.document(userID);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            DocumentSnapshot doc = task.getResult();
+                            if (document != null) {
+                                units = document.getString("unitsPref");
+                                Toast.makeText(MapboxMapActivity.this,units,Toast.LENGTH_SHORT);
+                                //Toast.makeText()
+                                //also get landmark pref.
+                            }
+
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            Toast.makeText(MapboxMapActivity.this,"DocumentSnapshot data: " + document.getData(),Toast.LENGTH_SHORT);
+                        } else {
+                            Log.d(TAG, "No such document");
+                            Toast.makeText(MapboxMapActivity.this,"No such document",Toast.LENGTH_SHORT);
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                        Toast.makeText(MapboxMapActivity.this,"get failed with "+ task.getException(),Toast.LENGTH_SHORT);
+                    }
+                }
+            });
+
             if(units == "km"){
                 distance = currentRoute.distance() / 1000;
             }
@@ -961,7 +980,9 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 distance = (currentRoute.distance() / 1000) / 1.609344;
             }
 
-            st = String.format("%.2f K.M", distance);
+            distance = currentRoute.distance() / 1000;
+
+            st = String.format("%.2f KM", distance);
             TextView dv=findViewById(R.id.distanceText);
             dv.setText(st);
 
