@@ -25,9 +25,9 @@
         android:padding="8dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/hotpotato_icon"/>
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:src="@drawable/routesmall"/>
 
         <TextView
             android:id="@+id/txtDistance"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:text="Distance to destination"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
 
     </LinearLayout>
@@ -48,9 +48,9 @@
         android:padding="8dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/hotpotato_icon"/>
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:src="@drawable/emptytime"/>
 
         <TextView
             android:id="@+id/txtTime"
@@ -58,16 +58,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:text="Time to destination"
-            android:textSize="16sp" />
+            android:textSize="20sp" />
 
 
     </LinearLayout>
 
     <ImageButton
         android:id="@+id/cancelBtn"
-        android:layout_width="99dp"
-        android:layout_height="46dp"
-        android:layout_marginLeft="30dp"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_marginLeft="160dp"
+        android:background="@drawable/acancelthing"
         android:orientation="horizontal" />
 
 </LinearLayout>

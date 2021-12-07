@@ -58,11 +58,21 @@
             tools:ignore="SpeakableTextPresentCheck" />
 
         <EditText
+            android:id="@+id/edtUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="-360dp"
+            android:ems="10"
+            android:hint="Username"
+            android:minHeight="48dp" />
+
+        <EditText
             android:id="@+id/edtSignupEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="-300dp"
+            android:layout_marginTop="20dp"
             android:ems="10"
             android:hint="Signup with your email."
             android:inputType="textEmailAddress"
@@ -73,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="23dp"
             android:ems="10"
             android:hint="Create new password"
             android:inputType="textPassword"

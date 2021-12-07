@@ -9,16 +9,15 @@
         android:id="@+id/choosetxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="Choose"
         android:textAlignment="center"
         android:layout_marginTop="5dp"
         android:textColor="@color/black"
         android:textSize="25dp"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold" />
 
     <LinearLayout
-        android:id="@+id/layoutUnits"
+        android:id="@+id/layoutViewmap"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,12 +26,12 @@
         <ImageView
             android:layout_width="66dp"
             android:layout_height="66dp"
-            android:src="@drawable/fillstar"/>
+            android:src="@drawable/amap"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change units"
+            android:text="View on map"
             android:layout_marginLeft="30dp"
             android:textSize="20sp"/>
 
@@ -40,7 +39,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutLandmarkpref"
+        android:id="@+id/layoutViewratings"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,12 +48,34 @@
         <ImageView
             android:layout_width="66dp"
             android:layout_height="66dp"
-            android:src="@drawable/fill_location"/>
+            android:src="@drawable/globenofill"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change landmark preference"
+            android:text="View ratings"
+            android:layout_marginLeft="30dp"
+            android:textSize="20sp"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutAddrating"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <ImageView
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:src="@drawable/emptystar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add your rating"
             android:layout_marginLeft="30dp"
             android:textSize="20sp"/>
 
