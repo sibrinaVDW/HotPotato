@@ -159,6 +159,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private PermissionsManager permissionsManager;
     String userID;
     String favoritePassed;
+    LatLng favoritePos;
 
     private static final String DISTANCE_SOURCE_ID = "DISTANCE_SOURCE_ID";
     private static final String DISTANCE_LINE_LAYER_ID = "DISTANCE_LINE_LAYER_ID";
@@ -189,7 +190,9 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     String startLocation="";
     String endLocation="";
     double distance;
+    double time;
     String st;
+    String timeSt;
     private String geojsonSourceLayerId = "geojsonSourceLayerId";
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
     private CarmenFeature home;
@@ -205,7 +208,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private String selectedPointInfo;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
-    String units;
+    public String units;
+    public String navigationOpt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,9 +296,12 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     @Override
     public void onMapReady(final MapboxMap mapboxMap) {
         this.mapboxMap = mapboxMap;
-        if(favoritePassed!= ""){
-
-        }
+       /* if(favoritePassed!= ""){
+            GeocodeFunc(favoritePassed);
+            LatLng position = favoritePos;
+            Toast.makeText(MapboxMapActivity.this, position.toString(),Toast.LENGTH_SHORT).show();;
+            showDialog(position);
+        }*/
 
         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
             @Override
@@ -506,8 +513,10 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(MapboxMapActivity.this, "car is clicked",Toast.LENGTH_LONG).show();
+                //Toast.makeText(MapboxMapActivity.this, "car is clicked",Toast.LENGTH_LONG).show();
                 //showPref();
+                navigationOpt = "Car";
+                Toast.makeText(MapboxMapActivity.this, navigationOpt,Toast.LENGTH_LONG).show();
                 moveDestinationMarkerToNewLocation(point);
                 reverseGeocodeFunc(point,c);
                 dialog.dismiss();
@@ -519,7 +528,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(MapboxMapActivity.this, "walk is clicked",Toast.LENGTH_LONG).show();
+                //Toast.makeText(MapboxMapActivity.this, "walk is clicked",Toast.LENGTH_LONG).show();
+                navigationOpt = "Walk";
                 moveDestinationMarkerToNewLocation(point);
                 reverseGeocodeFunc(point,c);
                 dialog.dismiss();
@@ -531,7 +541,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(MapboxMapActivity.this, "Bike is clicked",Toast.LENGTH_LONG).show();
+                //Toast.makeText(MapboxMapActivity.this, "Bike is clicked",Toast.LENGTH_LONG).show();
+                navigationOpt = "Bike";
                 moveDestinationMarkerToNewLocation(point);
                 reverseGeocodeFunc(point,c);
                 dialog.dismiss();
@@ -544,7 +555,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
-
     }
 
     private void showPref()
@@ -557,6 +567,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         LinearLayout miLayout = dialog.findViewById(R.id.layoutTime);
         TextView dist = dialog.findViewById(R.id.txtDistance);
         dist.setText("Distance : " + st);
+        TextView timeText = dialog.findViewById(R.id.txtTime);
+        timeText.setText("Time : " + timeSt);
 
         kmLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -690,6 +702,43 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);
         }
+    }
+
+    private void GeocodeFunc(String landmark)
+    {
+        MapboxGeocoding Geocode = MapboxGeocoding.builder()
+                .accessToken("sk.eyJ1IjoibWFqb3Job2JvIiwiYSI6ImNrdnR6cG05d2JodWozMHM3MW5udzhvMWkifQ.9hXJQ3dq_vYeRZqLA5YIog")
+                .query(landmark)
+                .geocodingTypes(GeocodingCriteria.TYPE_POI)
+                .build();
+        Geocode.enqueueCall(new Callback<GeocodingResponse>() {
+            @Override
+            public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
+
+                List<CarmenFeature> results = response.body().features();
+
+                if (results.size() > 0) {
+                    // Log the first results Point.
+                    Point firstResultPoint = results.get(0).center();
+                    Toast.makeText(MapboxMapActivity.this,firstResultPoint.toString(),Toast.LENGTH_SHORT).show();
+                    favoritePos = new LatLng(firstResultPoint.latitude(), firstResultPoint.longitude());
+                    //return favoritePos;
+                    Log.d(TAG, "onResponse: " + firstResultPoint.toString());
+
+                } else {
+
+                    // No result for your request were found.
+                    Log.d(TAG, "onResponse: No result found");
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
+
     }
 
 
@@ -977,6 +1026,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 }
             });
 
+            Toast.makeText(MapboxMapActivity.this,units,Toast.LENGTH_SHORT);
+
             if(units == "km"){
                 distance = currentRoute.distance() / 1000;
             }
@@ -985,10 +1036,25 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             }
 
             distance = currentRoute.distance() / 1000;
+            //Time = distance / speed
+            if(navigationOpt == "Car"){
 
+                time = distance / 60;
+                Toast.makeText(MapboxMapActivity.this,Double.toString(time),Toast.LENGTH_SHORT);
+            }
+            else if(navigationOpt == "Walk"){
+                time = distance / 5;
+            }
+            else if (navigationOpt == "Bike"){
+                time = distance / 15;
+            }
+
+            int hours = (int) Math.floor(time / 10000);
+            int minutes = (int) Math.floor((time - hours * 10000) / 100);
+            timeSt = Integer.toString(hours) + ":" + Integer.toString(minutes);
             st = String.format("%.2f KM", distance);
-            TextView dv=findViewById(R.id.distanceText);
-            dv.setText(st);
+            //TextView dv=findViewById(R.id.distanceText);
+            //dv.setText(st);
 
             if (mapboxMap != null) {
                 mapboxMap.getStyle(new Style.OnStyleLoaded() {
@@ -1147,6 +1213,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             public void onStyleLoaded(@NonNull Style style) {
                 GeoJsonSource destinationIconGeoJsonSource = style.getSourceAs(ICON_SOURCE_ID);
                 if (destinationIconGeoJsonSource != null) {
+                    Toast.makeText(MapboxMapActivity.this, pointToMoveMarkerTo.toString(),Toast.LENGTH_SHORT).show();
                     destinationIconGeoJsonSource.setGeoJson(Feature.fromGeometry(Point.fromLngLat(
                             pointToMoveMarkerTo.getLongitude(), pointToMoveMarkerTo.getLatitude())));
                             getRoute(mapboxMap,Point.fromLngLat(pointToMoveMarkerTo.getLongitude(),pointToMoveMarkerTo.getLatitude()),profiles[0]);

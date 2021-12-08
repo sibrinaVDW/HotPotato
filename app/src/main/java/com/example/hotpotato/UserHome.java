@@ -141,6 +141,7 @@ public class UserHome extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(UserHome.this,MapboxMapActivity.class);
                 i.putExtra("user",userID);
+                i.putExtra("favorite","");
                 startActivity(i);
             }
         });
@@ -182,7 +183,7 @@ public class UserHome extends AppCompatActivity {
 
                             }
                         });
-            }
+                }
         });
 
 

@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +55,51 @@ public class Ratings extends AppCompatActivity {
         });
 
         DocumentReference docRef = ref.document(landmark);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        docRef.collection("CollectionOfRatings")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String desc = document.getString("Description");
+                                int rate = document.getLong("Rating").intValue();
+                                switch (rate){
+                                    case 1:
+                                        landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.potato1));
+                                        break;
+
+                                    case 2:
+                                        landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.potato2));
+                                        break;
+
+                                    case 3:
+                                        landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.potato3));
+                                        break;
+
+                                    case 4:
+                                        landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.potato4));
+                                        break;
+
+                                    case 5:
+                                        landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.potato5));
+                                        break;
+                                }
+                                //landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.hotpotato_icon_foreground));
+                                RecyclerView recyclerView = findViewById(R.id.recRatingsView);
+                                RatingsRecAdapter adapter = new RatingsRecAdapter(landmarkRatings, getApplication());
+                                recyclerView.setLayoutManager(new LinearLayoutManager(Ratings.this));
+                                recyclerView.setAdapter(adapter);
+
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+
+                    }
+                });
+
+        /*docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -115,6 +162,6 @@ public class Ratings extends AppCompatActivity {
                     Toast.makeText(Ratings.this,"get failed with "+ task.getException(),Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
     }
 }

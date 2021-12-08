@@ -32,7 +32,7 @@
             tools:ignore="SpeakableTextPresentCheck"
             android:layout_marginTop="120dp"
             android:layout_marginLeft="50dp"
-            android:toolTipText="1 star"/>
+            />
 
         <ImageButton
             android:id="@+id/btnPotato2"
@@ -43,7 +43,7 @@
             tools:ignore="SpeakableTextPresentCheck"
             android:layout_marginTop="-65dp"
             android:layout_marginLeft="175dp"
-            android:toolTipText="2 stars"/>
+            />
 
         <ImageButton
             android:id="@+id/btnPotato3"
@@ -54,7 +54,7 @@
             android:background="@drawable/potato3"
             android:orientation="horizontal"
             tools:ignore="SpeakableTextPresentCheck"
-            android:toolTipText="3 stars"/>
+           />
 
         <ImageButton
             android:id="@+id/btnPotato4"
@@ -65,7 +65,7 @@
             android:background="@drawable/potato4"
             android:orientation="horizontal"
             tools:ignore="SpeakableTextPresentCheck"
-            android:toolTipText="4 stars"/>
+            />
 
         <ImageButton
             android:id="@+id/btnPotato5"
@@ -76,7 +76,7 @@
             android:background="@drawable/potato5"
             android:orientation="horizontal"
             tools:ignore="SpeakableTextPresentCheck"
-            android:toolTipText="5 stars"/>
+            />
 
         <ImageButton
             android:id="@+id/btnBackhome"
@@ -87,7 +87,7 @@
             android:background="@drawable/backnew"
             android:orientation="horizontal"
             tools:ignore="SpeakableTextPresentCheck"
-            android:toolTipText="5 stars"/>
+            />
 
     </LinearLayout>
 
