@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -35,6 +37,7 @@ public class Ratings extends AppCompatActivity {
     CollectionReference ref = db.collection("Ratings");
     String landmark;
     List<Data> landmarkRatings;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class Ratings extends AppCompatActivity {
         setContentView(R.layout.activity_ratings);
         Intent intent = getIntent();
         landmark = intent.getStringExtra("landmark");
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
         landmarkRatings = new ArrayList<>();
         Toast.makeText(Ratings.this,landmark,Toast.LENGTH_SHORT).show();
 
@@ -50,6 +55,7 @@ public class Ratings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Ratings.this, UserHome.class);
+                i.putExtra("user",user.getUid());
                 startActivity(i);
             }
         });
@@ -61,107 +67,49 @@ public class Ratings extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String desc = document.getString("Description");
-                                int rate = document.getLong("Rating").intValue();
-                                switch (rate){
-                                    case 1:
-                                        landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.potato1));
-                                        break;
+                            if(task.getResult().size() > 0){
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String desc = document.getString("Description");
+                                    String user= document.getString("Username");
+                                    int rate = document.getLong("Rating").intValue();
+                                    switch (rate){
+                                        case 1:
+                                            landmarkRatings.add(new Data(user + " : " + Long.toString(rate), desc, R.drawable.potato1));
+                                            break;
 
-                                    case 2:
-                                        landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.potato2));
-                                        break;
+                                        case 2:
+                                            landmarkRatings.add(new Data(user + " : " +Long.toString(rate), desc, R.drawable.potato2));
+                                            break;
 
-                                    case 3:
-                                        landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.potato3));
-                                        break;
+                                        case 3:
+                                            landmarkRatings.add(new Data(user + " : " +Long.toString(rate), desc, R.drawable.potato3));
+                                            break;
 
-                                    case 4:
-                                        landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.potato4));
-                                        break;
+                                        case 4:
+                                            landmarkRatings.add(new Data(user + " : " +Long.toString(rate), desc, R.drawable.potato4));
+                                            break;
 
-                                    case 5:
-                                        landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.potato5));
-                                        break;
+                                        case 5:
+                                            landmarkRatings.add(new Data(user + " : " +Long.toString(rate), desc, R.drawable.potato5));
+                                            break;
+                                    }
+                                    //landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.hotpotato_icon_foreground));
+                                    RecyclerView recyclerView = findViewById(R.id.recRatingsView);
+                                    RatingsRecAdapter adapter = new RatingsRecAdapter(landmarkRatings, getApplication());
+                                    recyclerView.setLayoutManager(new LinearLayoutManager(Ratings.this));
+                                    recyclerView.setAdapter(adapter);
+
                                 }
-                                //landmarkRatings.add(new Data(Long.toString(rate), desc, R.drawable.hotpotato_icon_foreground));
-                                RecyclerView recyclerView = findViewById(R.id.recRatingsView);
-                                RatingsRecAdapter adapter = new RatingsRecAdapter(landmarkRatings, getApplication());
-                                recyclerView.setLayoutManager(new LinearLayoutManager(Ratings.this));
-                                recyclerView.setAdapter(adapter);
-
                             }
+                            else{
+                                Toast.makeText(Ratings.this,"No Ratings for " + landmark, Toast.LENGTH_LONG).show();
+                            }
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
 
                     }
                 });
-
-        /*docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-
-                    if (document.exists()) {
-                        List<Rating> rates = new ArrayList<>();
-                        List<Map<String, Object>> users = (List<Map<String, Object>>) document.get("RatingLandmark");
-                        assert users != null;
-                        for (Map<String, Object> rating:users){
-                            //Collections ratesData = (Collections) rating.values().toArray();
-                            //Toast.makeText(Ratings.this, ratesData[1],Toast.LENGTH_SHORT).show();
-                        }
-                        Toast.makeText(Ratings.this,"users size: " + users.size(),Toast.LENGTH_SHORT).show();
-                        //rates = document.toObject(RatingDco.class).rates;
-                        //makeText(Ratings.this,"rating size: " + rates.size(),Toast.LENGTH_SHORT).show();
-                        //List<Map<String, Object>> ratings = (List<Map<String, Object>>) document.get("RatingLandmarks");
-                        //Map<String, Object> data = new HashMap<>();
-                        //List<String> titles = new ArrayList<>();
-                        for (Rating rating : rates) {
-                            String desc = rating.getDesc();
-                            int rate = rating.getRatingNum();
-                            Toast.makeText(Ratings.this,desc + " " + rate,Toast.LENGTH_SHORT).show();
-
-                            switch (rate){
-                                case 0:
-                                    break;
-
-                                case 1:
-                                    break;
-
-                                case 2:
-                                    break;
-
-                                case 3:
-                                    break;
-
-                                case 4:
-                                    break;
-
-                                case 5:
-                                    break;
-                            }
-
-                            Toast.makeText(Ratings.this,"In",Toast.LENGTH_SHORT).show();
-                            landmarkRatings.add(new Data(Integer.toString(rate), desc, R.drawable.hotpotato_icon_foreground));
-                            RecyclerView recyclerView = findViewById(R.id.recRatingsView);
-                            RatingsRecAdapter adapter = new RatingsRecAdapter(landmarkRatings, getApplication());
-                            recyclerView.setLayoutManager(new LinearLayoutManager(Ratings.this));
-                            recyclerView.setAdapter(adapter);
-                        }
-
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                    } else {
-                        Log.d(TAG, "No such document");
-                        Toast.makeText(Ratings.this,"No such document",Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                    Toast.makeText(Ratings.this,"get failed with "+ task.getException(),Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
     }
 }

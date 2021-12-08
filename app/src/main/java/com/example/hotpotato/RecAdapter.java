@@ -97,7 +97,7 @@ public void onBindViewHolder(@NonNull View_Holder holder, @SuppressLint("Recycle
                         @Override
                         public void onClick(View v) {
                                 Intent i = new Intent(v.getContext(),Ratings.class);
-                                Toast.makeText(context, "clicked  " + landmarkName, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(context, "clicked  " + landmarkName, Toast.LENGTH_SHORT).show();
                                 i.putExtra("landmark",landmarkName);
                                 v.getContext().startActivity(i);
                                 //Toast.makeText(MapboxMapActivity.this, "Time is chosen",Toast.LENGTH_LONG).show();
@@ -109,6 +109,10 @@ public void onBindViewHolder(@NonNull View_Holder holder, @SuppressLint("Recycle
                 createRatingsLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                                Intent i = new Intent(v.getContext(),AddRating.class);
+                                //Toast.makeText(context, "clicked  " + landmarkName, Toast.LENGTH_SHORT).show();
+                                i.putExtra("landmark",landmarkName);
+                                v.getContext().startActivity(i);
                                 //Toast.makeText(MapboxMapActivity.this, "Time is chosen",Toast.LENGTH_LONG).show();
                                 //start intent for creating rating.
                                 dialog.dismiss();
