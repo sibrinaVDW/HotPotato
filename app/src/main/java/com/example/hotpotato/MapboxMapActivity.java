@@ -191,8 +191,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     String endLocation="";
     double distance;
     double time;
-    String st;
-    String timeSt;
+    String st = "";
+    String timeSt = "";
     private String geojsonSourceLayerId = "geojsonSourceLayerId";
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
     private CarmenFeature home;
