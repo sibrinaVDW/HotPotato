@@ -1,6 +1,7 @@
 package com.example.hotpotato;
 
 public class Data {
+    public String userID;
     public String name;
     public String extraInfo;
 
@@ -31,6 +32,13 @@ public class Data {
     public int imageId;
 
     Data(String name, String extraInfo, int imageId) {
+        this.name = name;
+        this.extraInfo = extraInfo;
+        this.imageId = imageId;
+    }
+
+    Data(String userID, String name, String extraInfo, int imageId) {
+        this.userID = userID;
         this.name = name;
         this.extraInfo = extraInfo;
         this.imageId = imageId;

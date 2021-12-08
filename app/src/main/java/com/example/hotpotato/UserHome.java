@@ -163,7 +163,7 @@ public class UserHome extends AppCompatActivity {
                                             //Log.d(TAG, document.getId() + " => " + document.getData());
 
                                             //List<Data> users = new ArrayList<>();
-                                            userData.add(new Data(document.getString("name"), "Click to follow",R.drawable.user_btn));
+                                            userData.add(new Data(document.getId(),document.getString("name"), "Click to follow",R.drawable.user_btn));
                                             RecyclerView userListRecyclerView = userListpopup.findViewById(R.id.userList_rcv);
                                             RecAdapter userListAdapter = new RecAdapter(userData, getApplication());
                                             userListRecyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
