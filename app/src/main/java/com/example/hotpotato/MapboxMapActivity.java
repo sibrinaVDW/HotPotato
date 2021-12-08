@@ -555,7 +555,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
-
     }
 
     private void showPref()
@@ -719,7 +718,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 List<CarmenFeature> results = response.body().features();
 
                 if (results.size() > 0) {
-
                     // Log the first results Point.
                     Point firstResultPoint = results.get(0).center();
                     Toast.makeText(MapboxMapActivity.this,firstResultPoint.toString(),Toast.LENGTH_SHORT).show();
