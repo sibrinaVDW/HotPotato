@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -55,11 +56,14 @@ public class Signup extends AppCompatActivity {
         add = findViewById(R.id.btnSignUp);
         login = findViewById(R.id.btnLoginBack);
 
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Signup.this, Login.class);
                 startActivity(i);
+
+                login.setColorFilter(Color.argb(255, 255, 255, 255));
             }
         });
 

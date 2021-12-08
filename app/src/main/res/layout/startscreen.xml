@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -21,13 +22,14 @@
         <ImageButton
             android:id="@+id/loginstart_btn"
             android:layout_width="69dp"
-            android:layout_height="33dp"
+            android:layout_height="48dp"
             android:layout_marginLeft="310dp"
             android:layout_marginTop="-48dp"
             android:layout_marginRight="20dp"
             android:backgroundTint="#00FFFFFF"
 
-            app:srcCompat="@drawable/loginwhite_btn" />
+            app:srcCompat="@drawable/loginwhite_btn"
+            tools:ignore="SpeakableTextPresentCheck" />
 
 
         <ImageButton
@@ -37,6 +39,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="-150dp"
             android:backgroundTint="#00FFFFFF"
-            app:srcCompat="@drawable/getstarted_btn" />
+            app:srcCompat="@drawable/getstarted_btn"
+            tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
