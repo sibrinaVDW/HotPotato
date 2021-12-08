@@ -208,8 +208,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private String selectedPointInfo;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
-    public String units;
-    public String navigationOpt;
+    public String units = "";
+    public String navigationOpt = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +220,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         Intent intent = getIntent();
         userID = intent.getStringExtra("user");
         favoritePassed = intent.getStringExtra("favorite");
+
 
         poiInfoText = findViewById(R.id.elevation_query_api_response_elevation_numbers_only);
 
@@ -566,6 +567,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         LinearLayout kmLayout = dialog.findViewById(R.id.layoutDistance);
         LinearLayout miLayout = dialog.findViewById(R.id.layoutTime);
         TextView dist = dialog.findViewById(R.id.txtDistance);
+        Toast.makeText(MapboxMapActivity.this, "Distance " + st + " time " + timeSt,Toast.LENGTH_LONG).show();
         dist.setText("Distance : " + st);
         TextView timeText = dialog.findViewById(R.id.txtTime);
         timeText.setText("Time : " + timeSt);
@@ -1028,7 +1030,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
             Toast.makeText(MapboxMapActivity.this,units,Toast.LENGTH_SHORT);
 
-            if(units == "km"){
+            if(units.equals("km")){
                 distance = currentRoute.distance() / 1000;
             }
             else if(units == "mi"){
@@ -1036,8 +1038,9 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             }
 
             distance = currentRoute.distance() / 1000;
+
             //Time = distance / speed
-            if(navigationOpt == "Car"){
+            if(navigationOpt.equals("Car")){
 
                 time = distance / 60;
                 Toast.makeText(MapboxMapActivity.this,Double.toString(time),Toast.LENGTH_SHORT);
