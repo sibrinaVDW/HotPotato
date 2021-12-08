@@ -57,7 +57,8 @@ public class UserListRecAdapter extends RecyclerView.Adapter<View_Holder> {
             @Override
             public void onClick(View v) {
 
-                db.collection("Users").document(currentUserUid).update("FollowUsers",FieldValue.arrayUnion(list.get(holder.getAbsoluteAdapterPosition()).userID));
+                db.collection("Users").document(currentUserUid).update("FollowUsers",FieldValue.arrayUnion(list.get(holder.getAdapterPosition()).userID));
+                holder.extraInfo.setText("YOU CLICKED ME!");
             }
         });
 
