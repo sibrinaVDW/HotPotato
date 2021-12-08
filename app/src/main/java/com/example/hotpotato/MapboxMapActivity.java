@@ -190,7 +190,9 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     String startLocation="";
     String endLocation="";
     double distance;
+    double time;
     String st;
+    String timeSt;
     private String geojsonSourceLayerId = "geojsonSourceLayerId";
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
     private CarmenFeature home;
@@ -206,7 +208,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private String selectedPointInfo;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
-    String units;
+    public String units;
+    public String navigationOpt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,12 +296,12 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     @Override
     public void onMapReady(final MapboxMap mapboxMap) {
         this.mapboxMap = mapboxMap;
-        if(favoritePassed!= ""){
+       /* if(favoritePassed!= ""){
             GeocodeFunc(favoritePassed);
             LatLng position = favoritePos;
             Toast.makeText(MapboxMapActivity.this, position.toString(),Toast.LENGTH_SHORT).show();;
             showDialog(position);
-        }
+        }*/
 
         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
             @Override
@@ -510,8 +513,10 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(MapboxMapActivity.this, "car is clicked",Toast.LENGTH_LONG).show();
+                //Toast.makeText(MapboxMapActivity.this, "car is clicked",Toast.LENGTH_LONG).show();
                 //showPref();
+                navigationOpt = "Car";
+                Toast.makeText(MapboxMapActivity.this, navigationOpt,Toast.LENGTH_LONG).show();
                 moveDestinationMarkerToNewLocation(point);
                 reverseGeocodeFunc(point,c);
                 dialog.dismiss();
@@ -523,7 +528,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(MapboxMapActivity.this, "walk is clicked",Toast.LENGTH_LONG).show();
+                //Toast.makeText(MapboxMapActivity.this, "walk is clicked",Toast.LENGTH_LONG).show();
+                navigationOpt = "Walk";
                 moveDestinationMarkerToNewLocation(point);
                 reverseGeocodeFunc(point,c);
                 dialog.dismiss();
@@ -535,7 +541,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(MapboxMapActivity.this, "Bike is clicked",Toast.LENGTH_LONG).show();
+                //Toast.makeText(MapboxMapActivity.this, "Bike is clicked",Toast.LENGTH_LONG).show();
+                navigationOpt = "Bike";
                 moveDestinationMarkerToNewLocation(point);
                 reverseGeocodeFunc(point,c);
                 dialog.dismiss();
@@ -561,6 +568,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         LinearLayout miLayout = dialog.findViewById(R.id.layoutTime);
         TextView dist = dialog.findViewById(R.id.txtDistance);
         dist.setText("Distance : " + st);
+        TextView timeText = dialog.findViewById(R.id.txtTime);
+        timeText.setText("Time : " + timeSt);
 
         kmLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1019,6 +1028,8 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 }
             });
 
+            Toast.makeText(MapboxMapActivity.this,units,Toast.LENGTH_SHORT);
+
             if(units == "km"){
                 distance = currentRoute.distance() / 1000;
             }
@@ -1027,10 +1038,25 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             }
 
             distance = currentRoute.distance() / 1000;
+            //Time = distance / speed
+            if(navigationOpt == "Car"){
 
+                time = distance / 60;
+                Toast.makeText(MapboxMapActivity.this,Double.toString(time),Toast.LENGTH_SHORT);
+            }
+            else if(navigationOpt == "Walk"){
+                time = distance / 5;
+            }
+            else if (navigationOpt == "Bike"){
+                time = distance / 15;
+            }
+
+            int hours = (int) Math.floor(time / 10000);
+            int minutes = (int) Math.floor((time - hours * 10000) / 100);
+            timeSt = Integer.toString(hours) + ":" + Integer.toString(minutes);
             st = String.format("%.2f KM", distance);
-            TextView dv=findViewById(R.id.distanceText);
-            dv.setText(st);
+            //TextView dv=findViewById(R.id.distanceText);
+            //dv.setText(st);
 
             if (mapboxMap != null) {
                 mapboxMap.getStyle(new Style.OnStyleLoaded() {
