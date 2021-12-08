@@ -39,28 +39,9 @@
         mapbox:mapbox_cameraTargetLng="-74.0060"
         mapbox:mapbox_cameraZoom="14" >
 
-        <TextView
-            android:id="@+id/distanceText"
-            android:layout_width="133dp"
-            android:layout_height="53dp"
-            android:text="Distance goes here" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <TextView
-                android:id="@+id/elevation_query_api_response_elevation_numbers_only"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="numbers here"
-                mapbox:layout_constraintBottom_toBottomOf="parent"
-                mapbox:layout_constraintEnd_toEndOf="parent"
-                mapbox:layout_constraintStart_toStartOf="parent"
-                mapbox:layout_constraintTop_toTopOf="parent"
-                mapbox:layout_constraintVertical_bias="0.977" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="match_parent"/>
 
 
     </com.mapbox.mapboxsdk.maps.MapView>

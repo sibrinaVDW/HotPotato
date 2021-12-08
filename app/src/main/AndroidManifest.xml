@@ -38,8 +38,14 @@
             android:name=".Settings"
             android:exported="false" />
         <activity
+            android:name=".FollowedUserFavs"
+            android:exported="false"/>
+        <activity
             android:name=".MapboxMapActivity"
             android:exported="false">
+
+
+
 
             <!--
             <intent-filter>

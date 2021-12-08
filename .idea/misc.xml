@@ -25,8 +25,10 @@
         <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/bottumdistancelayout.xml" value="0.2526041666666667" />
         <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/recycler_list.xml" value="0.4" />
         <entry key="..\:/OPSC/HotPotato/app/src/main/res/layout/startscreen.xml" value="0.2526041666666667" />
+        <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_add_rating.xml" value="0.2359375" />
+        <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_followed_user_favs.xml" value="0.2359375" />
         <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_login.xml" value="0.20520833333333333" />
-        <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_mapbox_map.xml" value="0.1" />
+        <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_mapbox_map.xml" value="0.22" />
         <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_maps.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_settings.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Ryan/AndroidStudioProjects/HotPotato/app/src/main/res/layout/activity_user_home.xml" value="0.20520833333333333" />
@@ -36,7 +38,6 @@
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/drawable/hotpotato_icon_background.xml" value="0.31979166666666664" />
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/drawable/ic_launcher_background.xml" value="0.31979166666666664" />
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/drawable/ic_search.xml" value="0.403125" />
-        <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/activity_add_rating.xml" value="0.2421875" />
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/activity_item_list_item.xml" value="0.30364583333333334" />
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/activity_mapbox_map.xml" value="0.26358695652173914" />
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/activity_maps.xml" value="0.2907608695652174" />
@@ -47,7 +48,6 @@
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/activity_user_home.xml" value="0.33" />
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/activity_userlist_popup.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/bottomratinglayout.xml" value="0.38697916666666665" />
-        <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/bottumdistancelayout.xml" value="0.38697916666666665" />
         <entry key="..\:/Users/jadeo/Desktop/Third_Year/Sem2/OPSC7312/HotPotato/app/src/main/res/layout/recycler_list.xml" value="0.67" />
       </map>
     </option>

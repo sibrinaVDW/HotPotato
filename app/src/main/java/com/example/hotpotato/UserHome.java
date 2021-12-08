@@ -35,6 +35,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.mapbox.api.geocoding.v5.GeocodingCriteria;
@@ -149,7 +150,91 @@ public class UserHome extends AppCompatActivity {
         goToPlayerList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*db.collection("Users").document(userID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        LayoutInflater li = LayoutInflater.from(getApplicationContext());
+                        View userListpopup = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_userlist_popup,null);
+                        AlertDialog.Builder alertBuild = new AlertDialog.Builder(UserHome.this).setView(userListpopup).setTitle("VisibleUsers");
+
+                        List<String> followList = (List<String>) documentSnapshot.get("FollowedUsers");
+                        for (String followed:followList) {
+                            if(followed.equals(documentSnapshot.getId())){
+                                userData.add(new Data(documentSnapshot.getId(),documentSnapshot.getString("name"),"Followed",R.drawable.usericon_btn));
+
+
+                            }
+
+                            RecyclerView userListRecyclerView = userListpopup.findViewById(R.id.userList_rcv);
+                            UserListRecAdapter userListAdapter = new UserListRecAdapter(userData, getApplication());
+                            userListRecyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
+                            userListRecyclerView.setAdapter(userListAdapter);
+                        }
+                        //userData.add(new Data(document.getId(),document.getString("name"),"Click to follow",R.drawable.usericon_btn));
+
+                        AlertDialog alertDiag = alertBuild.show();
+
+                    }
+                });*/
+
+                List<String> existingUsers = new ArrayList<>();
+                final boolean[] found = {false};
                 db.collection("Users")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    userData = new ArrayList<>();
+                                    LayoutInflater li = LayoutInflater.from(getApplicationContext());
+                                    View userListpopup = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_userlist_popup,null);
+                                    AlertDialog.Builder alertBuild = new AlertDialog.Builder(UserHome.this).setView(userListpopup).setTitle("VisibleUsers");
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        if (!document.getId().equals(userID)) {
+                                            existingUsers.add(document.getId());
+                                        }
+
+
+                                        db.collection("Users").document(userID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                                List<String> usersFollowed = (List<String>) documentSnapshot.get("FollowedUsers");
+                                                for (String user : usersFollowed) {
+                                                    if(document.getId().equals(user)){
+                                                        found[0] = true;
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        if (found[0]){
+                                            userData.add(new Data(document.getId(), document.getString("name"), "Followed!", R.drawable.usericon_btn));
+                                        }else{
+                                            if (!document.getId().equals(userID)){
+                                                userData.add(new Data(document.getId(), document.getString("name"), "Click to follow!", R.drawable.usericon_btn));
+                                            }
+                                        }
+                                        found[0] = false;
+                                        RecyclerView userListRecyclerView = userListpopup.findViewById(R.id.userList_rcv);
+                                        UserListRecAdapter userListAdapter = new UserListRecAdapter(userData, getApplication());
+                                        userListRecyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
+                                        userListRecyclerView.setAdapter(userListAdapter);
+                                    }
+
+                                    AlertDialog alertDiag = alertBuild.show();
+
+
+
+                                } else {
+                                    Log.d(TAG, "Error getting documents: ", task.getException());
+                                }
+                            }
+                        });
+
+
+
+
+                /*db.collection("Users")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
@@ -158,14 +243,30 @@ public class UserHome extends AppCompatActivity {
                                     LayoutInflater li = LayoutInflater.from(getApplicationContext());
                                     View userListpopup = LayoutInflater.from(UserHome.this).inflate(R.layout.activity_userlist_popup,null);
                                     AlertDialog.Builder alertBuild = new AlertDialog.Builder(UserHome.this).setView(userListpopup).setTitle("VisibleUsers");
+
+
+                                    List<String> existingUsers = new ArrayList<>();
                                     for (QueryDocumentSnapshot document : task.getResult()) {
 
+
                                         if (!document.getId().equals(userID)){
+                                            existingUsers.add(document.getId());
+                                            List<String> followList = (List<String>) document.get("FollowedUsers");
+                                            for (String followed:followList) {
+                                                if (followed.equals(document.getId())) {
+                                                    userData.add(new Data(document.getId(), document.getString("name"), "Followed", R.drawable.usericon_btn));
+
+
+                                                }
+                                            }
+
+
+                                            userData.add(new Data(document.getId(),document.getString("name"),"Followed",R.drawable.usericon_btn));
                                             //userListString[0] += document.getId() + " => " + document.getString("name") + "\n";
                                             //Log.d(TAG, document.getId() + " => " + document.getData());
 
                                             //List<Data> users = new ArrayList<>();
-                                            userData.add(new Data(document.getId(),document.getString("name"), "Click to follow",R.drawable.user_btn));
+
                                             RecyclerView userListRecyclerView = userListpopup.findViewById(R.id.userList_rcv);
                                             UserListRecAdapter userListAdapter = new UserListRecAdapter(userData, getApplication());
                                             userListRecyclerView.setLayoutManager(new LinearLayoutManager(UserHome.this));
@@ -175,14 +276,18 @@ public class UserHome extends AppCompatActivity {
 
                                     //recycler
                                     AlertDialog alertDiag = alertBuild.show();
-                                    /*userList = userListpopup.findViewById(R.id.userListTextbox);
-                                    userList.setText(userListString[0]);*/
+                                    //userList = userListpopup.findViewById(R.id.userListTextbox);
+                                    //userList.setText(userListString[0]);
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
                                 }
 
                             }
-                        });
+                        });*/
+
+
+
+
                 }
         });
 
