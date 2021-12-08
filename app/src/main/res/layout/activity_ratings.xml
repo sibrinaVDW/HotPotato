@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/userback_bg"
-
     android:orientation="vertical"
     tools:context=".Ratings"
     tools:layout_editor_absoluteX="6dp">

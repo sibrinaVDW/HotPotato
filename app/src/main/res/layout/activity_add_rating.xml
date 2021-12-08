@@ -4,6 +4,129 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddRating">
+    tools:context=".AddRating"
+    android:background="@drawable/userback_bg">
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/placeDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:minHeight="50dp"
+            android:text="Description" />
+
+        <ImageButton
+            android:id="@+id/btnPotato1"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:background="@drawable/potato1"
+            android:orientation="horizontal"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:layout_marginTop="120dp"
+            android:layout_marginLeft="50dp"
+            android:toolTipText="1 star"/>
+
+        <ImageButton
+            android:id="@+id/btnPotato2"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:background="@drawable/potato2"
+            android:orientation="horizontal"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:layout_marginTop="-65dp"
+            android:layout_marginLeft="175dp"
+            android:toolTipText="2 stars"/>
+
+        <ImageButton
+            android:id="@+id/btnPotato3"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginLeft="300dp"
+            android:layout_marginTop="-65dp"
+            android:background="@drawable/potato3"
+            android:orientation="horizontal"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:toolTipText="3 stars"/>
+
+        <ImageButton
+            android:id="@+id/btnPotato4"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginLeft="115dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/potato4"
+            android:orientation="horizontal"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:toolTipText="4 stars"/>
+
+        <ImageButton
+            android:id="@+id/btnPotato5"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginLeft="245dp"
+            android:layout_marginTop="-60dp"
+            android:background="@drawable/potato5"
+            android:orientation="horizontal"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:toolTipText="5 stars"/>
+
+        <ImageButton
+            android:id="@+id/btnBackhome"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginLeft="175dp"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/backnew"
+            android:orientation="horizontal"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:toolTipText="5 stars"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/ratetxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Rating"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/placetxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:text="Destination name"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/ratingtxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="520dp"
+        android:text="Your rating"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
