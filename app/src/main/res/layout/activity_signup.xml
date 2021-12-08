@@ -8,8 +8,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="465dp"
+        android:layout_height="955dp"
         android:background="@drawable/bg_bgmerge"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

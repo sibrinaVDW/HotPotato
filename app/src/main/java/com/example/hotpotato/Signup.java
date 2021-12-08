@@ -38,6 +38,7 @@ public class Signup extends AppCompatActivity {
     private ImageButton add;
     private EditText email;
     private EditText password;
+    private EditText name;
 
     List<GeoPoint> points;
 
@@ -52,6 +53,7 @@ public class Signup extends AppCompatActivity {
 
         email = findViewById(R.id.edtSignupEmail);
         password = findViewById(R.id.edtSignupPassword);
+        name = findViewById(R.id.edtUsername);
         add = findViewById(R.id.btnSignUp);
         login = findViewById(R.id.btnLoginBack);
 
@@ -66,14 +68,15 @@ public class Signup extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nameText = email.getText().toString();
+                String emailText = email.getText().toString();
                 String passwordText = password.getText().toString();
-                createAccount(nameText,passwordText);
+                String nameText = name.getText().toString();
+                createAccount(emailText,passwordText,nameText);
             }
         });
     }
 
-    private void createAccount(String email, String password) {
+    private void createAccount(String email, String password,String name) {
         // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -87,7 +90,7 @@ public class Signup extends AppCompatActivity {
                             //updateUI(user);
 
                             Map<String, Object> userObj = new HashMap<>();
-                            userObj.put("name", "");
+                            userObj.put("name", name);
                             userObj.put("email", email);
                             userObj.put("prefLandmarks", "Modern");
                             userObj.put("unitsPref", "km");
