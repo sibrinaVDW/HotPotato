@@ -1019,7 +1019,59 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                             DocumentSnapshot doc = task.getResult();
                             if (document != null) {
                                 units = document.getString("unitsPref");
-                                Toast.makeText(MapboxMapActivity.this,units,Toast.LENGTH_SHORT);
+                                Toast.makeText(MapboxMapActivity.this,units,Toast.LENGTH_SHORT).show();
+
+                                if(units.equals("km")){
+                                    distance = currentRoute.distance() / 1000;
+                                    st = String.format("%.2f KM", distance);
+                                }
+                                else if(units.equals("mi")){
+                                    distance = (currentRoute.distance() / 1000) / 1.609344;
+                                    st = String.format("%.2f MI", distance);
+                                }
+
+                                //distance = currentRoute.distance() / 1000;
+
+                                //Time = distance / speed
+                                //Toast.makeText(MapboxMapActivity.this, navigationOpt,Toast.LENGTH_LONG).show();
+                                if(navigationOpt.equals("Car")){
+                                    time = ((distance / 60)*60)*60*1000;
+                                    //Toast.makeText(MapboxMapActivity.this,Double.toString(time),Toast.LENGTH_SHORT).show();
+                                }
+                                else if(navigationOpt.equals("Walk")){
+                                    time = ((distance / 5)*60)*60*1000;
+                                }
+                                else if (navigationOpt.equals("Bike")){
+                                    time = ((distance / 15)*60)*60*1000;
+                                }
+
+                                int hours = (int) Math.floor((time / 1000)/3600);
+                                int minutes = (int) Math.floor(((time - (3600000 * hours)) / 1000) / 60);
+                                timeSt = Integer.toString(hours) + ":" + Integer.toString(minutes);
+
+                                //TextView dv=findViewById(R.id.distanceText);
+                                //dv.setText(st);
+
+                                if (mapboxMap != null) {
+                                    mapboxMap.getStyle(new Style.OnStyleLoaded() {
+                                        @Override
+                                        public void onStyleLoaded(@NonNull Style style) {
+
+// Retrieve and update the source designated for showing the directions route
+                                            GeoJsonSource source = style.getSourceAs(ROUTE_SOURCE_ID);
+
+// Create a LineString with the directions route's geometry and
+// reset the GeoJSON source for the route LineLayer source
+                                            if (source != null) {
+                                                source.setGeoJson(LineString.fromPolyline(currentRoute.geometry(), Constants.PRECISION_6));
+                                            }
+                                        }
+
+                                    });
+
+                                    showPref();
+                                }
+                                //Toast.makeText(MapboxMapActivity.this,units,Toast.LENGTH_SHORT).show();
                                 //Toast.makeText()
                                 //also get landmark pref.
                             }
@@ -1037,57 +1089,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 }
             });
 
-            Toast.makeText(MapboxMapActivity.this,units,Toast.LENGTH_SHORT);
 
-            if(units.equals("km")){
-                distance = currentRoute.distance() / 1000;
-            }
-            else if(units == "mi"){
-                distance = (currentRoute.distance() / 1000) / 1.609344;
-            }
-
-            distance = currentRoute.distance() / 1000;
-
-            //Time = distance / speed
-            Toast.makeText(MapboxMapActivity.this, navigationOpt,Toast.LENGTH_LONG).show();
-            if(navigationOpt.equals("Car")){
-
-                time = distance / 60;
-                Toast.makeText(MapboxMapActivity.this,Double.toString(time),Toast.LENGTH_SHORT);
-            }
-            else if(navigationOpt == "Walk"){
-                time = distance / 5;
-            }
-            else if (navigationOpt == "Bike"){
-                time = distance / 15;
-            }
-
-            int hours = (int) Math.floor(time / 10000);
-            int minutes = (int) Math.floor((time - hours * 10000) / 100);
-            timeSt = Integer.toString(hours) + ":" + Integer.toString(minutes);
-            st = String.format("%.2f KM", distance);
-            //TextView dv=findViewById(R.id.distanceText);
-            //dv.setText(st);
-
-            if (mapboxMap != null) {
-                mapboxMap.getStyle(new Style.OnStyleLoaded() {
-                    @Override
-                    public void onStyleLoaded(@NonNull Style style) {
-
-// Retrieve and update the source designated for showing the directions route
-                        GeoJsonSource source = style.getSourceAs(ROUTE_SOURCE_ID);
-
-// Create a LineString with the directions route's geometry and
-// reset the GeoJSON source for the route LineLayer source
-                        if (source != null) {
-                            source.setGeoJson(LineString.fromPolyline(currentRoute.geometry(), Constants.PRECISION_6));
-                        }
-                    }
-
-                });
-
-                showPref();
-            }
         }
 
 // Get the directions route
