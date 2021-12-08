@@ -58,11 +58,6 @@ public void onBindViewHolder(@NonNull View_Holder holder, @SuppressLint("Recycle
 
                         Context v = view.getContext();
                         showOpts(v,list.get(position).name);
-                        /*Intent i = new Intent(v,Ratings.class);
-                        Toast.makeText(context, "clicked  " + , Toast.LENGTH_SHORT).show();
-                        i.putExtra("landmark",list.get(position).name);list.get(position).name
-                        v.startActivity(i);*/
-                        //Toast.makeText(v,"Clicked",Toast.LENGTH_SHORT).show();
                 }
         });
 
@@ -74,21 +69,23 @@ public void onBindViewHolder(@NonNull View_Holder holder, @SuppressLint("Recycle
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.bottomratinglayout);
 
-                LinearLayout vewMapLayout = dialog.findViewById(R.id.layoutViewmap);
+                LinearLayout viewMapLayout = dialog.findViewById(R.id.layoutViewmap);
                 LinearLayout viewRatingsLayout = dialog.findViewById(R.id.layoutViewratings);
                 LinearLayout createRatingsLayout = dialog.findViewById(R.id.layoutAddrating);
 
-                vewMapLayout.setOnClickListener(new View.OnClickListener() {
+                viewMapLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                                FirebaseAuth mAuth;
+                                /* mAuth;
                                 mAuth = FirebaseAuth.getInstance();
                                 Intent i = new Intent(v.getContext(),MapboxMapActivity.class);
                                 //.makeText(context, "clicked  " + , Toast.LENGTH_SHORT).show();
                                 i.putExtra("favorite",landmarkName);
+                                i.putExtra("favoriteIntent",i);
                                 i.putExtra("user",mAuth.getCurrentUser().getUid());
-                                v.getContext().startActivity(i);
-                                //Toast.makeText(MapboxMapActivity.this, "Distance is chosen",Toast.LENGTH_LONG).show();
+                                v.getContext().startActivity(i);*/
+
+                                Toast.makeText(v.getContext(), "Cannot open map now",Toast.LENGTH_LONG).show();
                                 dialog.dismiss();
                         }
                 });
