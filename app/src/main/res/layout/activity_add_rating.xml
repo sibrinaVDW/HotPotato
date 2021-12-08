@@ -14,14 +14,14 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/placeDescription"
+            android:id="@+id/txtplaceDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="150dp"
             android:ems="10"
+            android:hint="Description"
             android:inputType="textPersonName"
-            android:minHeight="50dp"
-            android:text="Description" />
+            android:minHeight="50dp" />
 
         <ImageButton
             android:id="@+id/btnPotato1"
@@ -83,11 +83,19 @@
             android:layout_width="66dp"
             android:layout_height="66dp"
             android:layout_marginLeft="175dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="95dp"
             android:background="@drawable/backnew"
             android:orientation="horizontal"
-            tools:ignore="SpeakableTextPresentCheck"
-            />
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/btnRatingsApply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="#00FFFFFF"
+            app:srcCompat="@drawable/applybutton"
+            tools:ignore="SpeakableTextPresentCheck" />
 
     </LinearLayout>
 

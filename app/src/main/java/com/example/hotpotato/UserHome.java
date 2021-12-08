@@ -115,7 +115,7 @@ public class UserHome extends AppCompatActivity {
 
                                     } else {
                                         // No result for the request were found.
-                                        Toast.makeText(UserHome.this, "Not found", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(UserHome.this, "Not found", Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
