@@ -83,7 +83,7 @@
             android:layout_width="66dp"
             android:layout_height="66dp"
             android:layout_marginLeft="175dp"
-            android:layout_marginTop="95dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/backnew"
             android:orientation="horizontal"
             tools:ignore="SpeakableTextPresentCheck" />

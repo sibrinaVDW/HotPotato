@@ -199,13 +199,14 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private CarmenFeature home;
     private CarmenFeature work;
 
+    private String currentProfile ="";
     private String[] profiles = new String[]{
             DirectionsCriteria.PROFILE_DRIVING,
             DirectionsCriteria.PROFILE_CYCLING,
             DirectionsCriteria.PROFILE_WALKING
     };
 
-    private TextView poiInfoText;
+    //private TextView poiInfoText;
     private String selectedPointInfo;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference ref = db.collection("Users");
@@ -224,7 +225,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         favoritePassed = intent.getStringExtra("favorite");
         favoriteIntent = intent.getSelector();
 
-        poiInfoText = findViewById(R.id.elevation_query_api_response_elevation_numbers_only);
+        //poiInfoText = findViewById(R.id.elevation_query_api_response_elevation_numbers_only);
 
         viewMap = findViewById(R.id.mapView);
         //viewMap.getMapAsync(this);
@@ -803,7 +804,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                     selectedPointInfo = feature.placeName();
 
                     //Toast.makeText(MapboxMapActivity.this, "" + feature.placeName(), Toast.LENGTH_LONG).show();
-                    poiInfoText.setText(""+feature.placeName());
+                    //poiInfoText.setText(""+feature.placeName());
 
 
                     /*Intent i = new Intent(getApplicationContext() , PopInformation.class);
