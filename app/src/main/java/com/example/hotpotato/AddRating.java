@@ -49,6 +49,9 @@ public class AddRating extends AppCompatActivity {
         landmark = intent.getStringExtra("landmark");
         mAuth = FirebaseAuth.getInstance();
         TextView ratingDesc;
+        TextView title;
+        title = findViewById(R.id.placetxt);
+        title.setText(landmark);
         ImageButton pot1;
         ImageButton pot2;
         ImageButton pot3;
@@ -57,7 +60,7 @@ public class AddRating extends AppCompatActivity {
         ImageButton ratingApply;
         ImageButton addRatingsBack;
         ratingDesc = findViewById(R.id.txtplaceDescription);
-        ratingApply = findViewById(R.id.btnRatingApply);
+        ratingApply = findViewById(R.id.btnRatingsApply);
         pot1 = findViewById(R.id.btnPotato1);
         pot1.setOnClickListener(new View.OnClickListener() {
             @Override
