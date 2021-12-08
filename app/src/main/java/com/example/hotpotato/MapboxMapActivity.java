@@ -518,7 +518,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 //Toast.makeText(MapboxMapActivity.this, "car is clicked",Toast.LENGTH_LONG).show();
                 //showPref();
                 navigationOpt = "Car";
-                Toast.makeText(MapboxMapActivity.this, navigationOpt,Toast.LENGTH_LONG).show();
+
                 moveDestinationMarkerToNewLocation(point);
                 reverseGeocodeFunc(point,c);
                 dialog.dismiss();
@@ -1049,6 +1049,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             distance = currentRoute.distance() / 1000;
 
             //Time = distance / speed
+            Toast.makeText(MapboxMapActivity.this, navigationOpt,Toast.LENGTH_LONG).show();
             if(navigationOpt.equals("Car")){
 
                 time = distance / 60;
