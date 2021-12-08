@@ -47,6 +47,7 @@ public class AddRating extends AppCompatActivity {
         setContentView(R.layout.activity_add_rating);
         Intent intent = getIntent();
         landmark = intent.getStringExtra("landmark");
+        username = "";
         mAuth = FirebaseAuth.getInstance();
         TextView ratingDesc;
         TextView title;

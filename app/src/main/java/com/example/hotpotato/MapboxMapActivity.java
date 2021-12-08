@@ -112,6 +112,7 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.mapbox.core.constants.Constants.PRECISION_6;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.in;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
@@ -210,6 +211,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     CollectionReference ref = db.collection("Users");
     public String units = "";
     public String navigationOpt = "";
+    Intent favoriteIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,11 +222,9 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         Intent intent = getIntent();
         userID = intent.getStringExtra("user");
         favoritePassed = intent.getStringExtra("favorite");
-
+        favoriteIntent = intent.getSelector();
 
         poiInfoText = findViewById(R.id.elevation_query_api_response_elevation_numbers_only);
-
-
 
         viewMap = findViewById(R.id.mapView);
         //viewMap.getMapAsync(this);
@@ -297,8 +297,12 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     @Override
     public void onMapReady(final MapboxMap mapboxMap) {
         this.mapboxMap = mapboxMap;
-       /* if(favoritePassed!= ""){
-            GeocodeFunc(favoritePassed);
+       /*if(favoritePassed!= ""){
+           Intent intent = new PlaceAutocomplete.IntentBuilder()
+                   .accessToken(Mapbox.getAccessToken() != null ? Mapbox.getAccessToken() : getString(R.string.mapbox_access_token))
+                   .build(MapboxMapActivity.this);
+           startActivityForResult(favoriteIntent, REQUEST_CODE_AUTOCOMPLETE);
+            /*GeocodeFunc(favoritePassed);
             LatLng position = favoritePos;
             Toast.makeText(MapboxMapActivity.this, position.toString(),Toast.LENGTH_SHORT).show();;
             showDialog(position);
@@ -458,9 +462,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                         return true;
                     }
 
-
-
-
                 });
 
             }
@@ -567,15 +568,23 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         LinearLayout kmLayout = dialog.findViewById(R.id.layoutDistance);
         LinearLayout miLayout = dialog.findViewById(R.id.layoutTime);
         TextView dist = dialog.findViewById(R.id.txtDistance);
+        ImageButton cancelRoute = dialog.findViewById(R.id.cancelBtn);
+        cancelRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mapboxMap.clear();
+                dialog.dismiss();
+            }
+        });
         Toast.makeText(MapboxMapActivity.this, "Distance " + st + " time " + timeSt,Toast.LENGTH_LONG).show();
         dist.setText("Distance : " + st);
         TextView timeText = dialog.findViewById(R.id.txtTime);
         timeText.setText("Time : " + timeSt);
 
-        kmLayout.setOnClickListener(new View.OnClickListener() {
+        /*kmLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MapboxMapActivity.this, "Distance is chosen",Toast.LENGTH_LONG).show();
+                //Toast.makeText(MapboxMapActivity.this, "Distance is chosen",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
             }
         });
@@ -583,11 +592,11 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         miLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MapboxMapActivity.this, "Time is chosen",Toast.LENGTH_LONG).show();
+                //Toast.makeText(MapboxMapActivity.this, "Time is chosen",Toast.LENGTH_LONG).show();
                 dialog.dismiss();
 
             }
-        });
+        });*/
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -725,7 +734,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                     Toast.makeText(MapboxMapActivity.this,firstResultPoint.toString(),Toast.LENGTH_SHORT).show();
                     favoritePos = new LatLng(firstResultPoint.latitude(), firstResultPoint.longitude());
                     //return favoritePos;
-                    Log.d(TAG, "onResponse: " + firstResultPoint.toString());
+                    Log.d(TAG, "LOOK HERE!!!! onResponse: " + firstResultPoint.toString());
 
                 } else {
 
@@ -1078,9 +1087,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
                 showPref();
             }
-
-
-
         }
 
 // Get the directions route
@@ -1126,9 +1132,16 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_AUTOCOMPLETE) {
 
-            // Retrieve selected location's CarmenFeature
-            CarmenFeature selectedCarmenFeature = PlaceAutocomplete.getPlace(data);
+            CarmenFeature selectedCarmenFeature = null;
+           /* if(favoritePassed != ""){
+                selectedCarmenFeature = PlaceAutocomplete.getPlace(favoriteIntent);
+            }
+            else{
+                // Retrieve selected location's CarmenFeature
+                 selectedCarmenFeature = PlaceAutocomplete.getPlace(data);
+            }*/
 
+            selectedCarmenFeature = PlaceAutocomplete.getPlace(data);
             // Create a new FeatureCollection and add a new Feature to it using selectedCarmenFeature above.
             // Then retrieve and update the source designated for showing a selected location's symbol layer icon
 
@@ -1162,10 +1175,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
 
                 }
             }
-        }
-
-        if(requestCode == 2){
-            //response from popup.
         }
 
         /*if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
