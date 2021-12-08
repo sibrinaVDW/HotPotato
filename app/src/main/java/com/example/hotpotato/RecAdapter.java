@@ -20,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -53,6 +55,7 @@ public void onBindViewHolder(@NonNull View_Holder holder, @SuppressLint("Recycle
                 @Override
                 public void onClick(View view) {
                         //Toast.makeText(context, "Recycle Click" + list.get(position), Toast.LENGTH_SHORT).show();
+
                         Context v = view.getContext();
                         showOpts(v,list.get(position).name);
                         /*Intent i = new Intent(v,Ratings.class);
@@ -78,6 +81,13 @@ public void onBindViewHolder(@NonNull View_Holder holder, @SuppressLint("Recycle
                 vewMapLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                                FirebaseAuth mAuth;
+                                mAuth = FirebaseAuth.getInstance();
+                                Intent i = new Intent(v.getContext(),MapboxMapActivity.class);
+                                //.makeText(context, "clicked  " + , Toast.LENGTH_SHORT).show();
+                                i.putExtra("favorite",landmarkName);
+                                i.putExtra("user",mAuth.getCurrentUser().getUid());
+                                v.getContext().startActivity(i);
                                 //Toast.makeText(MapboxMapActivity.this, "Distance is chosen",Toast.LENGTH_LONG).show();
                                 dialog.dismiss();
                         }

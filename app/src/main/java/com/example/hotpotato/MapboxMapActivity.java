@@ -159,6 +159,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private PermissionsManager permissionsManager;
     String userID;
     String favoritePassed;
+    LatLng favoritePos;
 
     private static final String DISTANCE_SOURCE_ID = "DISTANCE_SOURCE_ID";
     private static final String DISTANCE_LINE_LAYER_ID = "DISTANCE_LINE_LAYER_ID";
@@ -293,7 +294,10 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     public void onMapReady(final MapboxMap mapboxMap) {
         this.mapboxMap = mapboxMap;
         if(favoritePassed!= ""){
-
+            GeocodeFunc(favoritePassed);
+            LatLng position = favoritePos;
+            Toast.makeText(MapboxMapActivity.this, position.toString(),Toast.LENGTH_SHORT).show();;
+            showDialog(position);
         }
 
         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
@@ -690,6 +694,44 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);
         }
+    }
+
+    private void GeocodeFunc(String landmark)
+    {
+        MapboxGeocoding Geocode = MapboxGeocoding.builder()
+                .accessToken("sk.eyJ1IjoibWFqb3Job2JvIiwiYSI6ImNrdnR6cG05d2JodWozMHM3MW5udzhvMWkifQ.9hXJQ3dq_vYeRZqLA5YIog")
+                .query(landmark)
+                .geocodingTypes(GeocodingCriteria.TYPE_POI)
+                .build();
+        Geocode.enqueueCall(new Callback<GeocodingResponse>() {
+            @Override
+            public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
+
+                List<CarmenFeature> results = response.body().features();
+
+                if (results.size() > 0) {
+
+                    // Log the first results Point.
+                    Point firstResultPoint = results.get(0).center();
+                    Toast.makeText(MapboxMapActivity.this,firstResultPoint.toString(),Toast.LENGTH_SHORT).show();
+                    favoritePos = new LatLng(firstResultPoint.latitude(), firstResultPoint.longitude());
+                    //return favoritePos;
+                    Log.d(TAG, "onResponse: " + firstResultPoint.toString());
+
+                } else {
+
+                    // No result for your request were found.
+                    Log.d(TAG, "onResponse: No result found");
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
+
     }
 
 
@@ -1147,6 +1189,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
             public void onStyleLoaded(@NonNull Style style) {
                 GeoJsonSource destinationIconGeoJsonSource = style.getSourceAs(ICON_SOURCE_ID);
                 if (destinationIconGeoJsonSource != null) {
+                    Toast.makeText(MapboxMapActivity.this, pointToMoveMarkerTo.toString(),Toast.LENGTH_SHORT).show();
                     destinationIconGeoJsonSource.setGeoJson(Feature.fromGeometry(Point.fromLngLat(
                             pointToMoveMarkerTo.getLongitude(), pointToMoveMarkerTo.getLatitude())));
                             getRoute(mapboxMap,Point.fromLngLat(pointToMoveMarkerTo.getLongitude(),pointToMoveMarkerTo.getLatitude()),profiles[0]);
