@@ -2,14 +2,22 @@ package com.example.hotpotato;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
@@ -46,15 +54,65 @@ public void onBindViewHolder(@NonNull View_Holder holder, @SuppressLint("Recycle
                 public void onClick(View view) {
                         //Toast.makeText(context, "Recycle Click" + list.get(position), Toast.LENGTH_SHORT).show();
                         Context v = view.getContext();
-                        Intent i = new Intent(v,Ratings.class);
-                        Toast.makeText(context, "clicked  " + list.get(position).name, Toast.LENGTH_SHORT).show();
-                        i.putExtra("landmark",list.get(position).name);
-                        v.startActivity(i);
+                        showOpts(v,list.get(position).name);
+                        /*Intent i = new Intent(v,Ratings.class);
+                        Toast.makeText(context, "clicked  " + , Toast.LENGTH_SHORT).show();
+                        i.putExtra("landmark",list.get(position).name);list.get(position).name
+                        v.startActivity(i);*/
                         //Toast.makeText(v,"Clicked",Toast.LENGTH_SHORT).show();
                 }
         });
 
         }
+
+        private void showOpts(Context v,String landmarkName)
+        {
+                final Dialog dialog = new Dialog(v);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.bottomratinglayout);
+
+                LinearLayout vewMapLayout = dialog.findViewById(R.id.layoutViewmap);
+                LinearLayout viewRatingsLayout = dialog.findViewById(R.id.layoutViewratings);
+                LinearLayout createRatingsLayout = dialog.findViewById(R.id.layoutAddrating);
+
+                vewMapLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                                //Toast.makeText(MapboxMapActivity.this, "Distance is chosen",Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                        }
+                });
+
+                viewRatingsLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                                Intent i = new Intent(v.getContext(),Ratings.class);
+                                Toast.makeText(context, "clicked  " + landmarkName, Toast.LENGTH_SHORT).show();
+                                i.putExtra("landmark",landmarkName);
+                                v.getContext().startActivity(i);
+                                //Toast.makeText(MapboxMapActivity.this, "Time is chosen",Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+
+                        }
+                });
+
+                createRatingsLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                                //Toast.makeText(MapboxMapActivity.this, "Time is chosen",Toast.LENGTH_LONG).show();
+                                //start intent for creating rating.
+                                dialog.dismiss();
+
+                        }
+                });
+
+                dialog.show();
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
+        }
+
 
 @Override
 public int getItemCount() {

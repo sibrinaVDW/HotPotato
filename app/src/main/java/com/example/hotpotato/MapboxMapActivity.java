@@ -158,6 +158,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     private Location originLocation;
     private PermissionsManager permissionsManager;
     String userID;
+    String favoritePassed;
 
     private static final String DISTANCE_SOURCE_ID = "DISTANCE_SOURCE_ID";
     private static final String DISTANCE_LINE_LAYER_ID = "DISTANCE_LINE_LAYER_ID";
@@ -214,6 +215,7 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
         setContentView(R.layout.activity_mapbox_map);
         Intent intent = getIntent();
         userID = intent.getStringExtra("user");
+        favoritePassed = intent.getStringExtra("favorite");
 
         poiInfoText = findViewById(R.id.elevation_query_api_response_elevation_numbers_only);
 
@@ -290,6 +292,9 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
     @Override
     public void onMapReady(final MapboxMap mapboxMap) {
         this.mapboxMap = mapboxMap;
+        if(favoritePassed!= ""){
+
+        }
 
         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
             @Override
@@ -320,7 +325,6 @@ public class MapboxMapActivity extends AppCompatActivity implements LocationEngi
                 //  mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 100);
                 mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
                     LatLng source;
-
                     @Override
                     public boolean onMapClick(@NonNull LatLng point) {
 
