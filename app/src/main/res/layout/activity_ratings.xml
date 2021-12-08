@@ -5,48 +5,49 @@
     android:id="@+id/Ratings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/userback_bg"
 
-    android:layout_marginLeft="6dp"
-    android:layout_marginBottom="6dp"
     android:orientation="vertical"
-    tools:context=".Ratings">
+    tools:context=".Ratings"
+    tools:layout_editor_absoluteX="6dp">
 
-    <TextView
-        android:id="@+id/txtHeading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="168dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="169dp"
-        android:gravity="center"
-        android:text="Ratings"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recRatingsView"
-        android:layout_width="370dp"
-        android:layout_height="255dp"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="75dp"
-        android:layout_marginEnd="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHeading"
-        tools:listitem="@layout/recycler_list" />
+        <TextView
+            android:id="@+id/choosetxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rating"
+            android:textAlignment="center"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            android:textSize="35dp"
+            android:textStyle="bold"
+            />
 
-    <ImageButton
-        android:id="@+id/btnRatingsBack"
-        android:layout_width="104dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="151dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recRatingsView"
-        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recRatingsView"
+            android:layout_width="370dp"
+            android:layout_height="464dp"
+            android:layout_marginStart="-390dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="75dp"
+            android:layout_marginEnd="18dp"
+            tools:listitem="@layout/recycler_list" />
+
+        <ImageButton
+            android:id="@+id/btnRatingsBack"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginLeft="-240dp"
+            android:layout_marginTop="600dp"
+            android:background="@drawable/backnew"
+            android:orientation="horizontal"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

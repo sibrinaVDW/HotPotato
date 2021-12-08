@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HotPotato">
         <activity
+            android:name=".AddRating"
+            android:exported="false" />
+        <activity
             android:name=".Ratings"
             android:exported="false" />
         <activity
@@ -28,22 +31,23 @@
         <activity
             android:name=".Signup"
             android:exported="false" />
-
         <activity
             android:name=".PopInformation"
             android:exported="false" />
-
         <activity
             android:name=".Settings"
             android:exported="false" />
         <activity
             android:name=".MapboxMapActivity"
             android:exported="false">
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
 
         </activity>
         <activity
